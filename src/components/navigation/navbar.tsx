@@ -4,10 +4,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Code, Menu, Home, Youtube, ShoppingCart } from 'lucide-react';
+import { Menu, Home, Youtube, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import Image from 'next/image';
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -34,12 +35,15 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto px-4 flex h-24 items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="p-3 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-all duration-300">
-            <Code className="w-8 h-8 text-primary" />
+          <div className="relative h-16 w-48 transition-transform duration-300 group-hover:scale-105">
+            <Image 
+              src="/logo.png" 
+              alt="SCW Store Logo" 
+              fill 
+              className="object-contain"
+              priority
+            />
           </div>
-          <span className="font-headline font-bold text-3xl tracking-tight">
-            SCW<span className="text-secondary">.</span>Store
-          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -48,8 +52,8 @@ export function Navbar() {
             <Link
               href="/"
               className={cn(
-                "text-xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
-                pathname === "/" ? "text-primary scale-110" : "text-muted-foreground"
+                "text-2xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
+                pathname === "/" ? "text-primary scale-105" : "text-muted-foreground"
               )}
             >
               Marketplace
@@ -57,14 +61,14 @@ export function Navbar() {
           </div>
           
           <div className="flex items-center gap-6 pl-10 border-l border-white/10">
-             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500 w-12 h-12 transition-all hover:bg-green-500/10">
+             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500 w-14 h-14 transition-all hover:bg-green-500/10">
                 <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="w-7 h-7" />
+                  <WhatsAppIcon className="w-8 h-8" />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500 w-12 h-12 transition-all hover:bg-red-500/10">
+              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500 w-14 h-14 transition-all hover:bg-red-500/10">
                 <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer">
-                  <Youtube className="w-7 h-7" />
+                  <Youtube className="w-8 h-8" />
                 </a>
               </Button>
           </div>
@@ -74,8 +78,8 @@ export function Navbar() {
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="w-14 h-14">
-                <Menu className="w-10 h-10" />
+              <Button variant="ghost" size="icon" className="w-16 h-16">
+                <Menu className="w-12 h-12" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background/95 backdrop-blur-lg border-l-white/10">
@@ -84,21 +88,21 @@ export function Navbar() {
                   href="/"
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "flex items-center gap-4 text-2xl font-bold p-4 rounded-2xl transition-all",
+                    "flex items-center gap-4 text-3xl font-bold p-6 rounded-2xl transition-all",
                     pathname === "/" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5"
                   )}
                 >
-                  <Home className="w-7 h-7" />
+                  <Home className="w-8 h-8" />
                   Marketplace
                 </Link>
                 
                 <div className="pt-10 border-t border-white/10 flex flex-col gap-8">
                   <div className="flex gap-10 justify-center">
-                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-4 bg-white/5 rounded-full hover:text-green-500 transition-all hover:scale-110">
-                      <WhatsAppIcon className="w-9 h-9" />
+                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full hover:text-green-500 transition-all hover:scale-110">
+                      <WhatsAppIcon className="w-10 h-10" />
                     </a>
-                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-4 bg-white/5 rounded-full hover:text-red-500 transition-all hover:scale-110">
-                      <Youtube className="w-9 h-9" />
+                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full hover:text-red-500 transition-all hover:scale-110">
+                      <Youtube className="w-10 h-10" />
                     </a>
                   </div>
                 </div>
