@@ -1,11 +1,12 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThreeScene } from '@/components/ui/three-scene';
 import { projects } from '@/lib/projects';
-import { ArrowRight, Code, Cpu, Globe, Rocket } from 'lucide-react';
+import { ArrowRight, Code, Cpu, Globe, Rocket, Check, Zap, Star, ShieldCheck } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function Home() {
@@ -19,21 +20,20 @@ export default function Home() {
         <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           <div className="space-y-8 max-w-2xl">
             <Badge variant="outline" className="px-4 py-1 text-secondary border-secondary/30 bg-secondary/5 font-headline">
-              Available for New Projects
+              Premium Source Code Marketplace
             </Badge>
             <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight">
-              Crafting <span className="gradient-text">Digital Experiences</span> That Scale.
+              Launch Faster with <span className="gradient-text">Pro Source Code</span>.
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              I am a Full-stack Developer specializing in high-performance web applications, 
-              AI integrations, and interactive 3D interfaces. Welcome to SCW — where code meets creativity.
+              Skip weeks of development. Purchase production-ready source code for AI apps, SaaS dashboards, and 3D experiences. Built with Next.js and Firebase.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <Button size="lg" className="h-14 px-8 text-lg font-headline glow-primary" asChild>
-                <Link href="/projects">View My Work</Link>
+                <Link href="/projects">Browse Marketplace</Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-headline" asChild>
-                <Link href="/about">About Me</Link>
+                <Link href="#pricing">View Pricing</Link>
               </Button>
             </div>
           </div>
@@ -45,7 +45,6 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Background Overlay */}
         <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
           {heroImg && (
             <Image 
@@ -59,38 +58,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Skills / Stats Section */}
-      <section className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            { label: 'Live Projects', value: '25+', icon: Globe },
-            { label: 'Lines of Code', value: '100k+', icon: Code },
-            { label: 'Happy Clients', value: '15+', icon: Rocket },
-            { label: 'AI Models Integrated', value: '10+', icon: Cpu },
-          ].map((stat, i) => (
-            <div key={i} className="text-center space-y-2 p-6 glass-card rounded-2xl border border-white/5">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <stat.icon className="w-6 h-6 text-primary" />
-              </div>
-              <div className="text-3xl font-headline font-bold">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Featured Projects Grid */}
       <section className="container mx-auto px-4 space-y-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-4">
-            <h2 className="text-4xl font-headline font-bold">Featured <span className="text-primary">Projects</span></h2>
+            <h2 className="text-4xl font-headline font-bold">Latest <span className="text-primary">Source Code</span></h2>
             <p className="text-muted-foreground max-w-xl">
-              A curated selection of work ranging from enterprise web platforms to experimental AI tools.
+              Clean, documented, and ready-to-deploy templates for your next big idea.
             </p>
           </div>
           <Button variant="ghost" asChild className="group">
             <Link href="/projects" className="flex items-center gap-2">
-              Explore All Projects <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              Explore Full Marketplace <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
         </div>
@@ -107,8 +86,12 @@ export default function Home() {
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                     data-ai-hint="project screenshot"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-60" />
-                  <Badge className="absolute top-4 right-4 bg-primary/80 backdrop-blur-md">
+                  <div className="absolute top-4 left-4 z-10">
+                     <Badge className="bg-primary/90 backdrop-blur-md">
+                        ${project.price}
+                      </Badge>
+                  </div>
+                  <Badge className="absolute top-4 right-4 bg-secondary/80 backdrop-blur-md">
                     {project.category}
                   </Badge>
                 </div>
@@ -119,17 +102,94 @@ export default function Home() {
                   <p className="text-sm text-muted-foreground line-clamp-2">
                     {project.shortDescription}
                   </p>
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-[10px] font-normal px-2 py-0">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
                 </CardContent>
               </Card>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="container mx-auto px-4 py-24 scroll-mt-24">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-4xl font-headline font-bold">Flexible <span className="text-primary">Pricing</span> Plans</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Choose the best way to access our premium source code library and technical support.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Individual Plan */}
+          <Card className="bg-card border-white/5 relative overflow-hidden flex flex-col">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl">Single Project</CardTitle>
+              <CardDescription>Perfect for one-off builds.</CardDescription>
+              <div className="mt-6 flex items-baseline gap-1">
+                <span className="text-4xl font-bold font-headline">$49</span>
+                <span className="text-muted-foreground">/start</span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 pt-0 flex-grow">
+              <ul className="space-y-4 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Full Source Code Access</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Lifetime Updates</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Email Documentation</li>
+                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> 24/7 Priority Support</li>
+                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> Custom Modifications</li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-8">
+              <Button className="w-full" variant="outline" asChild><Link href="/projects">Shop Projects</Link></Button>
+            </CardFooter>
+          </Card>
+
+          {/* Bundle Plan */}
+          <Card className="bg-card border-primary/50 relative overflow-hidden flex flex-col scale-105 shadow-2xl">
+             <div className="absolute top-0 right-0 bg-primary px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-bl-lg">Popular</div>
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl">Dev Bundle</CardTitle>
+              <CardDescription>Best for freelancers and agencies.</CardDescription>
+              <div className="mt-6 flex items-baseline gap-1">
+                <span className="text-4xl font-bold font-headline">$199</span>
+                <span className="text-muted-foreground">/forever</span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 pt-0 flex-grow">
+              <ul className="space-y-4 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> 5 Premium Projects</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Full Commercial Rights</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Private Discord Access</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Priority Support</li>
+                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> Custom Modifications</li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-8">
+              <Button className="w-full glow-primary" asChild><Link href="/register">Get Started</Link></Button>
+            </CardFooter>
+          </Card>
+
+          {/* Custom Plan */}
+          <Card className="bg-card border-white/5 relative overflow-hidden flex flex-col">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl">Custom Build</CardTitle>
+              <CardDescription>Tailored solutions for your business.</CardDescription>
+              <div className="mt-6 flex items-baseline gap-1">
+                <span className="text-4xl font-bold font-headline">Custom</span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 pt-0 flex-grow">
+              <ul className="space-y-4 text-sm text-muted-foreground">
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> White-label App Build</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Technical Consultation</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> AWS/Firebase Deployment</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Ongoing Maintenance</li>
+                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Custom UI/UX Design</li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-8">
+              <Button className="w-full" variant="outline" asChild><Link href="/about#contact">Contact Me</Link></Button>
+            </CardFooter>
+          </Card>
         </div>
       </section>
 
@@ -140,12 +200,12 @@ export default function Home() {
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 blur-[150px] rounded-full translate-y-1/2 -translate-x-1/2" />
           
           <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-headline font-bold">Have a Vision? Let's Build It.</h2>
+            <h2 className="text-4xl md:text-5xl font-headline font-bold">Have a Custom Project?</h2>
             <p className="text-lg text-muted-foreground">
-              I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.
+              If our marketplace templates don't fit your exact needs, I'm available for custom full-stack development.
             </p>
             <Button size="lg" className="h-14 px-12 text-lg font-headline glow-primary" asChild>
-              <Link href="/about#contact">Start a Conversation</Link>
+              <Link href="/about#contact">Talk to the Developer</Link>
             </Button>
           </div>
         </div>
