@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo } from 'react';
@@ -11,19 +12,19 @@ import { Search, Sparkles, ArrowRight, Code2, Layers, Globe } from 'lucide-react
 import { Button } from '@/components/ui/button';
 
 export default function MarketplaceHome() {
-  const [filter, setFilter] = useState<'All' | 'Web' | 'Mobile'>('All');
+  const [filter, setFilter] = useState<'Web' | 'Mobile'>('Web');
   const [search, setSearch] = useState('');
 
   const filteredProjects = useMemo(() => {
     return projects.filter(project => {
-      const matchesCategory = filter === 'All' || project.category === filter;
+      const matchesCategory = project.category === filter;
       const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase()) || 
                            project.shortDescription.toLowerCase().includes(search.toLowerCase());
       return matchesCategory && matchesSearch;
     });
   }, [filter, search]);
 
-  const categories = ['All', 'Web', 'Mobile'] as const;
+  const categories = ['Web', 'Mobile'] as const;
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,7 +56,7 @@ export default function MarketplaceHome() {
                 <button
                   key={cat}
                   onClick={() => setFilter(cat)}
-                  className={`px-8 py-3 rounded-2xl text-base font-bold transition-all duration-300 ${
+                  className={`px-8 py-3 rounded-2xl text-xl font-bold transition-all duration-300 ${
                     filter === cat 
                       ? 'bg-primary text-white shadow-[0_0_20px_rgba(123,103,228,0.4)] scale-105' 
                       : 'text-muted-foreground hover:text-white hover:bg-white/5'
@@ -140,15 +141,8 @@ export default function MarketplaceHome() {
               </div>
               <h3 className="text-3xl font-headline font-bold">No assets found</h3>
               <p className="text-muted-foreground text-xl max-w-md mx-auto">
-                Try adjusting your filters or search terms to find what you're looking for.
+                Try searching for something else in the {filter} category.
               </p>
-              <Button 
-                variant="outline" 
-                onClick={() => {setFilter('All'); setSearch('');}}
-                className="h-12 px-8 rounded-xl font-bold"
-              >
-                Clear all filters
-              </Button>
             </div>
           )}
         </section>

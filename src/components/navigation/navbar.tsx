@@ -4,11 +4,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, Home, Youtube, Code2 } from 'lucide-react';
+import { Menu, Home, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import Image from 'next/image';
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -27,6 +26,34 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const SCWLogo = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 180 60" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg" 
+    className={className}
+  >
+    <defs>
+      <linearGradient id="logo-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#22d3ee" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+      <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+    <g filter="url(#neon-glow)">
+      <text x="5" y="45" fontFamily="Space Grotesk, sans-serif" fontWeight="900" fontSize="50" fill="url(#logo-glow)">S</text>
+      <text x="42" y="45" fontFamily="Space Grotesk, sans-serif" fontWeight="900" fontSize="50" fill="url(#logo-glow)">C</text>
+      <text x="54" y="38" fontFamily="monospace" fontWeight="bold" fontSize="16" fill="white" className="animate-pulse">
+        {"</>"}
+      </text>
+      <text x="92" y="45" fontFamily="Space Grotesk, sans-serif" fontWeight="900" fontSize="50" fill="url(#logo-glow)">W</text>
+    </g>
+  </svg>
+);
+
 export function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -35,23 +62,9 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">
       <div className="container mx-auto px-4 flex h-28 items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="relative h-16 w-16 bg-primary/20 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 overflow-hidden">
-            <Image 
-              src="/logo.png" 
-              alt="Logo" 
-              fill 
-              className="object-contain p-2"
-              onError={(e) => {
-                // Fallback to Icon if image doesn't exist
-                const target = e.target as any;
-                target.style.display = 'none';
-              }}
-            />
-            <Code2 className="w-8 h-8 text-primary absolute" />
+          <div className="relative h-20 w-48 transition-transform duration-300 group-hover:scale-105">
+            <SCWLogo className="w-full h-full" />
           </div>
-          <span className="text-3xl font-headline font-bold tracking-tighter">
-            SourceCode<span className="text-primary">Wala</span>
-          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -60,7 +73,7 @@ export function Navbar() {
             <Link
               href="/"
               className={cn(
-                "text-3xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
+                "text-4xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
                 pathname === "/" ? "text-primary scale-110" : "text-muted-foreground"
               )}
             >
