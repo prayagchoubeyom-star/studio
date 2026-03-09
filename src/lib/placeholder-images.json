@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "project-1",
+      "description": "NextGen Dashboard interface",
+      "imageUrl": "https://picsum.photos/seed/dash/1200/800",
+      "imageHint": "dashboard interface"
+    },
+    {
+      "id": "project-2",
+      "description": "SaaS Platform landing page",
+      "imageUrl": "https://picsum.photos/seed/saas/1200/800",
+      "imageHint": "saas landing"
+    },
+    {
+      "id": "project-3",
+      "description": "AI Chat Application",
+      "imageUrl": "https://picsum.photos/seed/ai/1200/800",
+      "imageHint": "ai chat"
+    },
+    {
+      "id": "project-4",
+      "description": "3D Visualizer Tool",
+      "imageUrl": "https://picsum.photos/seed/3d/1200/800",
+      "imageHint": "3d visualizer"
+    },
+    {
+      "id": "hero-bg",
+      "description": "Tech background",
+      "imageUrl": "https://picsum.photos/seed/tech/1920/1080",
+      "imageHint": "abstract tech"
+    },
+    {
+      "id": "avatar",
+      "description": "Developer profile",
+      "imageUrl": "https://picsum.photos/seed/dev/400/400",
+      "imageHint": "developer portrait"
+    }
+  ]
 }
