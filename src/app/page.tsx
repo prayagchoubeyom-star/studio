@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo } from 'react';
@@ -8,11 +7,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { projects } from '@/lib/projects';
-import { Search, Filter, Sparkles, ArrowRight, Code2, Layers, Cpu, Globe } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, Code2, Layers, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function MarketplaceHome() {
-  const [filter, setFilter] = useState<'All' | 'Web' | 'Mobile' | 'AI' | '3D'>('All');
+  const [filter, setFilter] = useState<'All' | 'Web' | 'Mobile'>('All');
   const [search, setSearch] = useState('');
 
   const filteredProjects = useMemo(() => {
@@ -24,7 +23,7 @@ export default function MarketplaceHome() {
     });
   }, [filter, search]);
 
-  const categories = ['All', 'Web', 'Mobile', 'AI', '3D'] as const;
+  const categories = ['All', 'Web', 'Mobile'] as const;
 
   return (
     <div className="min-h-screen bg-background">
@@ -129,11 +128,6 @@ export default function MarketplaceHome() {
                           {tech}
                         </span>
                       ))}
-                      {project.technologies.length > 4 && (
-                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest px-2 py-1">
-                          +{project.technologies.length - 4}
-                        </span>
-                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -164,7 +158,7 @@ export default function MarketplaceHome() {
           {[
             { icon: Code2, title: "Clean Code", desc: "Production-ready, documented, and type-safe TypeScript codebases." },
             { icon: Layers, title: "Modular Architecture", desc: "Easily scalable components built with the latest industry standards." },
-            { icon: Globe, title: "Ready to Deploy", desc: "Instant access to files with detailed installation guides for AWS and Firebase." }
+            { icon: Globe, title: "Ready to Deploy", desc: "Instant access to files with detailed installation guides for your production environment." }
           ].map((item, i) => (
             <div key={i} className="space-y-4">
               <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">

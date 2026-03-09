@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function ProjectDetailPage() {
@@ -23,10 +23,12 @@ export default function ProjectDetailPage() {
       <div className="container mx-auto px-4 py-32 text-center space-y-8">
         <h1 className="text-4xl font-headline font-bold">Project Not Found</h1>
         <p className="text-muted-foreground">The project you're looking for doesn't exist.</p>
-        <Button onClick={() => router.push('/projects')}>Back to Marketplace</Button>
+        <Button onClick={() => router.push('/')}>Back to Marketplace</Button>
       </div>
     );
   }
+
+  const isMobile = project.category === 'Mobile';
 
   return (
     <div className="pb-24">
@@ -42,7 +44,7 @@ export default function ProjectDetailPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         
         <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-12 relative z-10 space-y-6">
-          <Link href="/projects" className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors w-fit mb-4">
+          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors w-fit mb-4">
             <ArrowLeft className="w-4 h-4" /> Back to Marketplace
           </Link>
           <div className="flex flex-wrap gap-3">
@@ -52,11 +54,21 @@ export default function ProjectDetailPage() {
           <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight">{project.title}</h1>
           
           <div className="flex flex-wrap items-center gap-4">
-            <Button size="lg" className="h-12 px-8 glow-primary" asChild>
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                <ExternalLink className="w-4 h-4" /> Live Demo
-              </a>
-            </Button>
+            {!isMobile && project.liveUrl && (
+              <Button size="lg" className="h-12 px-8 glow-primary" asChild>
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <ExternalLink className="w-4 h-4" /> Live Demo
+                </a>
+              </Button>
+            )}
+
+            {isMobile && project.downloadApkUrl && (
+              <Button size="lg" className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20" asChild>
+                <a href={project.downloadApkUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <Download className="w-4 h-4" /> Download APK
+                </a>
+              </Button>
+            )}
 
             {(project.demoUserEmail || project.demoAdminEmail) && (
               <Popover>
@@ -94,7 +106,7 @@ export default function ProjectDetailPage() {
                     )}
 
                     <p className="text-[10px] text-muted-foreground italic mt-2">
-                      * Use these to log in on the live demo site.
+                      * Use these to log in on the {isMobile ? 'mobile application' : 'live demo site'}.
                     </p>
                   </div>
                 </PopoverContent>
@@ -115,6 +127,9 @@ export default function ProjectDetailPage() {
           <Tabs defaultValue="overview" className="w-full">
             <TabsList className="bg-white/5 border border-white/10 w-full justify-start h-14 p-1 rounded-xl">
               <TabsTrigger value="overview" className="flex items-center gap-2 rounded-lg"><FileText className="w-4 h-4" /> Overview</TabsTrigger>
+              {isMobile && project.screenshots && (
+                 <TabsTrigger value="screenshots" className="flex items-center gap-2 rounded-lg"><Smartphone className="w-4 h-4" /> Screenshots</TabsTrigger>
+              )}
               <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg"><Play className="w-4 h-4" /> Video Tour</TabsTrigger>
               <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg"><Lock className="w-4 h-4" /> Documentation</TabsTrigger>
             </TabsList>
@@ -140,16 +155,35 @@ export default function ProjectDetailPage() {
               </div>
             </TabsContent>
 
+            {isMobile && project.screenshots && (
+              <TabsContent value="screenshots" className="mt-8 space-y-6 animate-in fade-in duration-500">
+                <h2 className="text-3xl font-headline font-bold">App <span className="text-primary">Screenshots</span></h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {project.screenshots.map((shot, i) => (
+                    <div key={i} className="relative aspect-[9/19] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                      <Image src={shot} alt={`Screenshot ${i + 1}`} fill className="object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            )}
+
             <TabsContent value="video" className="mt-8 space-y-6 animate-in fade-in duration-500">
               <h2 className="text-3xl font-headline font-bold">Watch Video <span className="text-red-500">Demo</span></h2>
               <div className="aspect-video relative rounded-2xl overflow-hidden border border-white/10">
-                <iframe 
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${project.youtubeId}`}
-                  title="Project Video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+                {project.youtubeId ? (
+                  <iframe 
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${project.youtubeId}`}
+                    title="Project Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-white/5 text-muted-foreground">
+                    Video tour coming soon
+                  </div>
+                )}
               </div>
             </TabsContent>
 
@@ -158,7 +192,7 @@ export default function ProjectDetailPage() {
               {isPurchased ? (
                 <div className="prose prose-invert max-w-none p-8 bg-white/5 rounded-2xl border border-white/10">
                   <pre className="whitespace-pre-wrap font-code text-sm text-primary-foreground">
-                    {project.documentation}
+                    {project.documentation || 'Documentation is being prepared.'}
                   </pre>
                 </div>
               ) : (
@@ -204,7 +238,7 @@ export default function ProjectDetailPage() {
             <div className="space-y-4">
               <h3 className="text-xl font-headline font-bold">What's Included?</h3>
               <ul className="text-sm space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Full Source Code (TypeScript)</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Full Source Code ({isMobile ? 'React Native/Flutter' : 'TypeScript'})</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Complete Documentation</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Future Updates</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Support via Email</li>

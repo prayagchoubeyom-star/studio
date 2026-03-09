@@ -7,14 +7,15 @@ export interface Project {
   fullDescription: string;
   thumbnail: string;
   images: string[];
+  screenshots?: string[];
   technologies: string[];
-  category: 'Web' | 'Mobile' | 'AI' | '3D';
+  category: 'Web' | 'Mobile';
   liveUrl?: string;
   repoUrl?: string;
+  downloadApkUrl?: string;
   youtubeId?: string;
   price: number;
   features: string[];
-  has3D?: boolean;
   documentation?: string;
   demoUserEmail?: string;
   demoUserPassword?: string;
@@ -40,7 +41,6 @@ export const projects: Project[] = [
     liveUrl: 'https://demo.example.com',
     repoUrl: 'https://github.com/scw/nextgen-dash',
     features: ['Real-time analytics', 'Custom widget system', 'Role-based access', 'Exportable reports'],
-    has3D: false,
     documentation: '## Installation\n1. Clone the repo\n2. Run `npm install`\n3. Setup `.env`\n4. Run `npm run dev`',
     demoUserEmail: 'user@example.com',
     demoUserPassword: 'password123',
@@ -48,47 +48,50 @@ export const projects: Project[] = [
     demoAdminPassword: 'adminpassword'
   },
   {
-    id: 'ai-companion',
-    title: 'AI Companion',
-    price: 79.00,
+    id: 'fitness-tracker-app',
+    title: 'ProFit Mobile App',
+    price: 89.00,
     youtubeId: 'dQw4w9WgXcQ',
-    shortDescription: 'An intelligent personal assistant powered by LLMs.',
-    fullDescription: 'AI Companion is more than just a chatbot. It integrates with your daily workflow to help summarize emails, generate code snippets, and manage your calendar using state-of-the-art AI models.',
-    thumbnail: PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || '',
+    shortDescription: 'Complete fitness tracking solution with social features.',
+    fullDescription: 'A comprehensive mobile application built with React Native for fitness enthusiasts. Includes workout planning, calorie tracking, and a social feed for sharing progress.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-2')?.imageUrl || '',
     images: [
-      PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || '',
-      PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''
+      PlaceHolderImages.find(img => img.id === 'project-2')?.imageUrl || '',
+      PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || ''
     ],
-    technologies: ['OpenAI API', 'React', 'Node.js', 'Firebase'],
-    category: 'AI',
-    liveUrl: 'https://ai-companion.example.com',
-    repoUrl: 'https://github.com/scw/ai-companion',
-    features: ['Context-aware conversations', 'Multi-modal input', 'Cross-platform sync', 'Local storage for privacy'],
-    has3D: false,
-    documentation: '## Setup Guide\n- API Key required for OpenAI.\n- Firebase config needed for auth.',
-    demoUserEmail: 'ai-user@test.com',
-    demoUserPassword: 'password123'
+    screenshots: [
+      "https://picsum.photos/seed/mobile1/400/800",
+      "https://picsum.photos/seed/mobile2/400/800",
+      "https://picsum.photos/seed/mobile3/400/800"
+    ],
+    technologies: ['React Native', 'Firebase', 'Redux', 'NativeWind'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/profit.apk',
+    repoUrl: 'https://github.com/scw/profit-app',
+    features: ['Activity tracking', 'Custom workout builder', 'Meal logging', 'Friend system'],
+    documentation: '## Mobile Setup\n1. Install React Native CLI\n2. Run `npm install`\n3. Configure Firebase in `google-services.json`\n4. Run `npx react-native run-android`',
+    demoUserEmail: 'tester@profit.com',
+    demoUserPassword: 'testpassword'
   },
   {
-    id: 'scw-3d-visualizer',
-    title: '3D Product Visualizer',
-    price: 120.00,
+    id: 'ecommerce-portal',
+    title: 'Modern E-shop',
+    price: 65.00,
     youtubeId: 'dQw4w9WgXcQ',
-    shortDescription: 'Interactive 3D engine for exploring products in the browser.',
-    fullDescription: 'A cutting-edge visualizer that allows users to interact with 3D models of products. It includes lighting controls, material switching, and AR capabilities for a truly immersive shopping experience.',
+    shortDescription: 'Full-stack e-commerce solution with Stripe integration.',
+    fullDescription: 'A fast, SEO-friendly e-commerce platform with a powerful admin panel. Perfect for small to medium businesses looking to launch their online store quickly.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-4')?.imageUrl || '',
     images: [
       PlaceHolderImages.find(img => img.id === 'project-4')?.imageUrl || '',
-      PlaceHolderImages.find(img => img.id === 'project-2')?.imageUrl || ''
+      PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''
     ],
-    technologies: ['Three.js', 'React Three Fiber', 'GLSL', 'WebXR'],
-    category: '3D',
-    liveUrl: 'https://3d.example.com',
-    repoUrl: 'https://github.com/scw/3d-visualizer',
-    features: ['PBR rendering', 'Dynamic shadows', 'AR support', 'Custom GLTF loader'],
-    has3D: true,
-    documentation: '## 3D Asset Management\n- Place GLB files in /public/assets\n- Adjust material properties in config.js',
-    demoAdminEmail: '3d-admin@test.com',
-    demoAdminPassword: 'admin-key-99'
+    technologies: ['Next.js', 'Prisma', 'Stripe', 'PostgreSQL'],
+    category: 'Web',
+    liveUrl: 'https://shop.example.com',
+    repoUrl: 'https://github.com/scw/eshop',
+    features: ['Stripe Checkout', 'Inventory Management', 'Order Tracking', 'SEO Optimized'],
+    documentation: '## Deployment\n- Deploy to Vercel\n- Setup database on Supabase\n- Configure Stripe Webhooks',
+    demoAdminEmail: 'shop-admin@test.com',
+    demoAdminPassword: 'admin-password-123'
   }
 ];
