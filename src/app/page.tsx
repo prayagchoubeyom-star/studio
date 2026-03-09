@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useMemo } from 'react';
@@ -8,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { projects } from '@/lib/projects';
-import { Search, Sparkles, ArrowRight, Code2, Layers, Globe } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, Code2, Layers, Globe, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function MarketplaceHome() {
@@ -40,11 +39,17 @@ export default function MarketplaceHome() {
           <Badge variant="outline" className="px-4 md:px-6 py-2 text-xs md:text-sm font-headline border-primary/20 bg-primary/5 text-primary mb-2 md:mb-4 animate-in fade-in slide-in-from-top-4 duration-500">
             <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-2" /> Premium Source Code Marketplace
           </Badge>
-          <h1 className="text-4xl md:text-6xl lg:text-8xl font-headline font-bold leading-tight tracking-tighter animate-in fade-in slide-in-from-bottom-4 duration-700">
-            Build Faster with <span className="gradient-text">Pro Assets</span>.
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-headline font-bold leading-tight tracking-tighter animate-in fade-in slide-in-from-bottom-4 duration-700">
+              Build Faster with <span className="gradient-text">Pro Assets</span>.
+            </h1>
+            <div className="flex items-center justify-center gap-2 text-xl md:text-3xl font-headline font-bold text-secondary animate-in fade-in slide-in-from-bottom-5 duration-800">
+              <ShieldCheck className="w-6 h-6 md:w-8 md:h-8" />
+              Pay only after website setup.
+            </div>
+          </div>
           <p className="text-lg md:text-2xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000">
-            Expertly crafted source code, templates, and full-stack solutions ready for your next production launch.
+            Expertly crafted source code, templates, and full-stack solutions ready for your next production launch. Zero risk, professional support.
           </p>
         </section>
 
