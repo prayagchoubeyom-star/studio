@@ -8,7 +8,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // If you must use static export (paste to public_html), 
+  // uncomment the line below, but AI features will stop working.
+  // output: 'export',
   images: {
+    unoptimized: true, // Required for many cPanel environments
     remotePatterns: [
       {
         protocol: 'https',
