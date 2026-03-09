@@ -13,7 +13,7 @@
         "youtubeId": { "type": "string" },
         "demoUrl": { "type": "string" },
         "docs": { "type": "string" },
-        "category": { "type": "string", "enum": ["Web", "Mobile", "AI", "3D"] },
+        "category": { "type": "string", "enum": ["Web", "Mobile"] },
         "thumbnail": { "type": "string" }
       },
       "required": ["title", "price", "category"]

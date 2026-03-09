@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export interface Project {
@@ -71,7 +72,9 @@ export const projects: Project[] = [
     features: ['Activity tracking', 'Custom workout builder', 'Meal logging', 'Friend system'],
     documentation: '## Mobile Setup\n1. Install React Native CLI\n2. Run `npm install`\n3. Configure Firebase in `google-services.json`\n4. Run `npx react-native run-android`',
     demoUserEmail: 'tester@profit.com',
-    demoUserPassword: 'testpassword'
+    demoUserPassword: 'testpassword',
+    demoAdminEmail: 'admin@profit.com',
+    demoAdminPassword: 'adminpassword'
   },
   {
     id: 'ecommerce-portal',
@@ -91,6 +94,8 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/scw/eshop',
     features: ['Stripe Checkout', 'Inventory Management', 'Order Tracking', 'SEO Optimized'],
     documentation: '## Deployment\n- Deploy to Vercel\n- Setup database on Supabase\n- Configure Stripe Webhooks',
+    demoUserEmail: 'customer@eshop.com',
+    demoUserPassword: 'password',
     demoAdminEmail: 'shop-admin@test.com',
     demoAdminPassword: 'admin-password-123'
   }

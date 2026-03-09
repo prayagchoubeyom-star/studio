@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, Home, Youtube, ShoppingCart } from 'lucide-react';
+import { Menu, Home, Youtube, Code2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -33,76 +33,84 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto px-4 flex h-24 items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative h-16 w-48 transition-transform duration-300 group-hover:scale-105">
+      <div className="container mx-auto px-4 flex h-28 items-center justify-between">
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="relative h-16 w-16 bg-primary/20 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 overflow-hidden">
             <Image 
               src="/logo.png" 
-              alt="SCW Store Logo" 
+              alt="Logo" 
               fill 
-              className="object-contain"
-              priority
+              className="object-contain p-2"
+              onError={(e) => {
+                // Fallback to Icon if image doesn't exist
+                const target = e.target as any;
+                target.style.display = 'none';
+              }}
             />
+            <Code2 className="w-8 h-8 text-primary absolute" />
           </div>
+          <span className="text-3xl font-headline font-bold tracking-tighter">
+            SourceCode<span className="text-primary">Wala</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-12">
-          <div className="flex items-center gap-10">
+        <div className="hidden lg:flex items-center gap-16">
+          <div className="flex items-center gap-12">
             <Link
               href="/"
               className={cn(
-                "text-2xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
-                pathname === "/" ? "text-primary scale-105" : "text-muted-foreground"
+                "text-3xl font-bold transition-all hover:text-primary hover:translate-y-[-2px] active:translate-y-0",
+                pathname === "/" ? "text-primary scale-110" : "text-muted-foreground"
               )}
             >
               Marketplace
             </Link>
           </div>
           
-          <div className="flex items-center gap-6 pl-10 border-l border-white/10">
-             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500 w-14 h-14 transition-all hover:bg-green-500/10">
+          <div className="flex items-center gap-8 pl-12 border-l border-white/10">
+             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500 w-16 h-16 transition-all hover:bg-green-500/10">
                 <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="w-8 h-8" />
+                  <WhatsAppIcon className="w-10 h-10" />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500 w-14 h-14 transition-all hover:bg-red-500/10">
+              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500 w-16 h-16 transition-all hover:bg-red-500/10">
                 <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer">
-                  <Youtube className="w-8 h-8" />
+                  <Youtube className="w-10 h-10" />
                 </a>
               </Button>
           </div>
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="w-16 h-16">
                 <Menu className="w-12 h-12" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-background/95 backdrop-blur-lg border-l-white/10">
-              <div className="flex flex-col gap-10 mt-20">
+            <SheetContent side="right" className="bg-background/95 backdrop-blur-lg border-l-white/10 w-full sm:max-w-md">
+              <div className="flex flex-col gap-12 mt-20">
                 <Link
                   href="/"
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "flex items-center gap-4 text-3xl font-bold p-6 rounded-2xl transition-all",
+                    "flex items-center gap-6 text-4xl font-bold p-8 rounded-3xl transition-all",
                     pathname === "/" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5"
                   )}
                 >
-                  <Home className="w-8 h-8" />
+                  <Home className="w-10 h-10" />
                   Marketplace
                 </Link>
                 
-                <div className="pt-10 border-t border-white/10 flex flex-col gap-8">
-                  <div className="flex gap-10 justify-center">
-                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full hover:text-green-500 transition-all hover:scale-110">
-                      <WhatsAppIcon className="w-10 h-10" />
+                <div className="pt-12 border-t border-white/10 flex flex-col gap-10">
+                  <div className="flex gap-12 justify-center">
+                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-6 bg-white/5 rounded-full hover:text-green-500 transition-all hover:scale-110">
+                      <WhatsAppIcon className="w-12 h-12" />
                     </a>
-                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full hover:text-red-500 transition-all hover:scale-110">
-                      <Youtube className="w-10 h-10" />
+                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-6 bg-white/5 rounded-full hover:text-red-500 transition-all hover:scale-110">
+                      <Youtube className="w-12 h-12" />
                     </a>
                   </div>
                 </div>
