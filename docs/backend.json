@@ -1,0 +1,47 @@
+
+{
+  "entities": {
+    "Project": {
+      "title": "Marketplace Project",
+      "description": "A project available for sale.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "shortDescription": { "type": "string" },
+        "fullDescription": { "type": "string" },
+        "youtubeId": { "type": "string" },
+        "demoUrl": { "type": "string" },
+        "docs": { "type": "string" },
+        "category": { "type": "string", "enum": ["Web", "Mobile", "AI", "3D"] },
+        "thumbnail": { "type": "string" }
+      },
+      "required": ["title", "price", "category"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Extended user data.",
+      "type": "object",
+      "properties": {
+        "purchasedProjects": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "role": { "type": "string", "enum": ["user", "admin"] }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com"]
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Store for projects available in the marketplace."
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Store for user-specific data including purchases."
+    }
+  }
+}

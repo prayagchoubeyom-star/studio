@@ -1,14 +1,14 @@
+
 "use client"
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Code, User, Layout, Wand2, Menu, Home, Youtube } from 'lucide-react';
+import { Code, User, Layout, Wand2, Menu, Home, Youtube, LogIn, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
-// Custom WhatsApp Icon SVG
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
     viewBox="0 0 24 24" 
@@ -32,24 +32,9 @@ export function Navbar() {
 
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'Projects', href: '/projects', icon: Layout },
+    { name: 'Marketplace', href: '/projects', icon: ShoppingCart },
+    { name: 'Pricing', href: '/#pricing', icon: Wand2 },
     { name: 'About', href: '/about', icon: User },
-    { name: 'AI Tool', href: '/admin/summarizer', icon: Wand2 },
-  ];
-
-  const socialLinks = [
-    { 
-      name: 'WhatsApp', 
-      href: 'https://wa.me/1234567890', // Replace with actual number
-      icon: WhatsAppIcon,
-      color: 'hover:text-green-500'
-    },
-    { 
-      name: 'YouTube', 
-      href: 'https://youtube.com/@sourcecodewala', // Replace with actual channel
-      icon: Youtube,
-      color: 'hover:text-red-500'
-    }
   ];
 
   return (
@@ -60,7 +45,7 @@ export function Navbar() {
             <Code className="w-6 h-6 text-primary" />
           </div>
           <span className="font-headline font-bold text-xl tracking-tight">
-            SCW<span className="text-secondary">.</span>
+            SCW<span className="text-secondary">.</span>Store
           </span>
         </Link>
 
@@ -72,7 +57,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
+                  "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1.5",
                   pathname === link.href ? "text-primary" : "text-muted-foreground"
                 )}
               >
@@ -82,19 +67,19 @@ export function Navbar() {
           </div>
           
           <div className="flex items-center gap-3 pl-6 border-l border-white/10">
-            {socialLinks.map((social) => (
-              <Button 
-                key={social.name} 
-                variant="ghost" 
-                size="icon" 
-                asChild 
-                className={cn("rounded-full transition-colors", social.color)}
-              >
-                <a href={social.href} target="_blank" rel="noopener noreferrer" title={social.name}>
-                  <social.icon className="w-5 h-5" />
+             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500">
+                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon className="w-5 h-5" />
                 </a>
               </Button>
-            ))}
+              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500">
+                <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer">
+                  <Youtube className="w-5 h-5" />
+                </a>
+              </Button>
+              <Button size="sm" variant="outline" className="ml-4 border-primary/20 text-primary hover:bg-primary/10" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
           </div>
         </div>
 
@@ -124,21 +109,16 @@ export function Navbar() {
                 ))}
                 
                 <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground px-2">Connect with me</p>
-                  <div className="flex gap-4 px-2">
-                    {socialLinks.map((social) => (
-                      <Button 
-                        key={social.name} 
-                        variant="outline" 
-                        size="icon" 
-                        asChild 
-                        className={cn("rounded-full", social.color)}
-                      >
-                        <a href={social.href} target="_blank" rel="noopener noreferrer">
-                          <social.icon className="w-5 h-5" />
-                        </a>
-                      </Button>
-                    ))}
+                  <Button variant="outline" asChild className="w-full">
+                    <Link href="/login">Account Login</Link>
+                  </Button>
+                  <div className="flex gap-4 justify-center">
+                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-full hover:text-green-500 transition-colors">
+                      <WhatsAppIcon className="w-6 h-6" />
+                    </a>
+                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-full hover:text-red-500 transition-colors">
+                      <Youtube className="w-6 h-6" />
+                    </a>
                   </div>
                 </div>
               </div>

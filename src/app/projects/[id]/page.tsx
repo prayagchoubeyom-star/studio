@@ -1,27 +1,29 @@
+
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ThreeScene } from '@/components/ui/three-scene';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock } from 'lucide-react';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const project = projects.find(p => p.id === id);
+  const [isPurchased, setIsPurchased] = useState(false); // Mock purchase state
 
   if (!project) {
     return (
       <div className="container mx-auto px-4 py-32 text-center space-y-8">
         <h1 className="text-4xl font-headline font-bold">Project Not Found</h1>
-        <p className="text-muted-foreground">The project you're looking for doesn't exist or has been removed.</p>
-        <Button onClick={() => router.push('/projects')}>Back to Projects</Button>
+        <p className="text-muted-foreground">The project you're looking for doesn't exist.</p>
+        <Button onClick={() => router.push('/projects')}>Back to Marketplace</Button>
       </div>
     );
   }
@@ -41,28 +43,22 @@ export default function ProjectDetailPage() {
         
         <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-12 relative z-10 space-y-6">
           <Link href="/projects" className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors w-fit mb-4">
-            <ArrowLeft className="w-4 h-4" /> Back to Projects
+            <ArrowLeft className="w-4 h-4" /> Back to Marketplace
           </Link>
           <div className="flex flex-wrap gap-3">
             <Badge className="bg-primary/20 text-primary border-primary/30 py-1 px-4">{project.category}</Badge>
-            {project.has3D && <Badge variant="outline" className="text-secondary border-secondary/30">3D Interactive</Badge>}
+            <Badge variant="outline" className="text-secondary border-secondary/30 font-bold">${project.price}</Badge>
           </div>
           <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight">{project.title}</h1>
           <div className="flex flex-wrap gap-4">
-            {project.liveUrl && (
-              <Button size="lg" className="h-12 px-8 glow-primary" asChild>
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4" /> Live Demo
-                </a>
-              </Button>
-            )}
-            {project.repoUrl && (
-              <Button size="lg" variant="outline" className="h-12 px-8 border-white/20 bg-white/5" asChild>
-                <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <Github className="w-4 h-4" /> Code Repository
-                </a>
-              </Button>
-            )}
+            <Button size="lg" className="h-12 px-8 glow-primary" asChild>
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <ExternalLink className="w-4 h-4" /> Live Demo
+              </a>
+            </Button>
+            <Button size="lg" variant="secondary" className="h-12 px-8 bg-green-600 hover:bg-green-700 text-white" onClick={() => setIsPurchased(true)}>
+              <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
+            </Button>
           </div>
         </div>
       </section>
@@ -70,61 +66,83 @@ export default function ProjectDetailPage() {
       {/* Content Grid */}
       <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-12 mt-12">
         <div className="lg:col-span-2 space-y-12">
-          {/* Main Description */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-headline font-bold">About the Project</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
-              {project.fullDescription}
-            </p>
-          </div>
+          
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="bg-white/5 border border-white/10 w-full justify-start h-14 p-1 rounded-xl">
+              <TabsTrigger value="overview" className="flex items-center gap-2 rounded-lg"><FileText className="w-4 h-4" /> Overview</TabsTrigger>
+              <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg"><Play className="w-4 h-4" /> Video Tour</TabsTrigger>
+              <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg"><Lock className="w-4 h-4" /> Documentation</TabsTrigger>
+            </TabsList>
 
-          {/* Key Features */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-headline font-bold">Key Features</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {project.features.map((feature, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
-                  <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <span className="text-foreground">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+            <TabsContent value="overview" className="mt-8 space-y-12 animate-in fade-in duration-500">
+              <div className="space-y-6">
+                <h2 className="text-3xl font-headline font-bold">About the Project</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {project.fullDescription}
+                </p>
+              </div>
 
-          {/* Interactive 3D (If applicable) */}
-          {project.has3D && (
-            <div className="space-y-6">
-              <h2 className="text-3xl font-headline font-bold">Interactive <span className="text-secondary">3D Exploration</span></h2>
-              <Card className="overflow-hidden bg-white/5 border-white/10 aspect-video md:aspect-[21/9] relative group">
-                <ThreeScene className="w-full h-full cursor-grab active:cursor-grabbing" type="sphere" />
-                <div className="absolute bottom-4 left-4 text-xs text-muted-foreground bg-background/50 backdrop-blur-md px-3 py-1.5 rounded-full">
-                  Interact to explore the model geometry
+              <div className="space-y-6">
+                <h2 className="text-3xl font-headline font-bold">Key Features</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {project.features.map((feature, i) => (
+                    <div key={i} className="flex items-start gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
+                      <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <span className="text-foreground">{feature}</span>
+                    </div>
+                  ))}
                 </div>
-              </Card>
-            </div>
-          )}
+              </div>
+            </TabsContent>
 
-          {/* Gallery */}
-          <div className="space-y-6">
-            <h2 className="text-3xl font-headline font-bold">Project Gallery</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {project.images.map((image, i) => (
-                <div key={i} className="relative aspect-video rounded-2xl overflow-hidden group border border-white/10">
-                  <Image 
-                    src={image} 
-                    alt={`${project.title} Screenshot ${i+1}`} 
-                    fill 
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+            <TabsContent value="video" className="mt-8 space-y-6 animate-in fade-in duration-500">
+              <h2 className="text-3xl font-headline font-bold">Watch Video <span className="text-red-500">Demo</span></h2>
+              <div className="aspect-video relative rounded-2xl overflow-hidden border border-white/10">
+                <iframe 
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${project.youtubeId}`}
+                  title="Project Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="docs" className="mt-8 space-y-6 animate-in fade-in duration-500">
+              <h2 className="text-3xl font-headline font-bold">Installation <span className="text-primary">Guide</span></h2>
+              {isPurchased ? (
+                <div className="prose prose-invert max-w-none p-8 bg-white/5 rounded-2xl border border-white/10">
+                  <pre className="whitespace-pre-wrap font-code text-sm text-primary-foreground">
+                    {project.documentation}
+                  </pre>
                 </div>
-              ))}
-            </div>
-          </div>
+              ) : (
+                <Card className="bg-red-500/10 border-red-500/20 p-12 text-center flex flex-col items-center gap-6">
+                  <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
+                    <Lock className="w-8 h-8 text-red-500" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold">Access Restricted</h3>
+                    <p className="text-muted-foreground">Purchase the source code to unlock the detailed installation documentation and repository access.</p>
+                  </div>
+                  <Button onClick={() => setIsPurchased(true)} className="glow-primary">Buy Now to Unlock</Button>
+                </Card>
+              )}
+            </TabsContent>
+          </Tabs>
+
         </div>
 
         {/* Sidebar Info */}
         <div className="space-y-8">
           <Card className="bg-card border-white/10 p-8 space-y-6 sticky top-24">
+            <div className="space-y-2">
+              <div className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Price</div>
+              <div className="text-4xl font-headline font-bold text-primary">${project.price}</div>
+            </div>
+
+            <hr className="border-white/10" />
+
             <div className="space-y-4">
               <h3 className="text-xl font-headline font-bold">Technologies Used</h3>
               <div className="flex flex-wrap gap-2">
@@ -139,28 +157,22 @@ export default function ProjectDetailPage() {
             <hr className="border-white/10" />
 
             <div className="space-y-4">
-              <h3 className="text-xl font-headline font-bold">Project Timeline</h3>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Status</span>
-                <span className="text-primary font-medium">Completed</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Year</span>
-                <span className="text-foreground">2024</span>
-              </div>
+              <h3 className="text-xl font-headline font-bold">What's Included?</h3>
+              <ul className="text-sm space-y-3 text-muted-foreground">
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Full Source Code (TypeScript)</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Complete Documentation</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Future Updates</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Support via Email</li>
+              </ul>
             </div>
 
-            <hr className="border-white/10" />
-
-            <div className="space-y-4">
-              <h3 className="text-xl font-headline font-bold">Need a similar solution?</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                If this project aligns with what you're looking to build, I'm available to help you realize your vision.
-              </p>
-              <Button className="w-full glow-primary" asChild>
-                <Link href="/about#contact">Inquire Now</Link>
-              </Button>
-            </div>
+            <Button className="w-full h-12 text-lg font-headline glow-primary" onClick={() => setIsPurchased(true)}>
+              Get Instant Access
+            </Button>
+            
+            <p className="text-[10px] text-center text-muted-foreground italic">
+              Secure checkout. Digital products are delivered instantly.
+            </p>
           </Card>
         </div>
       </div>
