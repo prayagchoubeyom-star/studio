@@ -4,10 +4,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, Home } from 'lucide-react';
+import { Menu, Home, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -63,9 +63,9 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto px-4 flex h-28 items-center justify-between">
+      <div className="container mx-auto px-4 flex h-20 md:h-28 items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="relative h-20 w-48 transition-transform duration-300 group-hover:scale-105">
+          <div className="relative h-12 w-32 md:h-20 md:w-48 transition-transform duration-300 group-hover:scale-105">
             <SCWLogo className="w-full h-full" />
           </div>
         </Link>
@@ -99,34 +99,40 @@ export function Navbar() {
         </div>
 
         {/* Mobile Nav */}
-        <div className="lg:hidden">
+        <div className="lg:hidden flex items-center gap-4">
+           <Button variant="ghost" size="icon" asChild className="text-[#25D366] w-10 h-10">
+              <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="w-6 h-6" />
+              </a>
+            </Button>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="w-16 h-16">
-                <Menu className="w-12 h-12" />
+              <Button variant="ghost" size="icon" className="w-10 h-10">
+                <Menu className="w-8 h-8" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background/95 backdrop-blur-lg border-l-white/10 w-full sm:max-w-md">
-              <div className="flex flex-col gap-12 mt-20">
+              <div className="flex flex-col gap-12 mt-20 h-full">
                 <Link
                   href="/"
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "flex items-center gap-6 text-4xl font-bold p-8 rounded-3xl transition-all",
+                    "flex items-center gap-6 text-3xl font-bold p-6 rounded-2xl transition-all",
                     pathname === "/" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5"
                   )}
                 >
-                  <Home className="w-10 h-10" />
+                  <Home className="w-8 h-8" />
                   Marketplace
                 </Link>
                 
-                <div className="pt-12 border-t border-white/10 flex flex-col gap-10">
-                  <div className="flex gap-12 justify-center">
-                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-6 bg-white/5 rounded-full text-[#25D366] transition-all hover:scale-110">
-                      <WhatsAppIcon className="w-12 h-12" />
+                <div className="mt-auto pb-20 border-t border-white/10 flex flex-col gap-8 pt-10">
+                  <p className="text-center text-muted-foreground text-sm font-medium uppercase tracking-widest">Connect With Us</p>
+                  <div className="flex gap-10 justify-center">
+                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full text-[#25D366] transition-all active:scale-95">
+                      <WhatsAppIcon className="w-10 h-10" />
                     </a>
-                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-6 bg-white/5 rounded-full text-[#FF0000] transition-all hover:scale-110">
-                      <YoutubeIcon className="w-12 h-12" />
+                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-5 bg-white/5 rounded-full text-[#FF0000] transition-all active:scale-95">
+                      <YoutubeIcon className="w-10 h-10" />
                     </a>
                   </div>
                 </div>
