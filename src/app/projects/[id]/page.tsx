@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone, LayoutDashboard } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone, LayoutDashboard, Globe } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function ProjectDetailPage() {
@@ -125,6 +125,24 @@ export default function ProjectDetailPage() {
             <Button size="lg" variant="secondary" className="h-10 md:h-12 px-4 md:px-8 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto" onClick={() => setIsPurchased(true)}>
               <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
             </Button>
+          </div>
+
+          {/* Happy Clients Note */}
+          <div className="mt-8 p-6 bg-primary/10 border border-primary/20 rounded-3xl max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-1000">
+             <div className="flex items-center gap-3 mb-3">
+               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                 <Globe className="w-4 h-4 text-primary" />
+               </div>
+               <h3 className="font-headline font-bold text-lg">Trusted by Happy Clients</h3>
+             </div>
+             <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+               If the demo links above are undergoing maintenance, feel free to browse these live production sites built for our clients to verify the quality of our work:
+             </p>
+             <div className="flex flex-wrap gap-4">
+               <a href="https://setupfx24.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-primary hover:text-white transition-colors bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50">setupfx24.com</a>
+               <a href="https://pipxcapital.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-primary hover:text-white transition-colors bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50">pipxcapital.com</a>
+               <a href="https://bluestoneexchange.com/" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-primary hover:text-white transition-colors bg-white/5 px-3 py-2 rounded-lg border border-white/10 hover:border-primary/50">bluestoneexchange.com</a>
+             </div>
           </div>
         </div>
       </section>
@@ -269,3 +287,4 @@ export default function ProjectDetailPage() {
     </div>
   );
 }
+
