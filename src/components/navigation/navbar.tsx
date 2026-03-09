@@ -1,10 +1,9 @@
-
 "use client"
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Code, User, Layout, Wand2, Menu, Home, Youtube, LogIn, ShoppingCart } from 'lucide-react';
+import { Code, Menu, Home, Youtube, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -33,31 +32,29 @@ export function Navbar() {
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Marketplace', href: '/projects', icon: ShoppingCart },
-    { name: 'Pricing', href: '/#pricing', icon: Wand2 },
-    { name: 'About', href: '/about', icon: User },
   ];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/80 backdrop-blur-xl">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
+      <div className="container mx-auto px-4 flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-            <Code className="w-6 h-6 text-primary" />
+          <div className="p-2 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+            <Code className="w-7 h-7 text-primary" />
           </div>
-          <span className="font-headline font-bold text-xl tracking-tight">
+          <span className="font-headline font-bold text-2xl tracking-tight">
             SCW<span className="text-secondary">.</span>Store
           </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-10">
+          <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary flex items-center gap-1.5",
+                  "text-lg font-semibold transition-colors hover:text-primary flex items-center gap-2",
                   pathname === link.href ? "text-primary" : "text-muted-foreground"
                 )}
               >
@@ -66,19 +63,16 @@ export function Navbar() {
             ))}
           </div>
           
-          <div className="flex items-center gap-3 pl-6 border-l border-white/10">
-             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500">
+          <div className="flex items-center gap-4 pl-8 border-l border-white/10">
+             <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-green-500 w-11 h-11">
                 <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="w-5 h-5" />
+                  <WhatsAppIcon className="w-6 h-6" />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500">
+              <Button variant="ghost" size="icon" asChild className="rounded-full hover:text-red-500 w-11 h-11">
                 <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer">
-                  <Youtube className="w-5 h-5" />
+                  <Youtube className="w-6 h-6" />
                 </a>
-              </Button>
-              <Button size="sm" variant="outline" className="ml-4 border-primary/20 text-primary hover:bg-primary/10" asChild>
-                <Link href="/login">Login</Link>
               </Button>
           </div>
         </div>
@@ -87,37 +81,34 @@ export function Navbar() {
         <div className="md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="w-6 h-6" />
+              <Button variant="ghost" size="icon" className="w-12 h-12">
+                <Menu className="w-8 h-8" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-background/95 backdrop-blur-lg">
-              <div className="flex flex-col gap-6 mt-12">
+              <div className="flex flex-col gap-8 mt-16">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
                     className={cn(
-                      "flex items-center gap-4 text-lg font-medium p-2 rounded-lg transition-colors",
+                      "flex items-center gap-4 text-xl font-bold p-3 rounded-xl transition-colors",
                       pathname === link.href ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5"
                     )}
                   >
-                    <link.icon className="w-5 h-5" />
+                    <link.icon className="w-6 h-6" />
                     {link.name}
                   </Link>
                 ))}
                 
-                <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
-                  <Button variant="outline" asChild className="w-full">
-                    <Link href="/login">Account Login</Link>
-                  </Button>
-                  <div className="flex gap-4 justify-center">
-                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-full hover:text-green-500 transition-colors">
-                      <WhatsAppIcon className="w-6 h-6" />
+                <div className="pt-8 border-t border-white/10 flex flex-col gap-6">
+                  <div className="flex gap-6 justify-center">
+                    <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:text-green-500 transition-colors">
+                      <WhatsAppIcon className="w-8 h-8" />
                     </a>
-                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-full hover:text-red-500 transition-colors">
-                      <Youtube className="w-6 h-6" />
+                    <a href="https://youtube.com/@sourcecodewala" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 rounded-full hover:text-red-500 transition-colors">
+                      <Youtube className="w-8 h-8" />
                     </a>
                   </div>
                 </div>

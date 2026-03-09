@@ -1,4 +1,3 @@
-
 import { PlaceHolderImages } from './placeholder-images';
 
 export interface Project {
@@ -12,11 +11,15 @@ export interface Project {
   category: 'Web' | 'Mobile' | 'AI' | '3D';
   liveUrl?: string;
   repoUrl?: string;
-  youtubeId?: string; // New field
-  price: number; // New field
+  youtubeId?: string;
+  price: number;
   features: string[];
   has3D?: boolean;
-  documentation?: string; // New field
+  documentation?: string;
+  demoUserEmail?: string;
+  demoUserPassword?: string;
+  demoAdminEmail?: string;
+  demoAdminPassword?: string;
 }
 
 export const projects: Project[] = [
@@ -24,7 +27,7 @@ export const projects: Project[] = [
     id: 'nextgen-dash',
     title: 'NextGen Dashboard',
     price: 49.99,
-    youtubeId: 'dQw4w9WgXcQ', // Placeholder ID
+    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'A high-performance analytics dashboard for SaaS companies.',
     fullDescription: 'NextGen Dashboard provides deep insights into business metrics with real-time data streaming. Built with performance and scalability in mind, it features advanced data visualization and customizable reporting tools.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
@@ -38,7 +41,11 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/scw/nextgen-dash',
     features: ['Real-time analytics', 'Custom widget system', 'Role-based access', 'Exportable reports'],
     has3D: false,
-    documentation: '## Installation\n1. Clone the repo\n2. Run `npm install`\n3. Setup `.env`\n4. Run `npm run dev`'
+    documentation: '## Installation\n1. Clone the repo\n2. Run `npm install`\n3. Setup `.env`\n4. Run `npm run dev`',
+    demoUserEmail: 'user@example.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'admin@example.com',
+    demoAdminPassword: 'adminpassword'
   },
   {
     id: 'ai-companion',
@@ -58,7 +65,9 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/scw/ai-companion',
     features: ['Context-aware conversations', 'Multi-modal input', 'Cross-platform sync', 'Local storage for privacy'],
     has3D: false,
-    documentation: '## Setup Guide\n- API Key required for OpenAI.\n- Firebase config needed for auth.'
+    documentation: '## Setup Guide\n- API Key required for OpenAI.\n- Firebase config needed for auth.',
+    demoUserEmail: 'ai-user@test.com',
+    demoUserPassword: 'password123'
   },
   {
     id: 'scw-3d-visualizer',
@@ -78,6 +87,8 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/scw/3d-visualizer',
     features: ['PBR rendering', 'Dynamic shadows', 'AR support', 'Custom GLTF loader'],
     has3D: true,
-    documentation: '## 3D Asset Management\n- Place GLB files in /public/assets\n- Adjust material properties in config.js'
+    documentation: '## 3D Asset Management\n- Place GLB files in /public/assets\n- Adjust material properties in config.js',
+    demoAdminEmail: '3d-admin@test.com',
+    demoAdminPassword: 'admin-key-99'
   }
 ];

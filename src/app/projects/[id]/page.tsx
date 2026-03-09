@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState } from 'react';
@@ -10,13 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const project = projects.find(p => p.id === id);
-  const [isPurchased, setIsPurchased] = useState(false); // Mock purchase state
+  const [isPurchased, setIsPurchased] = useState(false);
 
   if (!project) {
     return (
@@ -50,12 +50,57 @@ export default function ProjectDetailPage() {
             <Badge variant="outline" className="text-secondary border-secondary/30 font-bold">${project.price}</Badge>
           </div>
           <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight">{project.title}</h1>
-          <div className="flex flex-wrap gap-4">
+          
+          <div className="flex flex-wrap items-center gap-4">
             <Button size="lg" className="h-12 px-8 glow-primary" asChild>
               <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                 <ExternalLink className="w-4 h-4" /> Live Demo
               </a>
             </Button>
+
+            {(project.demoUserEmail || project.demoAdminEmail) && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="lg" className="h-12 px-8 border-white/20 bg-white/5 hover:bg-white/10">
+                    <KeyRound className="w-4 h-4 mr-2" /> Demo Credentials
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-6 bg-card border-white/10 shadow-2xl rounded-2xl">
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-lg border-b border-white/10 pb-2">Access Details</h4>
+                    
+                    {project.demoUserEmail && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-wider">
+                          <User className="w-3 h-3" /> User Login
+                        </div>
+                        <div className="bg-white/5 p-3 rounded-lg text-sm font-mono break-all">
+                          <div className="text-muted-foreground mb-1">Email: {project.demoUserEmail}</div>
+                          <div className="text-muted-foreground">Pass: {project.demoUserPassword}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {project.demoAdminEmail && (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-secondary text-sm font-bold uppercase tracking-wider">
+                          <ShieldCheck className="w-3 h-3" /> Admin Login
+                        </div>
+                        <div className="bg-white/5 p-3 rounded-lg text-sm font-mono break-all">
+                          <div className="text-muted-foreground mb-1">Email: {project.demoAdminEmail}</div>
+                          <div className="text-muted-foreground">Pass: {project.demoAdminPassword}</div>
+                        </div>
+                      </div>
+                    )}
+
+                    <p className="text-[10px] text-muted-foreground italic mt-2">
+                      * Use these to log in on the live demo site.
+                    </p>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+
             <Button size="lg" variant="secondary" className="h-12 px-8 bg-green-600 hover:bg-green-700 text-white" onClick={() => setIsPurchased(true)}>
               <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
             </Button>
