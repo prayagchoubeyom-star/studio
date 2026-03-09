@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState } from 'react';
@@ -9,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone } from 'lucide-react';
+import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone, LayoutDashboard } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function ProjectDetailPage() {
@@ -57,7 +58,15 @@ export default function ProjectDetailPage() {
             {!isMobile && project.liveUrl && (
               <Button size="lg" className="h-12 px-8 glow-primary" asChild>
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4" /> Live Demo
+                  <ExternalLink className="w-4 h-4" /> User Demo
+                </a>
+              </Button>
+            )}
+
+            {!isMobile && project.adminLiveUrl && (
+              <Button size="lg" variant="outline" className="h-12 px-8 border-primary/50 text-primary hover:bg-primary/10" asChild>
+                <a href={project.adminLiveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <LayoutDashboard className="w-4 h-4" /> Admin Demo
                 </a>
               </Button>
             )}
@@ -74,12 +83,12 @@ export default function ProjectDetailPage() {
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="outline" size="lg" className="h-12 px-8 border-white/20 bg-white/5 hover:bg-white/10">
-                    <KeyRound className="w-4 h-4 mr-2" /> Demo Credentials
+                    <KeyRound className="w-4 h-4 mr-2" /> Credentials
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80 p-6 bg-card border-white/10 shadow-2xl rounded-2xl">
                   <div className="space-y-4">
-                    <h4 className="font-bold text-lg border-b border-white/10 pb-2">Access Details</h4>
+                    <h4 className="font-bold text-lg border-b border-white/10 pb-2">Demo Credentials</h4>
                     
                     {project.demoUserEmail && (
                       <div className="space-y-2">
@@ -106,7 +115,7 @@ export default function ProjectDetailPage() {
                     )}
 
                     <p className="text-[10px] text-muted-foreground italic mt-2">
-                      * Use these to log in on the {isMobile ? 'mobile application' : 'live demo site'}.
+                      * Use these to log in on the {isMobile ? 'mobile application' : 'live demo sites'}.
                     </p>
                   </div>
                 </PopoverContent>

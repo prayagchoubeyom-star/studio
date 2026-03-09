@@ -12,6 +12,7 @@ export interface Project {
   technologies: string[];
   category: 'Web' | 'Mobile';
   liveUrl?: string;
+  adminLiveUrl?: string;
   repoUrl?: string;
   downloadApkUrl?: string;
   youtubeId?: string;
@@ -40,6 +41,7 @@ export const projects: Project[] = [
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Recharts'],
     category: 'Web',
     liveUrl: 'https://demo.example.com',
+    adminLiveUrl: 'https://demo.example.com/admin',
     repoUrl: 'https://github.com/scw/nextgen-dash',
     features: ['Real-time analytics', 'Custom widget system', 'Role-based access', 'Exportable reports'],
     documentation: '## Installation\n1. Clone the repo\n2. Run `npm install`\n3. Setup `.env`\n4. Run `npm run dev`',
@@ -91,6 +93,7 @@ export const projects: Project[] = [
     technologies: ['Next.js', 'Prisma', 'Stripe', 'PostgreSQL'],
     category: 'Web',
     liveUrl: 'https://shop.example.com',
+    adminLiveUrl: 'https://shop.example.com/admin',
     repoUrl: 'https://github.com/scw/eshop',
     features: ['Stripe Checkout', 'Inventory Management', 'Order Tracking', 'SEO Optimized'],
     documentation: '## Deployment\n- Deploy to Vercel\n- Setup database on Supabase\n- Configure Stripe Webhooks',
