@@ -25,6 +25,30 @@
       "imageHint": "3d visualizer"
     },
     {
+      "id": "project-5",
+      "description": "E-commerce Portal",
+      "imageUrl": "https://picsum.photos/seed/shop/1200/800",
+      "imageHint": "ecommerce store"
+    },
+    {
+      "id": "project-6",
+      "description": "Real Estate Cloud",
+      "imageUrl": "https://picsum.photos/seed/house/1200/800",
+      "imageHint": "real estate"
+    },
+    {
+      "id": "project-7",
+      "description": "FinTech Wallet",
+      "imageUrl": "https://picsum.photos/seed/wallet/1200/800",
+      "imageHint": "crypto wallet"
+    },
+    {
+      "id": "project-8",
+      "description": "EduLearn Pro",
+      "imageUrl": "https://picsum.photos/seed/study/1200/800",
+      "imageHint": "learning app"
+    },
+    {
       "id": "hero-bg",
       "description": "Tech background",
       "imageUrl": "https://picsum.photos/seed/tech/1920/1080",
