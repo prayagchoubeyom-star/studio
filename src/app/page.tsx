@@ -1,215 +1,181 @@
 
+"use client"
+
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThreeScene } from '@/components/ui/three-scene';
+import { Input } from '@/components/ui/input';
 import { projects } from '@/lib/projects';
-import { ArrowRight, Code, Cpu, Globe, Rocket, Check, Zap, Star, ShieldCheck } from 'lucide-react';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Search, Filter, Sparkles, ArrowRight, Code2, Layers, Cpu, Globe } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-export default function Home() {
-  const featuredProjects = projects.slice(0, 3);
-  const heroImg = PlaceHolderImages.find(img => img.id === 'hero-bg');
+export default function MarketplaceHome() {
+  const [filter, setFilter] = useState<'All' | 'Web' | 'Mobile' | 'AI' | '3D'>('All');
+  const [search, setSearch] = useState('');
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter(project => {
+      const matchesCategory = filter === 'All' || project.category === filter;
+      const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase()) || 
+                           project.shortDescription.toLowerCase().includes(search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [filter, search]);
+
+  const categories = ['All', 'Web', 'Mobile', 'AI', '3D'] as const;
 
   return (
-    <div className="flex flex-col gap-24 pb-24">
-      {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center overflow-hidden">
-        <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="space-y-8 max-w-2xl">
-            <Badge variant="outline" className="px-4 py-1 text-secondary border-secondary/30 bg-secondary/5 font-headline">
-              Premium Source Code Marketplace
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-headline font-bold leading-tight">
-              Launch Faster with <span className="gradient-text">Pro Source Code</span>.
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Skip weeks of development. Purchase production-ready source code for AI apps, SaaS dashboards, and 3D experiences. Built with Next.js and Firebase.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Button size="lg" className="h-14 px-8 text-lg font-headline glow-primary" asChild>
-                <Link href="/projects">Browse Marketplace</Link>
-              </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-headline" asChild>
-                <Link href="#pricing">View Pricing</Link>
-              </Button>
+    <div className="min-h-screen bg-background">
+      {/* Dynamic Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/10 blur-[120px] rounded-full animate-pulse delay-1000" />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-4 py-24 space-y-20">
+        {/* Hero Section */}
+        <section className="text-center space-y-8 max-w-4xl mx-auto">
+          <Badge variant="outline" className="px-6 py-2 text-sm font-headline border-primary/20 bg-primary/5 text-primary mb-4 animate-in fade-in slide-in-from-top-4 duration-500">
+            <Sparkles className="w-4 h-4 mr-2" /> Premium Source Code Marketplace
+          </Badge>
+          <h1 className="text-6xl md:text-8xl font-headline font-bold leading-tight tracking-tighter animate-in fade-in slide-in-from-bottom-4 duration-700">
+            Build Faster with <span className="gradient-text">Pro Assets</span>.
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000">
+            Expertly crafted source code, templates, and full-stack solutions ready for your next production launch.
+          </p>
+        </section>
+
+        {/* Search and Filters Bar */}
+        <section className="sticky top-24 z-30 py-4 glass-card rounded-[2rem] px-8 border-white/5 shadow-2xl animate-in zoom-in-95 duration-500">
+          <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
+            <div className="flex flex-wrap items-center gap-3">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`px-8 py-3 rounded-2xl text-base font-bold transition-all duration-300 ${
+                    filter === cat 
+                      ? 'bg-primary text-white shadow-[0_0_20px_rgba(123,103,228,0.4)] scale-105' 
+                      : 'text-muted-foreground hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            
+            <div className="relative w-full lg:w-[400px] group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <Input 
+                placeholder="Search premium code..." 
+                className="pl-12 h-14 bg-white/5 border-white/10 rounded-2xl text-lg focus:ring-primary focus:border-primary transition-all"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
           </div>
+        </section>
 
-          <div className="hidden lg:block relative h-[600px]">
-            <ThreeScene className="w-full h-full" type="hero" />
-            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/20 blur-[100px] rounded-full animate-pulse" />
-            <div className="absolute -top-10 -left-10 w-64 h-64 bg-secondary/20 blur-[100px] rounded-full animate-pulse delay-700" />
-          </div>
-        </div>
-        
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-          {heroImg && (
-            <Image 
-              src={heroImg.imageUrl} 
-              alt="Background" 
-              fill 
-              className="object-cover" 
-              data-ai-hint={heroImg.imageHint}
-            />
-          )}
-        </div>
-      </section>
-
-      {/* Featured Projects Grid */}
-      <section className="container mx-auto px-4 space-y-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-4">
-            <h2 className="text-4xl font-headline font-bold">Latest <span className="text-primary">Source Code</span></h2>
-            <p className="text-muted-foreground max-w-xl">
-              Clean, documented, and ready-to-deploy templates for your next big idea.
-            </p>
-          </div>
-          <Button variant="ghost" asChild className="group">
-            <Link href="/projects" className="flex items-center gap-2">
-              Explore Full Marketplace <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </Button>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProjects.map((project) => (
-            <Link key={project.id} href={`/projects/${project.id}`}>
-              <Card className="group overflow-hidden border-white/5 bg-card hover:bg-card/80 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
-                <div className="aspect-video relative overflow-hidden">
-                  <Image 
-                    src={project.thumbnail} 
-                    alt={project.title} 
-                    fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    data-ai-hint="project screenshot"
-                  />
-                  <div className="absolute top-4 left-4 z-10">
-                     <Badge className="bg-primary/90 backdrop-blur-md">
-                        ${project.price}
-                      </Badge>
+        {/* Projects Grid */}
+        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project, idx) => (
+              <Link key={project.id} href={`/projects/${project.id}`} className="group h-full">
+                <Card className="h-full flex flex-col overflow-hidden border-white/5 bg-card/40 backdrop-blur-sm hover:bg-card/60 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-t-white/10">
+                  <div className="aspect-[16/10] relative overflow-hidden">
+                    <Image 
+                      src={project.thumbnail} 
+                      alt={project.title} 
+                      fill 
+                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                      data-ai-hint="software project screenshot"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    <div className="absolute top-4 left-4 flex gap-2">
+                       <Badge className="bg-primary/90 backdrop-blur-xl border-white/10 text-base py-1 px-4 font-bold shadow-xl">
+                          ${project.price}
+                        </Badge>
+                    </div>
+                    
+                    <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                      <Button variant="secondary" size="sm" className="bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold">
+                        View Details <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                  <Badge className="absolute top-4 right-4 bg-secondary/80 backdrop-blur-md">
-                    {project.category}
-                  </Badge>
-                </div>
-                <CardContent className="p-6 space-y-4">
-                  <h3 className="text-xl font-headline font-bold group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {project.shortDescription}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+
+                  <CardContent className="p-8 flex-grow flex flex-col space-y-6">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                         <Badge variant="outline" className="text-[10px] uppercase tracking-[0.2em] font-bold text-secondary border-secondary/20">
+                          {project.category}
+                        </Badge>
+                      </div>
+                      <h3 className="text-2xl font-headline font-bold group-hover:text-primary transition-colors leading-tight">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground text-base line-clamp-2 leading-relaxed font-medium">
+                        {project.shortDescription}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 border-t border-white/5 flex flex-wrap gap-2">
+                      {project.technologies.slice(0, 4).map((tech) => (
+                        <span key={tech} className="text-[10px] font-bold text-white/40 uppercase tracking-widest bg-white/5 px-2 py-1 rounded-md">
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 4 && (
+                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest px-2 py-1">
+                          +{project.technologies.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full py-32 text-center space-y-6 bg-white/5 rounded-[3rem] border-2 border-dashed border-white/10">
+              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <h3 className="text-3xl font-headline font-bold">No assets found</h3>
+              <p className="text-muted-foreground text-xl max-w-md mx-auto">
+                Try adjusting your filters or search terms to find what you're looking for.
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {setFilter('All'); setSearch('');}}
+                className="h-12 px-8 rounded-xl font-bold"
+              >
+                Clear all filters
+              </Button>
+            </div>
+          )}
+        </section>
+
+        {/* Benefits Section */}
+        <section className="grid md:grid-cols-3 gap-12 pt-20 border-t border-white/5">
+          {[
+            { icon: Code2, title: "Clean Code", desc: "Production-ready, documented, and type-safe TypeScript codebases." },
+            { icon: Layers, title: "Modular Architecture", desc: "Easily scalable components built with the latest industry standards." },
+            { icon: Globe, title: "Ready to Deploy", desc: "Instant access to files with detailed installation guides for AWS and Firebase." }
+          ].map((item, i) => (
+            <div key={i} className="space-y-4">
+              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center">
+                <item.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h4 className="text-xl font-headline font-bold">{item.title}</h4>
+              <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+            </div>
           ))}
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="container mx-auto px-4 py-24 scroll-mt-24">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl font-headline font-bold">Flexible <span className="text-primary">Pricing</span> Plans</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Choose the best way to access our premium source code library and technical support.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Individual Plan */}
-          <Card className="bg-card border-white/5 relative overflow-hidden flex flex-col">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl">Single Project</CardTitle>
-              <CardDescription>Perfect for one-off builds.</CardDescription>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-4xl font-bold font-headline">$49</span>
-                <span className="text-muted-foreground">/start</span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-0 flex-grow">
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Full Source Code Access</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Lifetime Updates</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Email Documentation</li>
-                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> 24/7 Priority Support</li>
-                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> Custom Modifications</li>
-              </ul>
-            </CardContent>
-            <CardFooter className="p-8">
-              <Button className="w-full" variant="outline" asChild><Link href="/projects">Shop Projects</Link></Button>
-            </CardFooter>
-          </Card>
-
-          {/* Bundle Plan */}
-          <Card className="bg-card border-primary/50 relative overflow-hidden flex flex-col scale-105 shadow-2xl">
-             <div className="absolute top-0 right-0 bg-primary px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-bl-lg">Popular</div>
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl">Dev Bundle</CardTitle>
-              <CardDescription>Best for freelancers and agencies.</CardDescription>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-4xl font-bold font-headline">$199</span>
-                <span className="text-muted-foreground">/forever</span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-0 flex-grow">
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> 5 Premium Projects</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Full Commercial Rights</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Private Discord Access</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Priority Support</li>
-                <li className="flex items-center gap-3 opacity-30"><Check className="w-4 h-4" /> Custom Modifications</li>
-              </ul>
-            </CardContent>
-            <CardFooter className="p-8">
-              <Button className="w-full glow-primary" asChild><Link href="/register">Get Started</Link></Button>
-            </CardFooter>
-          </Card>
-
-          {/* Custom Plan */}
-          <Card className="bg-card border-white/5 relative overflow-hidden flex flex-col">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl">Custom Build</CardTitle>
-              <CardDescription>Tailored solutions for your business.</CardDescription>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-4xl font-bold font-headline">Custom</span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-0 flex-grow">
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> White-label App Build</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Technical Consultation</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> AWS/Firebase Deployment</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Ongoing Maintenance</li>
-                <li className="flex items-center gap-3"><Check className="w-4 h-4 text-primary" /> Custom UI/UX Design</li>
-              </ul>
-            </CardContent>
-            <CardFooter className="p-8">
-              <Button className="w-full" variant="outline" asChild><Link href="/about#contact">Contact Me</Link></Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="container mx-auto px-4">
-        <div className="relative rounded-3xl overflow-hidden bg-primary/10 border border-primary/20 p-12 md:p-24 text-center">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 blur-[150px] rounded-full translate-y-1/2 -translate-x-1/2" />
-          
-          <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-headline font-bold">Have a Custom Project?</h2>
-            <p className="text-lg text-muted-foreground">
-              If our marketplace templates don't fit your exact needs, I'm available for custom full-stack development.
-            </p>
-            <Button size="lg" className="h-14 px-12 text-lg font-headline glow-primary" asChild>
-              <Link href="/about#contact">Talk to the Developer</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 }
