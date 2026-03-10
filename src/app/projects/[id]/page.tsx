@@ -174,7 +174,7 @@ export default function ProjectDetailPage() {
                    <TabsTrigger value="screenshots" className="flex items-center gap-2 rounded-lg text-sm"><Smartphone className="w-4 h-4" /> Screenshots</TabsTrigger>
                 )}
                 <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg text-sm"><Play className="w-4 h-4" /> Video</TabsTrigger>
-                <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg text-sm"><Lock className="w-4 h-4" /> Docs</TabsTrigger>
+                <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Docs</TabsTrigger>
               </TabsList>
             </div>
 
@@ -233,23 +233,11 @@ export default function ProjectDetailPage() {
 
             <TabsContent value="docs" className="mt-6 md:mt-8 space-y-6 animate-in fade-in duration-500">
               <h2 className="text-2xl md:text-3xl font-headline font-bold">Installation <span className="text-primary">Guide</span></h2>
-              {isPurchased ? (
-                <div className="prose prose-invert max-w-none p-6 md:p-8 bg-white/5 rounded-xl md:rounded-2xl border border-white/10">
-                  <pre className="whitespace-pre-wrap font-code text-xs md:text-sm text-primary-foreground overflow-x-auto">
-                    {project.documentation || 'Documentation is being prepared.'}
-                  </pre>
-                </div>
-              ) : (
-                <Card className="bg-red-500/10 border-red-500/20 p-8 md:p-12 text-center flex flex-col items-center gap-6">
-                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-red-500/20 flex items-center justify-center">
-                    <Lock className="w-6 h-6 md:w-8 md:h-8 text-red-500" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-lg md:text-xl font-bold">Access Restricted</h3>
-                    <p className="text-sm text-muted-foreground">Purchase the source code to unlock the detailed installation documentation and repository access.</p>
-                  </div>
-                </Card>
-              )}
+              <div className="prose prose-invert max-w-none p-6 md:p-8 bg-white/5 rounded-xl md:rounded-2xl border border-white/10">
+                <pre className="whitespace-pre-wrap font-code text-xs md:text-sm text-primary-foreground overflow-x-auto">
+                  {project.documentation || 'Documentation is being prepared.'}
+                </pre>
+              </div>
             </TabsContent>
           </Tabs>
 
