@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState } from 'react';
@@ -249,7 +248,6 @@ export default function ProjectDetailPage() {
                     <h3 className="text-lg md:text-xl font-bold">Access Restricted</h3>
                     <p className="text-sm text-muted-foreground">Purchase the source code to unlock the detailed installation documentation and repository access.</p>
                   </div>
-                  <Button onClick={() => setIsPurchased(true)} className="glow-primary w-full sm:w-auto">Buy Now to Unlock</Button>
                 </Card>
               )}
             </TabsContent>
