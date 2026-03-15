@@ -20,7 +20,6 @@ import {
   User, 
   ShieldCheck, 
   Download, 
-  Smartphone, 
   LayoutDashboard,
   Copy,
   Check,
@@ -74,143 +73,130 @@ export default function ProjectDetailPage() {
   
   return (
     <div className="pb-12 md:pb-24">
-      {/* Hero Header */}
-      <section className="relative h-[50vh] md:h-[70vh] w-full overflow-hidden">
-        <Image 
-          src={project.thumbnail} 
-          alt={project.title} 
-          fill 
-          className="object-cover opacity-40 blur-sm"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      {/* Hero Header with Slider */}
+      <section className="relative h-[60vh] md:h-[85vh] w-full overflow-hidden bg-black">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full h-full"
+        >
+          <CarouselContent className="h-full ml-0">
+            {project.screenshots.map((shot, index) => (
+              <CarouselItem key={index} className="pl-0 h-[60vh] md:h-[85vh] relative">
+                <Image 
+                  src={shot} 
+                  alt={`${project.title} View ${index + 1}`} 
+                  fill 
+                  className="object-cover opacity-60"
+                  priority={index === 0}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="absolute bottom-8 right-8 z-20 flex gap-2">
+            <CarouselPrevious className="static translate-y-0 bg-black/50 border-white/20 hover:bg-white/20 h-12 w-12" />
+            <CarouselNext className="static translate-y-0 bg-black/50 border-white/20 hover:bg-white/20 h-12 w-12" />
+          </div>
+        </Carousel>
+
+        {/* Overlay Content */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
         
-        <div className="container mx-auto px-4 h-full flex flex-col justify-end pb-8 md:pb-12 relative z-10 space-y-4 md:space-y-6">
-          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors w-fit mb-2 md:mb-4 text-sm md:text-base">
-            <ArrowLeft className="w-4 h-4" /> Back to Marketplace
-          </Link>
-          <div className="flex flex-wrap gap-2 md:gap-3">
-            <Badge className="bg-primary/20 text-primary border-primary/30 py-1 px-3 md:px-4 text-xs md:text-sm">{project.category}</Badge>
-            <Badge variant="outline" className="text-secondary border-secondary/30 font-bold text-xs md:text-sm">${project.price}</Badge>
-          </div>
-          <h1 className="text-3xl md:text-5xl lg:text-7xl font-headline font-bold leading-tight">{project.title}</h1>
-          
-          <div className="flex flex-wrap items-center gap-2 md:gap-4 pt-4">
-            {!isMobile && project.liveUrl && (
-              <Button size="lg" className="h-10 md:h-12 px-4 md:px-8 glow-primary w-full sm:w-auto" asChild>
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <LayoutDashboard className="w-4 h-4" /> User Demo
-                </a>
-              </Button>
-            )}
+        <div className="absolute inset-0 z-10">
+          <div className="container mx-auto px-4 h-full flex flex-col justify-between py-12">
+            <Link href="/" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit text-sm md:text-base bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 pointer-events-auto">
+              <ArrowLeft className="w-4 h-4" /> Back to Marketplace
+            </Link>
 
-            {!isMobile && project.adminLiveUrl && (
-              <Button size="lg" variant="outline" className="h-10 md:h-12 px-4 md:px-8 border-primary/50 text-primary hover:bg-primary/10 w-full sm:w-auto" asChild>
-                <a href={project.adminLiveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4" /> Admin Demo
-                </a>
-              </Button>
-            )}
-
-            {isMobile && project.downloadApkUrl && (
-              <Button size="lg" className="h-10 md:h-12 px-4 md:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 w-full sm:w-auto" asChild>
-                <a href={project.downloadApkUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <Download className="w-4 h-4" /> Download APK
-                </a>
-              </Button>
-            )}
-
-            {(project.demoUserEmail || project.demoAdminEmail) && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" size="lg" className="h-10 md:h-12 px-4 md:px-8 border-white/20 bg-white/5 hover:bg-white/10 w-full sm:w-auto">
-                    <KeyRound className="w-4 h-4 mr-2" /> Credentials
+            <div className="space-y-4 md:space-y-6 pointer-events-auto">
+              <div className="flex flex-wrap gap-2 md:gap-3">
+                <Badge className="bg-primary/20 text-primary border-primary/30 py-1 px-3 md:px-4 text-xs md:text-sm backdrop-blur-md">{project.category}</Badge>
+                <Badge variant="outline" className="text-secondary border-secondary/30 font-bold text-xs md:text-sm backdrop-blur-md bg-black/20">${project.price}</Badge>
+              </div>
+              <h1 className="text-3xl md:text-5xl lg:text-7xl font-headline font-bold leading-tight drop-shadow-2xl">{project.title}</h1>
+              
+              <div className="flex flex-wrap items-center gap-2 md:gap-4 pt-4">
+                {!isMobile && project.liveUrl && (
+                  <Button size="lg" className="h-10 md:h-12 px-4 md:px-8 glow-primary w-full sm:w-auto" asChild>
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                      <LayoutDashboard className="w-4 h-4" /> User Demo
+                    </a>
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-6 bg-card border-white/10 shadow-2xl rounded-2xl mx-4">
-                  <div className="space-y-4">
-                    <h4 className="font-bold text-lg border-b border-white/10 pb-2">Demo Credentials</h4>
-                    
-                    {project.demoUserEmail && (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-wider">
-                          <User className="w-3 h-3" /> User Login
-                        </div>
-                        <div className="bg-white/5 p-3 rounded-lg text-xs md:text-sm font-mono break-all">
-                          <div className="text-muted-foreground mb-1">Email: {project.demoUserEmail}</div>
-                          <div className="text-muted-foreground">Pass: {project.demoUserPassword}</div>
-                        </div>
+                )}
+
+                {!isMobile && project.adminLiveUrl && (
+                  <Button size="lg" variant="outline" className="h-10 md:h-12 px-4 md:px-8 border-primary/50 text-primary hover:bg-primary/10 w-full sm:w-auto bg-black/20 backdrop-blur-md" asChild>
+                    <a href={project.adminLiveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4" /> Admin Demo
+                    </a>
+                  </Button>
+                )}
+
+                {isMobile && project.downloadApkUrl && (
+                  <Button size="lg" className="h-10 md:h-12 px-4 md:px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20 w-full sm:w-auto" asChild>
+                    <a href={project.downloadApkUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                      <Download className="w-4 h-4" /> Download APK
+                    </a>
+                  </Button>
+                )}
+
+                {(project.demoUserEmail || project.demoAdminEmail) && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" size="lg" className="h-10 md:h-12 px-4 md:px-8 border-white/20 bg-black/20 hover:bg-white/10 w-full sm:w-auto backdrop-blur-md">
+                        <KeyRound className="w-4 h-4 mr-2" /> Credentials
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-6 bg-card border-white/10 shadow-2xl rounded-2xl mx-4">
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-lg border-b border-white/10 pb-2">Demo Credentials</h4>
+                        
+                        {project.demoUserEmail && (
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-primary text-sm font-bold uppercase tracking-wider">
+                              <User className="w-3 h-3" /> User Login
+                            </div>
+                            <div className="bg-white/5 p-3 rounded-lg text-xs md:text-sm font-mono break-all">
+                              <div className="text-muted-foreground mb-1">Email: {project.demoUserEmail}</div>
+                              <div className="text-muted-foreground">Pass: {project.demoUserPassword}</div>
+                            </div>
+                          </div>
+                        )}
+
+                        {project.demoAdminEmail && (
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-secondary text-sm font-bold uppercase tracking-wider">
+                              <ShieldCheck className="w-3 h-3" /> Admin Login
+                            </div>
+                            <div className="bg-white/5 p-3 rounded-lg text-xs md:text-sm font-mono break-all">
+                              <div className="text-muted-foreground mb-1">Email: {project.demoAdminEmail}</div>
+                              <div className="text-muted-foreground">Pass: {project.demoAdminPassword}</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </PopoverContent>
+                  </Popover>
+                )}
 
-                    {project.demoAdminEmail && (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-secondary text-sm font-bold uppercase tracking-wider">
-                          <ShieldCheck className="w-3 h-3" /> Admin Login
-                        </div>
-                        <div className="bg-white/5 p-3 rounded-lg text-xs md:text-sm font-mono break-all">
-                          <div className="text-muted-foreground mb-1">Email: {project.demoAdminEmail}</div>
-                          <div className="text-muted-foreground">Pass: {project.demoAdminPassword}</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            )}
-
-            <Button 
-              size="lg" 
-              variant="secondary" 
-              className="h-10 md:h-12 px-4 md:px-8 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
-              onClick={() => setIsPaymentOpen(true)}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Screenshot Slider Section */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <Smartphone className="w-6 h-6 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-headline font-bold">Project <span className="text-primary">Gallery</span></h2>
-          </div>
-          
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {project.screenshots.map((shot, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
-                  <div className="relative aspect-[16/10] md:aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 group">
-                    <Image 
-                      src={shot} 
-                      alt={`${project.title} Screenshot ${index + 1}`} 
-                      fill 
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="hidden md:flex justify-end gap-2 mt-4">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselNext className="static translate-y-0" />
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="h-10 md:h-12 px-4 md:px-8 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+                  onClick={() => setIsPaymentOpen(true)}
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
+                </Button>
+              </div>
             </div>
-          </Carousel>
+          </div>
         </div>
       </section>
 
       {/* Content Grid */}
-      <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-8 md:gap-12 mt-4">
+      <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-8 md:gap-12 mt-12 md:mt-16">
         <div className="lg:col-span-2 space-y-8 md:space-y-12">
           
           <Tabs defaultValue="overview" className="w-full">
