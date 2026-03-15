@@ -153,6 +153,111 @@ export const projects: Project[] = [
 
   // MOBILE PROJECTS
   {
+    id: 'binance-app-clone',
+    title: 'Binance App Clone',
+    price: 1999,
+    shortDescription: 'Premium cryptocurrency exchange mobile app with spot and futures trading.',
+    fullDescription: 'A comprehensive mobile application clone of Binance. Includes a sophisticated trading engine, real-time price tickers, multi-asset wallet integration, and advanced charting. Built for high performance and security.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/binance1/400/800",
+      "https://picsum.photos/seed/binance2/400/800",
+      "https://picsum.photos/seed/binance3/400/800"
+    ],
+    technologies: ['React Native', 'TypeScript', 'Redux', 'WebSockets'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/binance-clone.apk',
+    features: ['Spot & Futures Trading', 'P2P Marketplace', 'Fiat-to-Crypto Bridge', 'Advanced Charting Indicators'],
+    documentation: '## Binance Clone Setup\n1. Initialize React Native app\n2. Connect to the exchange backend via WebSockets\n3. Setup secure wallet keys storage\n4. Build and deploy.',
+    demoUserEmail: 'crypto@binance.com',
+    demoUserPassword: 'password123'
+  },
+  {
+    id: 'exness-app-clone',
+    title: 'Exness App Clone',
+    price: 1999,
+    shortDescription: 'Professional multi-asset brokerage mobile app for mobile trading.',
+    fullDescription: 'A high-fidelity clone of the Exness mobile trading app. Optimized for low-latency execution and high-security user management. Features a seamless interface for forex, commodities, and stocks.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-5')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-5')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/exness1/400/800",
+      "https://picsum.photos/seed/exness2/400/800",
+      "https://picsum.photos/seed/exness3/400/800"
+    ],
+    technologies: ['Flutter', 'Dart', 'Node.js', 'PostgreSQL'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/exness-clone.apk',
+    features: ['One-click trading', 'Instant deposits/withdrawals', 'Technical analysis tools', 'Personalized watchlists'],
+    documentation: '## Exness Clone Setup\n1. Setup Flutter environment\n2. Configure backend API endpoints\n3. Integrate payment gateways\n4. Build APK/IPA.',
+    demoUserEmail: 'trader@exness.com',
+    demoUserPassword: 'password123'
+  },
+  {
+    id: 'octafx-app-clone',
+    title: 'OctaFX App Clone',
+    price: 1999,
+    shortDescription: 'Popular forex trading mobile app with copy-trading integration.',
+    fullDescription: 'A feature-rich clone of the OctaFX mobile platform. Includes built-in copy-trading features, daily analysis feeds, and a highly intuitive user interface designed for mass-market adoption.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/octafx1/400/800",
+      "https://picsum.photos/seed/octafx2/400/800",
+      "https://picsum.photos/seed/octafx3/400/800"
+    ],
+    technologies: ['React Native', 'Firebase', 'NativeWind', 'Zustand'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/octafx-clone.apk',
+    features: ['Integrated Copytrading', 'Bonus & Promotion Engine', 'Real-time Push Alerts', 'Economic Calendar'],
+    documentation: '## OctaFX Clone Setup\n1. Setup React Native & Firebase\n2. Configure Copytrading backend logic\n3. Setup push notification keys\n4. Build and distribute.',
+    demoUserEmail: 'trader@octafx.com',
+    demoUserPassword: 'password123'
+  },
+  {
+    id: 'mt5-app-clone',
+    title: 'MT5 App Clone',
+    price: 1999,
+    shortDescription: 'Advanced multi-asset mobile terminal for modern brokers.',
+    fullDescription: 'A professional-grade mobile terminal clone of MetaTrader 5 (MT5). Supports hedging, netting, and advanced order types. Designed for brokers who want to offer a familiar yet branded trading experience.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/mt5_1/400/800",
+      "https://picsum.photos/seed/mt5_2/400/800",
+      "https://picsum.photos/seed/mt5_3/400/800"
+    ],
+    technologies: ['React Native', 'C++', 'Node.js', 'Socket.io'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/mt5-clone.apk',
+    features: ['Hedging & Netting Support', 'Advanced Depth of Market', 'Automated Trading Alerts', 'Cloud Synchronization'],
+    documentation: '## MT5 Clone Setup\n1. Configure MT5 Server API keys\n2. Setup WebSocket bridge for data streaming\n3. Build mobile apps with native bridges\n4. Deploy.',
+    demoUserEmail: 'admin@mt5.com',
+    demoUserPassword: 'password123'
+  },
+  {
+    id: 'mt4-app-clone',
+    title: 'MT4 App Clone',
+    price: 1999,
+    shortDescription: 'Classic forex trading terminal for mobile devices.',
+    fullDescription: 'A classic mobile terminal clone of MetaTrader 4 (MT4). Optimized for simple, fast execution and legacy system compatibility. The world\'s most popular choice for mobile forex traders.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/mt4_1/400/800",
+      "https://picsum.photos/seed/mt4_2/400/800",
+      "https://picsum.photos/seed/mt4_3/400/800"
+    ],
+    technologies: ['Flutter', 'Node.js', 'Redis', 'WebSockets'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/mt4-clone.apk',
+    features: ['Classic Charting Interface', 'Standard Technical Indicators', 'Stable Execution Core', 'Multi-Language Support'],
+    documentation: '## MT4 Clone Setup\n1. Connect MT4 Manager API\n2. Setup Redis for caching market data\n3. Build and test mobile apps\n4. Publish to stores.',
+    demoUserEmail: 'trader@mt4.com',
+    demoUserPassword: 'password123'
+  },
+  {
     id: 'forex-trading-app',
     title: 'Forex Trading App',
     price: 1999,
