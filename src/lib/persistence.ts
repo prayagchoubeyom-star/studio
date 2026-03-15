@@ -9,6 +9,7 @@ const SETTINGS_KEY = 'scw_settings_v3';
 export interface SiteSettings {
   usdtAddress: string;
   qrUrl: string;
+  logoUrl?: string;
 }
 
 export function getPersistentProjects(): Project[] {
@@ -28,7 +29,6 @@ export function getPersistentProjects(): Project[] {
 export function savePersistentProjects(projects: Project[]) {
   if (typeof window === 'undefined') return;
   localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
-  // Dispatch event for other components to listen to
   window.dispatchEvent(new Event('storage_update'));
 }
 
@@ -57,6 +57,7 @@ export function getPersistentSettings(): SiteSettings {
   const defaultSettings: SiteSettings = {
     usdtAddress: '0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7',
     qrUrl: defaultQr,
+    logoUrl: '',
   };
 
   if (typeof window === 'undefined') return defaultSettings;

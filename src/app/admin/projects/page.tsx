@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Image as ImageIcon } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Youtube } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -69,6 +69,7 @@ export default function AdminProjectsPage() {
       liveUrl: '',
       adminLiveUrl: '',
       downloadApkUrl: '',
+      youtubeId: '',
     } as Project);
     setIsModalOpen(true);
   };
@@ -113,13 +114,7 @@ export default function AdminProjectsPage() {
 
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        className="hidden" 
-        accept="image/*" 
-        onChange={handleFileChange} 
-      />
+      <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
@@ -139,12 +134,7 @@ export default function AdminProjectsPage() {
           <h2 className="text-xl font-bold">Catalog List</h2>
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search projects..." 
-              className="pl-10 bg-white/5 border-white/10"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <Input placeholder="Search projects..." className="pl-10 bg-white/5 border-white/10" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
         </div>
         <div className="overflow-x-auto">
@@ -192,159 +182,67 @@ export default function AdminProjectsPage() {
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl bg-card border-white/10 max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-headline font-bold">
-              {editingProject?.id.includes('project-') ? 'Create Project' : 'Edit Project Details'}
-            </DialogTitle>
-          </DialogHeader>
-          
+          <DialogHeader><DialogTitle className="text-2xl font-headline font-bold">{editingProject?.id.includes('project-') ? 'Create Project' : 'Edit Project Details'}</DialogTitle></DialogHeader>
           {editingProject && (
             <div className="grid gap-8 py-4">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label>Project Title</Label>
-                    <Input 
-                      value={editingProject.title} 
-                      onChange={e => setEditingProject({...editingProject, title: e.target.value})} 
-                      className="bg-white/5 border-white/10"
-                    />
+                    <Input value={editingProject.title} onChange={e => setEditingProject({...editingProject, title: e.target.value})} className="bg-white/5 border-white/10" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Price ($)</Label>
-                      <Input 
-                        type="number" 
-                        value={editingProject.price} 
-                        onChange={e => setEditingProject({...editingProject, price: Number(e.target.value)})} 
-                        className="bg-white/5 border-white/10"
-                      />
-                    </div>
+                    <div className="space-y-2"><Label>Price ($)</Label><Input type="number" value={editingProject.price} onChange={e => setEditingProject({...editingProject, price: Number(e.target.value)})} className="bg-white/5 border-white/10" /></div>
                     <div className="space-y-2">
                       <Label>Category</Label>
-                      <select 
-                        className="w-full h-10 bg-white/5 border border-white/10 rounded-md px-3 text-sm focus:ring-1 focus:ring-primary outline-none"
-                        value={editingProject.category} 
-                        onChange={e => setEditingProject({...editingProject, category: e.target.value as any})}
-                      >
+                      <select className="w-full h-10 bg-white/5 border border-white/10 rounded-md px-3 text-sm focus:ring-1 focus:ring-primary outline-none" value={editingProject.category} onChange={e => setEditingProject({...editingProject, category: e.target.value as any})}>
                         <option value="Web">Web Project</option>
                         <option value="Mobile">Mobile Application</option>
                       </select>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Short Description</Label>
-                    <Input 
-                      value={editingProject.shortDescription} 
-                      onChange={e => setEditingProject({...editingProject, shortDescription: e.target.value})} 
-                      className="bg-white/5 border-white/10"
-                    />
+                    <Label>YouTube Video ID</Label>
+                    <div className="flex gap-2">
+                      <div className="h-10 w-10 flex items-center justify-center bg-destructive/10 rounded-md shrink-0"><Youtube className="w-5 h-5 text-destructive" /></div>
+                      <Input placeholder="e.g. dQw4w9WgXcQ" value={editingProject.youtubeId || ''} onChange={e => setEditingProject({...editingProject, youtubeId: e.target.value})} className="bg-white/5 border-white/10" />
+                    </div>
                   </div>
                 </div>
-
                 <div className="space-y-4">
                   <Label>Main Thumbnail</Label>
                   <div className="relative aspect-video rounded-xl border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center group">
                     <img src={editingProject.thumbnail} alt="" className="object-cover w-full h-full" />
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button variant="secondary" size="sm" onClick={() => {
-                        setUploadTarget('thumbnail');
-                        fileInputRef.current?.click();
-                      }}>
-                        <Upload className="w-4 h-4 mr-2" /> Upload Image
-                      </Button>
+                      <Button variant="secondary" size="sm" onClick={() => { setUploadTarget('thumbnail'); fileInputRef.current?.click(); }}><Upload className="w-4 h-4 mr-2" /> Upload Image</Button>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <Label className="flex items-center justify-between">
-                  <span>Gallery Screenshots (Hero Slider)</span>
-                  <Button variant="outline" size="sm" className="h-8 border-primary/30 text-primary" onClick={() => {
-                    setUploadTarget('screenshot');
-                    fileInputRef.current?.click();
-                  }}>
-                    <Plus className="w-3 h-3 mr-2" /> Add Slide
-                  </Button>
-                </Label>
+                <Label className="flex items-center justify-between"><span>Gallery Screenshots (Hero Slider)</span><Button variant="outline" size="sm" className="h-8 border-primary/30 text-primary" onClick={() => { setUploadTarget('screenshot'); fileInputRef.current?.click(); }}><Plus className="w-3 h-3 mr-2" /> Add Slide</Button></Label>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
                   {editingProject.screenshots?.map((s, i) => (
                     <div key={i} className="relative aspect-video rounded-lg border border-white/10 bg-white/5 group overflow-hidden">
                       <img src={s} className="object-cover w-full h-full" alt="" />
-                      <button 
-                        onClick={() => removeScreenshot(i)}
-                        className="absolute top-1 right-1 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
+                      <button onClick={() => removeScreenshot(i)} className="absolute top-1 right-1 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><X className="w-3 h-3" /></button>
                     </div>
                   ))}
-                  {(!editingProject.screenshots || editingProject.screenshots.length === 0) && (
-                    <div className="col-span-full py-8 text-center border-2 border-dashed border-white/5 rounded-xl text-muted-foreground text-sm">
-                      No screenshots added. These appear in the project details header slider.
-                    </div>
-                  )}
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label>User Demo Link</Label>
-                  <Input 
-                    value={editingProject.liveUrl || ''} 
-                    onChange={e => setEditingProject({...editingProject, liveUrl: e.target.value})} 
-                    className="bg-white/5 border-white/10"
-                    placeholder="https://demo.yoursite.com"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Admin Demo Link</Label>
-                  <Input 
-                    value={editingProject.adminLiveUrl || ''} 
-                    onChange={e => setEditingProject({...editingProject, adminLiveUrl: e.target.value})} 
-                    className="bg-white/5 border-white/10"
-                    placeholder="https://admin.yoursite.com"
-                  />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label>Mobile APK Download Link (For Mobile Category)</Label>
-                  <Input 
-                    value={editingProject.downloadApkUrl || ''} 
-                    onChange={e => setEditingProject({...editingProject, downloadApkUrl: e.target.value})} 
-                    className="bg-white/5 border-white/10"
-                    placeholder="Direct link to .apk file"
-                  />
-                </div>
+                <div className="space-y-2"><Label>User Demo Link</Label><Input value={editingProject.liveUrl || ''} onChange={e => setEditingProject({...editingProject, liveUrl: e.target.value})} className="bg-white/5 border-white/10" /></div>
+                <div className="space-y-2"><Label>Admin Demo Link</Label><Input value={editingProject.adminLiveUrl || ''} onChange={e => setEditingProject({...editingProject, adminLiveUrl: e.target.value})} className="bg-white/5 border-white/10" /></div>
+                <div className="space-y-2 md:col-span-2"><Label>Mobile APK Link</Label><Input value={editingProject.downloadApkUrl || ''} onChange={e => setEditingProject({...editingProject, downloadApkUrl: e.target.value})} className="bg-white/5 border-white/10" /></div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Full Project Description</Label>
-                <Textarea 
-                  value={editingProject.fullDescription} 
-                  onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} 
-                  className="bg-white/5 border-white/10 min-h-[120px]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Technical Documentation (Markdown Supported)</Label>
-                <Textarea 
-                  value={editingProject.documentation || ''} 
-                  onChange={e => setEditingProject({...editingProject, documentation: e.target.value})} 
-                  className="bg-white/5 border-white/10 min-h-[150px] font-mono text-xs"
-                  placeholder="## Setup Guide..."
-                />
-              </div>
+              <div className="space-y-2"><Label>Full Project Description</Label><Textarea value={editingProject.fullDescription} onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
+              <div className="space-y-2"><Label>Technical Documentation</Label><Textarea value={editingProject.documentation || ''} onChange={e => setEditingProject({...editingProject, documentation: e.target.value})} className="bg-white/5 border-white/10 min-h-[150px] font-mono text-xs" /></div>
             </div>
           )}
-          
-          <DialogFooter className="border-t border-white/5 pt-6">
-            <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button className="glow-primary px-8" onClick={handleSaveProject}>
-              <Save className="w-4 h-4 mr-2" /> Save Project Changes
-            </Button>
-          </DialogFooter>
+          <DialogFooter className="border-t border-white/5 pt-6"><Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button><Button className="glow-primary px-8" onClick={handleSaveProject}><Save className="w-4 h-4 mr-2" /> Save Project Changes</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

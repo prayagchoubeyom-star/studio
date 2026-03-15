@@ -15,6 +15,7 @@ export interface Project {
   adminLiveUrl?: string;
   repoUrl?: string;
   downloadApkUrl?: string;
+  youtubeId?: string;
   price: number;
   features: string[];
   documentation?: string;
@@ -44,6 +45,7 @@ export const projects: Project[] = [
     liveUrl: 'https://allinone.sourcecodewala.store/login',
     adminLiveUrl: 'https://allinone.sourcecodewala.store/admin',
     repoUrl: 'https://github.com/scw/forex-trading',
+    youtubeId: 'dQw4w9WgXcQ',
     features: [
       'Professional trading terminal',
       'Copy trading',
