@@ -130,6 +130,26 @@ export const projects: Project[] = [
     demoAdminEmail: 'admin@liquidity.com',
     demoAdminPassword: 'adminpassword'
   },
+  {
+    id: 'indian-paper-trading',
+    title: 'Indian Market Paper Trading Complete Setup',
+    price: 55.00,
+    shortDescription: 'Realistic paper trading platform for the Indian stock market (NSE/BSE).',
+    fullDescription: 'Practice trading in the Indian stock market without real capital. This setup includes real-time data simulation for NSE/BSE stocks, virtual portfolio tracking, and performance analytics tailored for the Indian trading ecosystem.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
+    technologies: ['Next.js', 'Node.js', 'MongoDB', 'Chart.js', 'Tailwind CSS'],
+    category: 'Web',
+    liveUrl: 'https://paper.example.com',
+    adminLiveUrl: 'https://paper.example.com/admin',
+    repoUrl: 'https://github.com/scw/indian-paper-trading',
+    features: ['NSE/BSE Data Simulation', 'Virtual Portfolio Management', 'Order History & Reports', 'Market News Feed'],
+    documentation: '## Indian Paper Trading Setup\n1. Secure Indian market data API credentials\n2. Configure MongoDB for user accounts\n3. Set up the virtual matching engine\n4. Deploy to a production environment.',
+    demoUserEmail: 'trader@india.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'admin@india.com',
+    demoAdminPassword: 'adminpassword'
+  },
 
   // MOBILE PROJECTS
   {
