@@ -59,6 +59,12 @@
       "description": "Developer profile",
       "imageUrl": "https://picsum.photos/seed/dev/400/400",
       "imageHint": "developer portrait"
+    },
+    {
+      "id": "usdt-qr",
+      "description": "USDT BEP20 QR Code",
+      "imageUrl": "https://picsum.photos/seed/usdtqr/400/400",
+      "imageHint": "qr code"
     }
   ]
 }

@@ -6,17 +6,39 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { projects } from '@/lib/projects';
-import { Github, ExternalLink, ArrowLeft, CheckCircle2, Play, FileText, ShoppingCart, Lock, KeyRound, User, ShieldCheck, Download, Smartphone, LayoutDashboard } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  CheckCircle2, 
+  Play, 
+  FileText, 
+  ShoppingCart, 
+  KeyRound, 
+  User, 
+  ShieldCheck, 
+  Download, 
+  Smartphone, 
+  LayoutDashboard,
+  Copy,
+  Check,
+  QrCode,
+  Info
+} from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const project = projects.find(p => p.id === id);
-  const [isPurchased, setIsPurchased] = useState(false);
+  
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   if (!project) {
     return (
@@ -29,6 +51,18 @@ export default function ProjectDetailPage() {
   }
 
   const isMobile = project.category === 'Mobile';
+  const qrCodeImage = PlaceHolderImages.find(img => img.id === 'usdt-qr');
+  const usdtAddress = "0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7";
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(usdtAddress);
+    setCopied(true);
+    toast({
+      title: "Address Copied",
+      description: "Wallet address copied to clipboard.",
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
   
   return (
     <div className="pb-12 md:pb-24">
@@ -57,7 +91,7 @@ export default function ProjectDetailPage() {
             {!isMobile && project.liveUrl && (
               <Button size="lg" className="h-10 md:h-12 px-4 md:px-8 glow-primary w-full sm:w-auto" asChild>
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4" /> User Demo
+                  <LayoutDashboard className="w-4 h-4" /> User Demo
                 </a>
               </Button>
             )}
@@ -65,7 +99,7 @@ export default function ProjectDetailPage() {
             {!isMobile && project.adminLiveUrl && (
               <Button size="lg" variant="outline" className="h-10 md:h-12 px-4 md:px-8 border-primary/50 text-primary hover:bg-primary/10 w-full sm:w-auto" asChild>
                 <a href={project.adminLiveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <LayoutDashboard className="w-4 h-4" /> Admin Demo
+                  <ShieldCheck className="w-4 h-4" /> Admin Demo
                 </a>
               </Button>
             )}
@@ -112,16 +146,17 @@ export default function ProjectDetailPage() {
                         </div>
                       </div>
                     )}
-
-                    <p className="text-[10px] text-muted-foreground italic mt-2">
-                      * Use these to log in on the {isMobile ? 'mobile application' : 'live demo sites'}.
-                    </p>
                   </div>
                 </PopoverContent>
               </Popover>
             )}
 
-            <Button size="lg" variant="secondary" className="h-10 md:h-12 px-4 md:px-8 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto" onClick={() => setIsPurchased(true)}>
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="h-10 md:h-12 px-4 md:px-8 bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
+              onClick={() => setIsPaymentOpen(true)}
+            >
               <ShoppingCart className="w-4 h-4 mr-2" /> Buy Source Code
             </Button>
           </div>
@@ -235,14 +270,17 @@ export default function ProjectDetailPage() {
             <div className="space-y-3 md:space-y-4">
               <h3 className="text-lg md:text-xl font-headline font-bold">What's Included?</h3>
               <ul className="text-xs md:text-sm space-y-3 text-muted-foreground">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Full Source Code ({isMobile ? 'React Native/Flutter' : 'TypeScript'})</li>
+                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Full Source Code</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Complete Documentation</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Future Updates</li>
                 <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Support via Email</li>
               </ul>
             </div>
 
-            <Button className="w-full h-12 text-lg font-headline glow-primary" onClick={() => setIsPurchased(true)}>
+            <Button 
+              className="w-full h-12 text-lg font-headline glow-primary" 
+              onClick={() => setIsPaymentOpen(true)}
+            >
               Get Instant Access
             </Button>
             
@@ -252,6 +290,92 @@ export default function ProjectDetailPage() {
           </Card>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
+        <DialogContent className="sm:max-w-[400px] bg-card border-white/10 p-0 overflow-hidden rounded-3xl">
+          <DialogHeader className="p-6 pb-2">
+            <DialogTitle className="text-center font-headline text-2xl font-bold">Deposit USDT</DialogTitle>
+          </DialogHeader>
+          
+          <div className="px-6 py-4 space-y-6">
+            {/* QR Code Section */}
+            <div className="flex flex-col items-center justify-center gap-4 py-4">
+              <div className="relative w-48 h-48 bg-white rounded-2xl p-2 shadow-2xl overflow-hidden">
+                {qrCodeImage && (
+                  <Image 
+                    src={qrCodeImage.imageUrl} 
+                    alt="Payment QR" 
+                    fill 
+                    className="object-contain"
+                    data-ai-hint={qrCodeImage.imageHint}
+                  />
+                )}
+                {!qrCodeImage && <QrCode className="w-full h-full text-muted" />}
+              </div>
+              <p className="text-sm font-medium text-muted-foreground">For USDT deposits only</p>
+            </div>
+
+            {/* Network & Address Info */}
+            <div className="space-y-4">
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+                  <span>Network</span>
+                </div>
+                <div className="flex items-center justify-between font-bold text-sm">
+                  <span>BEP20 <span className="text-muted-foreground font-normal ml-1">BNB Smart Chain(BSC)</span></span>
+                </div>
+              </div>
+
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1 uppercase tracking-widest font-bold">
+                  <span>Address</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] leading-tight break-all flex-1 text-foreground">
+                    {usdtAddress}
+                  </span>
+                  <Button 
+                    size="icon" 
+                    variant="secondary" 
+                    className="h-9 w-9 shrink-0 rounded-xl bg-primary/20 text-primary hover:bg-primary/30"
+                    onClick={copyAddress}
+                  >
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-[11px] text-muted-foreground px-1">
+                  <div className="flex items-center gap-1">
+                    <Info className="w-3 h-3" />
+                    <span>Min Deposit: 0.1 USDT</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span>Deposit to: Funding</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <Button 
+              className="w-full h-14 rounded-2xl font-bold glow-primary text-lg"
+              asChild
+            >
+              <a 
+                href={`https://wa.me/18252508100?text=Hello SCW, I've initiated a payment of $1,999 for ${project.title}. Please verify.`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Confirm Payment
+              </a>
+            </Button>
+          </div>
+          <div className="h-4" />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
