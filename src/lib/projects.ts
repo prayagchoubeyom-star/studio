@@ -187,7 +187,82 @@ export const projects: Project[] = [
     demoAdminPassword: 'Admin@54321'
   },
 
-  // MOBILE PROJECTS
+  // MOBILE PROJECTS (REORDERED)
+  {
+    id: 'forex-trading-app',
+    title: 'Forex Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Advanced mobile application for real-time forex trading.',
+    fullDescription: 'A full-featured mobile app designed for forex traders. It includes real-time price feeds, advanced charting tools, and high-security trading features. Built with React Native for high performance.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/fxapp1/400/800",
+      "https://picsum.photos/seed/fxapp2/400/800",
+      "https://picsum.photos/seed/fxapp3/400/800"
+    ],
+    technologies: ['React Native', 'Firebase', 'Socket.io', 'TypeScript'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/forex-app.apk',
+    repoUrl: 'https://github.com/scw/forex-app',
+    features: ['Real-time charts', 'Secure wallet', 'Push alerts', 'Multiple account support'],
+    documentation: '## Forex App Setup\n1. Install React Native environment\n2. Configure Socket.io server URL\n3. Connect Firebase project\n4. Build and deploy to stores.',
+    demoUserEmail: 'apptrader@test.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'appadmin@trading.com',
+    demoAdminPassword: 'adminpassword'
+  },
+  {
+    id: 'indian-market-trading-app',
+    title: 'Indian Market Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Comprehensive mobile app for the Indian Stock Market.',
+    fullDescription: 'Manage your Indian stock market portfolio on the go. This app provides direct access to NSE/BSE data, intraday charts, and advanced order types specifically for the Indian market ecosystem.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/indiaapp1/400/800",
+      "https://picsum.photos/seed/indiaapp2/400/800",
+      "https://picsum.photos/seed/indiaapp3/400/800"
+    ],
+    technologies: ['React Native', 'Node.js', 'Redux', 'Chart.js'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/india-trade.apk',
+    repoUrl: 'https://github.com/scw/india-trade-app',
+    features: ['NSE/BSE Watchlist', 'Portfolio tracking', 'Live market news', 'Biometric login'],
+    documentation: '## India Trade App Setup\n1. Setup NSE/BSE Data API keys\n2. Configure the React Native project\n3. Setup secure storage for credentials\n4. Build for Android/iOS.',
+    demoUserEmail: 'trader@india-app.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'admin@india-app.com',
+    demoAdminPassword: 'adminpassword'
+  },
+  {
+    id: 'binary-trading-app',
+    title: 'Binary Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Binary options mobile app for high-speed trading.',
+    fullDescription: 'A specialized mobile application for binary options trading. Features instant trade execution, profit/loss calculators, and a seamless user experience optimized for mobile interaction.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/binary1/400/800",
+      "https://picsum.photos/seed/binary2/400/800",
+      "https://picsum.photos/seed/binary3/400/800"
+    ],
+    technologies: ['Flutter', 'Node.js', 'WebSocket', 'Dart'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/binary-app.apk',
+    repoUrl: 'https://github.com/scw/binary-app',
+    features: ['High/Low trading', 'Instant deposit', 'Signal history', 'Demo mode'],
+    documentation: '## Binary App Setup\n1. Install Flutter SDK\n2. Configure backend API in config file\n3. Run `flutter build apk`\n4. Set up push notification keys.',
+    demoUserEmail: 'binaryuser@test.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'binaryadmin@test.com',
+    demoAdminPassword: 'adminpassword'
+  },
   {
     id: 'binance-app-clone',
     title: 'Binance App Clone',
@@ -292,81 +367,6 @@ export const projects: Project[] = [
     documentation: '## MT4 Clone Setup\n1. Connect MT4 Manager API\n2. Setup Redis for caching market data\n3. Build and test mobile apps\n4. Publish to stores.',
     demoUserEmail: 'trader@mt4.com',
     demoUserPassword: 'password123'
-  },
-  {
-    id: 'forex-trading-app',
-    title: 'Forex Trading App',
-    price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
-    shortDescription: 'Advanced mobile application for real-time forex trading.',
-    fullDescription: 'A full-featured mobile app designed for forex traders. It includes real-time price feeds, advanced charting tools, and high-security trading features. Built with React Native for high performance.',
-    thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
-    images: [PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''],
-    screenshots: [
-      "https://picsum.photos/seed/fxapp1/400/800",
-      "https://picsum.photos/seed/fxapp2/400/800",
-      "https://picsum.photos/seed/fxapp3/400/800"
-    ],
-    technologies: ['React Native', 'Firebase', 'Socket.io', 'TypeScript'],
-    category: 'Mobile',
-    downloadApkUrl: 'https://example.com/download/forex-app.apk',
-    repoUrl: 'https://github.com/scw/forex-app',
-    features: ['Real-time charts', 'Secure wallet', 'Push alerts', 'Multiple account support'],
-    documentation: '## Forex App Setup\n1. Install React Native environment\n2. Configure Socket.io server URL\n3. Connect Firebase project\n4. Build and deploy to stores.',
-    demoUserEmail: 'apptrader@test.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'appadmin@trading.com',
-    demoAdminPassword: 'adminpassword'
-  },
-  {
-    id: 'binary-trading-app',
-    title: 'Binary Trading App',
-    price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
-    shortDescription: 'Binary options mobile app for high-speed trading.',
-    fullDescription: 'A specialized mobile application for binary options trading. Features instant trade execution, profit/loss calculators, and a seamless user experience optimized for mobile interaction.',
-    thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
-    images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
-    screenshots: [
-      "https://picsum.photos/seed/binary1/400/800",
-      "https://picsum.photos/seed/binary2/400/800",
-      "https://picsum.photos/seed/binary3/400/800"
-    ],
-    technologies: ['Flutter', 'Node.js', 'WebSocket', 'Dart'],
-    category: 'Mobile',
-    downloadApkUrl: 'https://example.com/download/binary-app.apk',
-    repoUrl: 'https://github.com/scw/binary-app',
-    features: ['High/Low trading', 'Instant deposit', 'Signal history', 'Demo mode'],
-    documentation: '## Binary App Setup\n1. Install Flutter SDK\n2. Configure backend API in config file\n3. Run `flutter build apk`\n4. Set up push notification keys.',
-    demoUserEmail: 'binaryuser@test.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'binaryadmin@test.com',
-    demoAdminPassword: 'adminpassword'
-  },
-  {
-    id: 'indian-market-trading-app',
-    title: 'Indian Market Trading App',
-    price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
-    shortDescription: 'Comprehensive mobile app for the Indian Stock Market.',
-    fullDescription: 'Manage your Indian stock market portfolio on the go. This app provides direct access to NSE/BSE data, intraday charts, and advanced order types specifically for the Indian market ecosystem.',
-    thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
-    images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
-    screenshots: [
-      "https://picsum.photos/seed/indiaapp1/400/800",
-      "https://picsum.photos/seed/indiaapp2/400/800",
-      "https://picsum.photos/seed/indiaapp3/400/800"
-    ],
-    technologies: ['React Native', 'Node.js', 'Redux', 'Chart.js'],
-    category: 'Mobile',
-    downloadApkUrl: 'https://example.com/download/india-trade.apk',
-    repoUrl: 'https://github.com/scw/india-trade-app',
-    features: ['NSE/BSE Watchlist', 'Portfolio tracking', 'Live market news', 'Biometric login'],
-    documentation: '## India Trade App Setup\n1. Setup NSE/BSE Data API keys\n2. Configure the React Native project\n3. Setup secure storage for credentials\n4. Build for Android/iOS.',
-    demoUserEmail: 'trader@india-app.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'admin@india-app.com',
-    demoAdminPassword: 'adminpassword'
   },
   {
     id: 'profit-mobile-app',
