@@ -120,15 +120,15 @@ export const projects: Project[] = [
     images: [PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || ''],
     technologies: ['Node.js', 'FIX Protocol', 'Redis', 'TypeScript'],
     category: 'Web',
-    liveUrl: 'https://lp.example.com',
-    adminLiveUrl: 'https://lp.example.com/admin',
+    liveUrl: 'https://lp.sourcecodewala.store/login',
+    adminLiveUrl: 'https://lp.sourcecodewala.store/admin-login',
     repoUrl: 'https://github.com/scw/lp-connection',
     features: ['FIX API Integration', 'Order routing engine', 'Low-latency bridge', 'A-Book risk controls'],
     documentation: '## LP Connection Setup\n1. Secure FIX credentials from your LP\n2. Configure the bridge server\n3. Set up Redis for order caching\n4. Map trading symbols.',
-    demoUserEmail: 'broker@test.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'admin@liquidity.com',
-    demoAdminPassword: 'adminpassword'
+    demoUserEmail: 'demo@broker.com',
+    demoUserPassword: 'Demo@123456',
+    demoAdminEmail: 'admin@lpplatform.com',
+    demoAdminPassword: 'Admin@123456'
   },
   {
     id: 'indian-paper-trading',
