@@ -176,15 +176,15 @@ export const projects: Project[] = [
     images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
     technologies: ['Next.js', 'Node.js', 'MongoDB', 'Chart.js', 'Tailwind CSS'],
     category: 'Web',
-    liveUrl: 'https://paper.example.com',
-    adminLiveUrl: 'https://paper.example.com/admin',
+    liveUrl: 'https://indianpaper.sourcecodewala.store/login',
+    adminLiveUrl: 'https://indianpaper.sourcecodewala.store/admin/login',
     repoUrl: 'https://github.com/scw/indian-paper-trading',
     features: ['NSE/BSE Data Simulation', 'Virtual Portfolio Management', 'Order History & Reports', 'Market News Feed'],
     documentation: '## Indian Paper Trading Setup\n1. Secure Indian market data API credentials\n2. Configure MongoDB for user accounts\n3. Set up the virtual matching engine\n4. Deploy to a production environment.',
-    demoUserEmail: 'trader@india.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'admin@india.com',
-    demoAdminPassword: 'adminpassword'
+    demoUserEmail: 'testuser@gmail.com',
+    demoUserPassword: 'Test@123456',
+    demoAdminEmail: 'admin@test1gmail.com',
+    demoAdminPassword: 'Admin@54321'
   },
 
   // MOBILE PROJECTS
