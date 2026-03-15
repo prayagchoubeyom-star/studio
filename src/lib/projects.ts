@@ -45,14 +45,13 @@ export const projects: Project[] = [
     adminLiveUrl: 'https://allinone.sourcecodewala.store/admin',
     repoUrl: 'https://github.com/scw/forex-trading',
     features: [
-      'profetional trading terminal',
-      'copy trading',
-      'funded chalenges',
-      'prop firm',
-      'pam setup',
-      'mam setup',
+      'Professional trading terminal',
+      'Copy trading',
+      'Funded challenges',
+      'Prop firm setup',
+      'PAM/MAM setup',
       'IB management',
-      'A book B book setup',
+      'A-Book & B-Book setup',
       'LP connectivity'
     ],
     documentation: '## Forex Setup Guide\n1. Clone the repository\n2. Configure your MT4/MT5 API keys\n3. Set up environment variables\n4. Run `npm install` and `npm run dev`.',
@@ -80,15 +79,10 @@ export const projects: Project[] = [
     adminLiveUrl: 'https://allinone.sourcecodewala.store/admin',
     repoUrl: 'https://github.com/scw/copytrading',
     features: [
-      'profetional trading terminal',
-      'copy trading',
-      'funded chalenges',
-      'prop firm',
-      'pam setup',
-      'mam setup',
-      'IB management',
-      'A book B book setup',
-      'LP connectivity'
+      'Automated trade copying',
+      'Latency-optimized execution',
+      'Multi-broker support',
+      'Advanced risk filters'
     ],
     documentation: '## Copytrading Setup\n1. Connect master API\n2. Setup Redis for fast execution\n3. Configure your database\n4. Deploy to a high-performance server.',
     demoUserEmail: 'testuser@gmail.com',
@@ -98,7 +92,7 @@ export const projects: Project[] = [
   },
   {
     id: 'funded-forex',
-    title: 'funded forex compelete setup',
+    title: 'funded forex complete setup',
     price: 1999,
     shortDescription: 'Prop firm management platform with evaluation tracking.',
     fullDescription: 'Launch your own prop firm with this funded account management system. Includes challenge tracking, drawdown monitoring, and automated payout management.',
@@ -115,15 +109,10 @@ export const projects: Project[] = [
     adminLiveUrl: 'https://allinone.sourcecodewala.store/admin',
     repoUrl: 'https://github.com/scw/funded-forex',
     features: [
-      'profetional trading terminal',
-      'copy trading',
-      'funded chalenges',
-      'prop firm',
-      'pam setup',
-      'mam setup',
-      'IB management',
-      'A book B book setup',
-      'LP connectivity'
+      'Challenge management',
+      'Drawdown logic engines',
+      'Automated user dashboard',
+      'Integrated payment solutions'
     ],
     documentation: '## Funded Firm Setup\n1. Define your challenge parameters\n2. Setup Firebase for user data\n3. Configure payout methods\n4. Customize the branding.',
     demoUserEmail: 'testuser@gmail.com',
@@ -158,7 +147,7 @@ export const projects: Project[] = [
   },
   {
     id: 'lp-connection',
-    title: 'lp connection a book complelet setup',
+    title: 'lp connection a book complete setup',
     price: 1999,
     shortDescription: 'Direct liquidity provider connection with A-Book risk management.',
     fullDescription: 'Establish a direct bridge between your trading platform and top-tier liquidity providers. This A-Book setup ensures high-speed execution, minimal slippage, and professional-grade risk management for serious brokerage operations.',
@@ -175,15 +164,10 @@ export const projects: Project[] = [
     adminLiveUrl: 'https://lp.sourcecodewala.store/admin-login',
     repoUrl: 'https://github.com/scw/lp-connection',
     features: [
-      'profetional trading terminal',
-      'copy trading',
-      'funded chalenges',
-      'prop firm',
-      'pam setup',
-      'mam setup',
-      'IB management',
-      'A book B book setup',
-      'LP connectivity'
+      'Direct FIX API bridging',
+      'Real-time order routing',
+      'Deep liquidity access',
+      'Full risk control panel'
     ],
     documentation: '## LP Connection Setup\n1. Secure FIX credentials from your LP\n2. Configure the bridge server\n3. Set up Redis for order caching\n4. Map trading symbols.',
     demoUserEmail: 'demo@broker.com',
@@ -217,7 +201,7 @@ export const projects: Project[] = [
     demoAdminPassword: 'Admin@54321'
   },
 
-  // MOBILE PROJECTS (ONLY THE REQUESTED 5)
+  // MOBILE PROJECTS
   {
     id: 'forex-trading-app',
     title: 'Forex Trading App',

@@ -3,12 +3,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ExternalLink, ArrowLeft, Save, X, Upload } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Image as ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -24,6 +24,7 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [uploadTarget, setUploadTarget] = useState<'thumbnail' | 'screenshot'>('thumbnail');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -63,7 +64,11 @@ export default function AdminProjectsPage() {
       images: [],
       screenshots: [],
       technologies: ['Next.js', 'TypeScript'],
-      features: ['professional trading terminal'],
+      features: ['Professional trading terminal'],
+      documentation: '## Installation Guide\n1. Setup step one\n2. Setup step two',
+      liveUrl: '',
+      adminLiveUrl: '',
+      downloadApkUrl: '',
     } as Project);
     setIsModalOpen(true);
   };
@@ -88,137 +93,257 @@ export default function AdminProjectsPage() {
     if (file && editingProject) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setEditingProject({ ...editingProject, thumbnail: reader.result as string });
+        const base64 = reader.result as string;
+        if (uploadTarget === 'thumbnail') {
+          setEditingProject({ ...editingProject, thumbnail: base64 });
+        } else {
+          const newScreenshots = [...(editingProject.screenshots || []), base64];
+          setEditingProject({ ...editingProject, screenshots: newScreenshots });
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const removeScreenshot = (index: number) => {
+    if (!editingProject) return;
+    const filtered = editingProject.screenshots.filter((_, i) => i !== index);
+    setEditingProject({ ...editingProject, screenshots: filtered });
+  };
+
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
-      <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        className="hidden" 
+        accept="image/*" 
+        onChange={handleFileChange} 
+      />
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <Link href="/admin" className="text-sm text-primary flex items-center gap-2 hover:underline mb-2">
             <ArrowLeft className="w-3 h-3" /> Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-headline font-bold">Manage Projects</h1>
-          <p className="text-muted-foreground">Add and edit projects. Changes reflect instantly to the marketplace.</p>
+          <h1 className="text-3xl font-headline font-bold">Project Management</h1>
+          <p className="text-muted-foreground">Manage trading solutions, screenshots, and APK downloads.</p>
         </div>
-        <Button className="glow-primary" onClick={handleOpenAdd}>
-          <Plus className="w-4 h-4 mr-2" /> Add New Project
+        <Button className="glow-primary h-12 px-6" onClick={handleOpenAdd}>
+          <Plus className="w-4 h-4 mr-2" /> New Project
         </Button>
       </div>
 
-      <Card className="bg-card border-white/5 shadow-2xl">
-        <CardHeader>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <CardTitle>Project Catalog ({filteredProjects.length})</CardTitle>
-            <div className="relative w-full md:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search projects..." 
-                className="pl-10 bg-white/5 border-white/10"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
+      <Card className="bg-card border-white/5 shadow-2xl overflow-hidden">
+        <div className="p-6 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <h2 className="text-xl font-bold">Catalog List</h2>
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search projects..." 
+              className="pl-10 bg-white/5 border-white/10"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-xl border border-white/10 overflow-hidden">
-            <Table>
-              <TableHeader className="bg-white/5">
-                <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredProjects.map((project) => (
-                  <TableRow key={project.id} className="hover:bg-white/5">
-                    <TableCell className="font-medium">{project.title}</TableCell>
-                    <TableCell><Badge variant="outline">{project.category}</Badge></TableCell>
-                    <TableCell className="font-bold">${project.price}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => handleOpenEdit(project)}>
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(project.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+        </div>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-white/5">
+              <TableRow>
+                <TableHead>Project Info</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredProjects.map((project) => (
+                <TableRow key={project.id} className="hover:bg-white/5 border-white/5">
+                  <TableCell>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded bg-white/10 overflow-hidden relative border border-white/10">
+                        <img src={project.thumbnail} className="object-cover w-full h-full" alt="" />
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
+                      <div>
+                        <div className="font-bold">{project.title}</div>
+                        <div className="text-xs text-muted-foreground">{project.id}</div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell><Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">{project.category}</Badge></TableCell>
+                  <TableCell className="font-mono font-bold text-green-500">${project.price}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" size="icon" onClick={() => handleOpenEdit(project)}>
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(project.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </Card>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-2xl bg-card border-white/10 max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl bg-card border-white/10 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingProject?.id.includes('project-') ? 'Add Project' : 'Edit Project'}</DialogTitle>
+            <DialogTitle className="text-2xl font-headline font-bold">
+              {editingProject?.id.includes('project-') ? 'Create Project' : 'Edit Project Details'}
+            </DialogTitle>
           </DialogHeader>
+          
           {editingProject && (
-            <div className="grid gap-6 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Project Title</Label>
-                  <Input value={editingProject.title} onChange={e => setEditingProject({...editingProject, title: e.target.value})} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Price ($)</Label>
-                  <Input type="number" value={editingProject.price} onChange={e => setEditingProject({...editingProject, price: Number(e.target.value)})} />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Category</Label>
-                  <select 
-                    className="w-full h-10 bg-white/5 border border-white/10 rounded-md px-3 text-sm"
-                    value={editingProject.category} 
-                    onChange={e => setEditingProject({...editingProject, category: e.target.value as any})}
-                  >
-                    <option value="Web">Web</option>
-                    <option value="Mobile">Mobile</option>
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Demo URL</Label>
-                  <Input value={editingProject.liveUrl || ''} onChange={e => setEditingProject({...editingProject, liveUrl: e.target.value})} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Short Description</Label>
-                <Input value={editingProject.shortDescription} onChange={e => setEditingProject({...editingProject, shortDescription: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Full Description</Label>
-                <Textarea value={editingProject.fullDescription} onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Thumbnail Image</Label>
-                <div className="flex gap-4 items-center">
-                  <div className="w-20 h-20 relative rounded-lg overflow-hidden border border-white/10">
-                    <img src={editingProject.thumbnail} alt="Preview" className="object-cover w-full h-full" />
+            <div className="grid gap-8 py-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Project Title</Label>
+                    <Input 
+                      value={editingProject.title} 
+                      onChange={e => setEditingProject({...editingProject, title: e.target.value})} 
+                      className="bg-white/5 border-white/10"
+                    />
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
-                    <Upload className="w-4 h-4 mr-2" /> Upload New
-                  </Button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Price ($)</Label>
+                      <Input 
+                        type="number" 
+                        value={editingProject.price} 
+                        onChange={e => setEditingProject({...editingProject, price: Number(e.target.value)})} 
+                        className="bg-white/5 border-white/10"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Category</Label>
+                      <select 
+                        className="w-full h-10 bg-white/5 border border-white/10 rounded-md px-3 text-sm focus:ring-1 focus:ring-primary outline-none"
+                        value={editingProject.category} 
+                        onChange={e => setEditingProject({...editingProject, category: e.target.value as any})}
+                      >
+                        <option value="Web">Web Project</option>
+                        <option value="Mobile">Mobile Application</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Short Description</Label>
+                    <Input 
+                      value={editingProject.shortDescription} 
+                      onChange={e => setEditingProject({...editingProject, shortDescription: e.target.value})} 
+                      className="bg-white/5 border-white/10"
+                    />
+                  </div>
                 </div>
+
+                <div className="space-y-4">
+                  <Label>Main Thumbnail</Label>
+                  <div className="relative aspect-video rounded-xl border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center group">
+                    <img src={editingProject.thumbnail} alt="" className="object-cover w-full h-full" />
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button variant="secondary" size="sm" onClick={() => {
+                        setUploadTarget('thumbnail');
+                        fileInputRef.current?.click();
+                      }}>
+                        <Upload className="w-4 h-4 mr-2" /> Upload Image
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <Label className="flex items-center justify-between">
+                  <span>Gallery Screenshots (Hero Slider)</span>
+                  <Button variant="outline" size="sm" className="h-8 border-primary/30 text-primary" onClick={() => {
+                    setUploadTarget('screenshot');
+                    fileInputRef.current?.click();
+                  }}>
+                    <Plus className="w-3 h-3 mr-2" /> Add Slide
+                  </Button>
+                </Label>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+                  {editingProject.screenshots?.map((s, i) => (
+                    <div key={i} className="relative aspect-video rounded-lg border border-white/10 bg-white/5 group overflow-hidden">
+                      <img src={s} className="object-cover w-full h-full" alt="" />
+                      <button 
+                        onClick={() => removeScreenshot(i)}
+                        className="absolute top-1 right-1 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                  {(!editingProject.screenshots || editingProject.screenshots.length === 0) && (
+                    <div className="col-span-full py-8 text-center border-2 border-dashed border-white/5 rounded-xl text-muted-foreground text-sm">
+                      No screenshots added. These appear in the project details header slider.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>User Demo Link</Label>
+                  <Input 
+                    value={editingProject.liveUrl || ''} 
+                    onChange={e => setEditingProject({...editingProject, liveUrl: e.target.value})} 
+                    className="bg-white/5 border-white/10"
+                    placeholder="https://demo.yoursite.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Admin Demo Link</Label>
+                  <Input 
+                    value={editingProject.adminLiveUrl || ''} 
+                    onChange={e => setEditingProject({...editingProject, adminLiveUrl: e.target.value})} 
+                    className="bg-white/5 border-white/10"
+                    placeholder="https://admin.yoursite.com"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Mobile APK Download Link (For Mobile Category)</Label>
+                  <Input 
+                    value={editingProject.downloadApkUrl || ''} 
+                    onChange={e => setEditingProject({...editingProject, downloadApkUrl: e.target.value})} 
+                    className="bg-white/5 border-white/10"
+                    placeholder="Direct link to .apk file"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Full Project Description</Label>
+                <Textarea 
+                  value={editingProject.fullDescription} 
+                  onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} 
+                  className="bg-white/5 border-white/10 min-h-[120px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Technical Documentation (Markdown Supported)</Label>
+                <Textarea 
+                  value={editingProject.documentation || ''} 
+                  onChange={e => setEditingProject({...editingProject, documentation: e.target.value})} 
+                  className="bg-white/5 border-white/10 min-h-[150px] font-mono text-xs"
+                  placeholder="## Setup Guide..."
+                />
               </div>
             </div>
           )}
-          <DialogFooter>
+          
+          <DialogFooter className="border-t border-white/5 pt-6">
             <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button className="glow-primary" onClick={handleSaveProject}>Save Project</Button>
+            <Button className="glow-primary px-8" onClick={handleSaveProject}>
+              <Save className="w-4 h-4 mr-2" /> Save Project Changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
