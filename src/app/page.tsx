@@ -8,8 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { getPersistentProjects } from '@/lib/persistence';
-import { Search, Sparkles, ArrowRight, Code2, Layers, Globe, ShieldCheck } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Search, Sparkles, ShieldCheck } from 'lucide-react';
 import { Project } from '@/lib/projects';
 
 export default function MarketplaceHome() {
@@ -17,9 +16,15 @@ export default function MarketplaceHome() {
   const [search, setSearch] = useState('');
   const [projects, setProjects] = useState<Project[]>([]);
 
-  useEffect(() => {
-    // Force a re-fetch of data when component mounts to ensure latest from persistence
+  const loadData = () => {
     setProjects(getPersistentProjects());
+  };
+
+  useEffect(() => {
+    loadData();
+    // Listen for storage updates from the admin panel
+    window.addEventListener('storage_update', loadData);
+    return () => window.removeEventListener('storage_update', loadData);
   }, []);
 
   const filteredProjects = useMemo(() => {

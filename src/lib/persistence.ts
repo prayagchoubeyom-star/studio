@@ -2,9 +2,9 @@
 import { projects as initialProjects, Project } from './projects';
 import { PlaceHolderImages as initialAssets, ImagePlaceholder } from './placeholder-images';
 
-const PROJECTS_KEY = 'scw_projects_v2';
-const ASSETS_KEY = 'scw_assets_v2';
-const SETTINGS_KEY = 'scw_settings_v2';
+const PROJECTS_KEY = 'scw_projects_v3';
+const ASSETS_KEY = 'scw_assets_v3';
+const SETTINGS_KEY = 'scw_settings_v3';
 
 export interface SiteSettings {
   usdtAddress: string;
@@ -15,7 +15,6 @@ export function getPersistentProjects(): Project[] {
   if (typeof window === 'undefined') return initialProjects;
   const stored = localStorage.getItem(PROJECTS_KEY);
   if (!stored) {
-    // Seed the storage with initial data if empty
     localStorage.setItem(PROJECTS_KEY, JSON.stringify(initialProjects));
     return initialProjects;
   }
@@ -29,6 +28,8 @@ export function getPersistentProjects(): Project[] {
 export function savePersistentProjects(projects: Project[]) {
   if (typeof window === 'undefined') return;
   localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+  // Dispatch event for other components to listen to
+  window.dispatchEvent(new Event('storage_update'));
 }
 
 export function getPersistentAssets(): ImagePlaceholder[] {
@@ -48,6 +49,7 @@ export function getPersistentAssets(): ImagePlaceholder[] {
 export function savePersistentAssets(assets: ImagePlaceholder[]) {
   if (typeof window === 'undefined') return;
   localStorage.setItem(ASSETS_KEY, JSON.stringify(assets));
+  window.dispatchEvent(new Event('storage_update'));
 }
 
 export function getPersistentSettings(): SiteSettings {
@@ -70,4 +72,5 @@ export function getPersistentSettings(): SiteSettings {
 export function savePersistentSettings(settings: SiteSettings) {
   if (typeof window === 'undefined') return;
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  window.dispatchEvent(new Event('storage_update'));
 }

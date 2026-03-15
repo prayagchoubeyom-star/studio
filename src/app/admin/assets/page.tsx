@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { getPersistentAssets, savePersistentAssets } from '@/lib/persistence';
+import { getPersistentAssets, savePersistentAssets, getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
 import { ArrowLeft, Save, Upload, Search, RefreshCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -37,10 +37,42 @@ export default function AdminAssetsPage() {
   };
 
   const handleSaveAll = () => {
+    // 1. Save Assets
     savePersistentAssets(assets);
+    
+    // 2. Map Assets to Projects for direct sync
+    const currentProjects = getPersistentProjects();
+    const assetMap = assets.reduce((acc, a) => ({ ...acc, [a.id]: a.imageUrl }), {} as any);
+    
+    // 3. Update Project Thumbnails if they were derived from these specific placeholder IDs
+    const updatedProjects = currentProjects.map(p => {
+      // Map legacy IDs to project thumbnails
+      const mapping: Record<string, string> = {
+        'forex-setup': 'project-1',
+        'copytrading-setup': 'project-5',
+        'funded-forex': 'project-3',
+        'quotex-clone': 'project-6',
+        'lp-connection': 'project-7',
+        'indian-paper-trading': 'project-8',
+        'forex-trading-app': 'project-1',
+        'indian-market-trading-app': 'project-8',
+        'binary-trading-app': 'project-6',
+        'binance-app-clone': 'project-7',
+        'exness-app-clone': 'project-5'
+      };
+
+      const targetAssetId = mapping[p.id];
+      if (targetAssetId && assetMap[targetAssetId]) {
+        return { ...p, thumbnail: assetMap[targetAssetId] };
+      }
+      return p;
+    });
+
+    savePersistentProjects(updatedProjects);
+
     toast({
-      title: "Assets Saved",
-      description: "All photo changes are now live across the website.",
+      title: "Changes Published",
+      description: "Asset updates have been applied to projects and pages site-wide.",
     });
   };
 
@@ -56,8 +88,8 @@ export default function AdminAssetsPage() {
       reader.onloadend = () => {
         handleUpdateUrl(activeAssetId, reader.result as string);
         toast({
-          title: "Photo Loaded",
-          description: "Click 'Save All Changes' to make it permanent.",
+          title: "Photo Ready",
+          description: "Click 'Save Changes' to push this update live.",
         });
       };
       reader.readAsDataURL(file);
@@ -81,10 +113,10 @@ export default function AdminAssetsPage() {
             <ArrowLeft className="w-3 h-3" /> Back to Dashboard
           </Link>
           <h1 className="text-3xl font-headline font-bold">Website Assets</h1>
-          <p className="text-muted-foreground">Modify site-wide photos, background images, and brand elements.</p>
+          <p className="text-muted-foreground">Modify site-wide photos. Changes here automatically update linked projects.</p>
         </div>
-        <Button className="glow-primary" onClick={handleSaveAll}>
-          <Save className="w-4 h-4 mr-2" /> Save All Changes
+        <Button className="glow-primary px-8 h-12" onClick={handleSaveAll}>
+          <Save className="w-4 h-4 mr-2" /> Save Changes
         </Button>
       </div>
 
@@ -107,6 +139,7 @@ export default function AdminAssetsPage() {
                 alt={asset.description} 
                 fill 
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
+                unoptimized
               />
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                  <Button variant="secondary" size="sm" onClick={() => triggerFilePicker(asset.id)}>
@@ -122,11 +155,11 @@ export default function AdminAssetsPage() {
             </CardHeader>
             <CardContent className="p-4 pt-0 space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Image Source</Label>
+                <Label className="text-xs text-muted-foreground">Image Status</Label>
                 <div className="flex gap-2">
                   <Input 
-                    value={asset.imageUrl.startsWith('data:') ? 'Local File Selected' : asset.imageUrl} 
-                    className="h-9 text-xs bg-white/5 border-white/10 font-mono"
+                    value={asset.imageUrl.startsWith('data:') ? 'Custom Upload (Local)' : 'External Source'} 
+                    className="h-9 text-xs bg-white/5 border-white/10"
                     readOnly
                   />
                   <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => triggerFilePicker(asset.id)}>
