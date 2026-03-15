@@ -110,6 +110,26 @@ export const projects: Project[] = [
     demoAdminEmail: 'operator@test.com',
     demoAdminPassword: 'operatorpassword'
   },
+  {
+    id: 'lp-connection',
+    title: 'lp connection a book complelet setup',
+    price: 150.00,
+    shortDescription: 'Direct liquidity provider connection with A-Book risk management.',
+    fullDescription: 'Establish a direct bridge between your trading platform and top-tier liquidity providers. This A-Book setup ensures high-speed execution, minimal slippage, and professional-grade risk management for serious brokerage operations.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || ''],
+    technologies: ['Node.js', 'FIX Protocol', 'Redis', 'TypeScript'],
+    category: 'Web',
+    liveUrl: 'https://lp.example.com',
+    adminLiveUrl: 'https://lp.example.com/admin',
+    repoUrl: 'https://github.com/scw/lp-connection',
+    features: ['FIX API Integration', 'Order routing engine', 'Low-latency bridge', 'A-Book risk controls'],
+    documentation: '## LP Connection Setup\n1. Secure FIX credentials from your LP\n2. Configure the bridge server\n3. Set up Redis for order caching\n4. Map trading symbols.',
+    demoUserEmail: 'broker@test.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'admin@liquidity.com',
+    demoAdminPassword: 'adminpassword'
+  },
 
   // MOBILE PROJECTS
   {
