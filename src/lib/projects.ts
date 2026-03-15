@@ -29,7 +29,7 @@ export const projects: Project[] = [
   {
     id: 'forex-setup',
     title: 'Forex trading complete setup',
-    price: 49.99,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Professional forex trading platform with MT4/MT5 integration.',
     fullDescription: 'A complete forex trading solution featuring real-time charts, technical indicators, and seamless broker integration. Built for performance and reliability in the high-stakes trading environment.',
@@ -50,7 +50,7 @@ export const projects: Project[] = [
   {
     id: 'copytrading-setup',
     title: 'copytrading complete setup',
-    price: 65.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Automated copy-trading platform for master and follower accounts.',
     fullDescription: 'Enable users to follow professional traders automatically. This setup includes master account management, follower synchronization, and detailed performance analytics.',
@@ -71,7 +71,7 @@ export const projects: Project[] = [
   {
     id: 'funded-forex',
     title: 'funded forex compelete setup',
-    price: 39.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Prop firm management platform with evaluation tracking.',
     fullDescription: 'Launch your own prop firm with this funded account management system. Includes challenge tracking, drawdown monitoring, and automated payout management.',
@@ -92,7 +92,7 @@ export const projects: Project[] = [
   {
     id: 'quotex-clone',
     title: 'quotex clone complete setup',
-    price: 120.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Binary options trading platform with instant execution.',
     fullDescription: 'A high-speed binary options trading platform clone. Features OTC market simulation, high/low trading options, and an advanced admin panel for signal management.',
@@ -113,7 +113,7 @@ export const projects: Project[] = [
   {
     id: 'lp-connection',
     title: 'lp connection a book complelet setup',
-    price: 150.00,
+    price: 1999,
     shortDescription: 'Direct liquidity provider connection with A-Book risk management.',
     fullDescription: 'Establish a direct bridge between your trading platform and top-tier liquidity providers. This A-Book setup ensures high-speed execution, minimal slippage, and professional-grade risk management for serious brokerage operations.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || '',
@@ -133,7 +133,7 @@ export const projects: Project[] = [
   {
     id: 'indian-paper-trading',
     title: 'Indian Market Paper Trading Complete Setup',
-    price: 55.00,
+    price: 1999,
     shortDescription: 'Realistic paper trading platform for the Indian stock market (NSE/BSE).',
     fullDescription: 'Practice trading in the Indian stock market without real capital. This setup includes real-time data simulation for NSE/BSE stocks, virtual portfolio tracking, and performance analytics tailored for the Indian trading ecosystem.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
@@ -153,9 +153,84 @@ export const projects: Project[] = [
 
   // MOBILE PROJECTS
   {
+    id: 'forex-trading-app',
+    title: 'Forex Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Advanced mobile application for real-time forex trading.',
+    fullDescription: 'A full-featured mobile app designed for forex traders. It includes real-time price feeds, advanced charting tools, and high-security trading features. Built with React Native for high performance.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/fxapp1/400/800",
+      "https://picsum.photos/seed/fxapp2/400/800",
+      "https://picsum.photos/seed/fxapp3/400/800"
+    ],
+    technologies: ['React Native', 'Firebase', 'Socket.io', 'TypeScript'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/forex-app.apk',
+    repoUrl: 'https://github.com/scw/forex-app',
+    features: ['Real-time charts', 'Secure wallet', 'Push alerts', 'Multiple account support'],
+    documentation: '## Forex App Setup\n1. Install React Native environment\n2. Configure Socket.io server URL\n3. Connect Firebase project\n4. Build and deploy to stores.',
+    demoUserEmail: 'apptrader@test.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'appadmin@trading.com',
+    demoAdminPassword: 'adminpassword'
+  },
+  {
+    id: 'binary-trading-app',
+    title: 'Binary Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Binary options mobile app for high-speed trading.',
+    fullDescription: 'A specialized mobile application for binary options trading. Features instant trade execution, profit/loss calculators, and a seamless user experience optimized for mobile interaction.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/binary1/400/800",
+      "https://picsum.photos/seed/binary2/400/800",
+      "https://picsum.photos/seed/binary3/400/800"
+    ],
+    technologies: ['Flutter', 'Node.js', 'WebSocket', 'Dart'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/binary-app.apk',
+    repoUrl: 'https://github.com/scw/binary-app',
+    features: ['High/Low trading', 'Instant deposit', 'Signal history', 'Demo mode'],
+    documentation: '## Binary App Setup\n1. Install Flutter SDK\n2. Configure backend API in config file\n3. Run `flutter build apk`\n4. Set up push notification keys.',
+    demoUserEmail: 'binaryuser@test.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'binaryadmin@test.com',
+    demoAdminPassword: 'adminpassword'
+  },
+  {
+    id: 'indian-market-trading-app',
+    title: 'Indian Market Trading App',
+    price: 1999,
+    youtubeId: 'dQw4w9WgXcQ',
+    shortDescription: 'Comprehensive mobile app for the Indian Stock Market.',
+    fullDescription: 'Manage your Indian stock market portfolio on the go. This app provides direct access to NSE/BSE data, intraday charts, and advanced order types specifically for the Indian market ecosystem.',
+    thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
+    images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/indiaapp1/400/800",
+      "https://picsum.photos/seed/indiaapp2/400/800",
+      "https://picsum.photos/seed/indiaapp3/400/800"
+    ],
+    technologies: ['React Native', 'Node.js', 'Redux', 'Chart.js'],
+    category: 'Mobile',
+    downloadApkUrl: 'https://example.com/download/india-trade.apk',
+    repoUrl: 'https://github.com/scw/india-trade-app',
+    features: ['NSE/BSE Watchlist', 'Portfolio tracking', 'Live market news', 'Biometric login'],
+    documentation: '## India Trade App Setup\n1. Setup NSE/BSE Data API keys\n2. Configure the React Native project\n3. Setup secure storage for credentials\n4. Build for Android/iOS.',
+    demoUserEmail: 'trader@india-app.com',
+    demoUserPassword: 'password123',
+    demoAdminEmail: 'admin@india-app.com',
+    demoAdminPassword: 'adminpassword'
+  },
+  {
     id: 'profit-mobile-app',
     title: 'ProFit Mobile App',
-    price: 89.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Complete fitness tracking solution with social features.',
     fullDescription: 'A comprehensive mobile application built for fitness enthusiasts. Includes workout planning, calorie tracking, and a social feed for sharing progress.',
@@ -180,7 +255,7 @@ export const projects: Project[] = [
   {
     id: 'quickbite-delivery',
     title: 'QuickBite Delivery',
-    price: 99.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'On-demand food delivery app with driver tracking.',
     fullDescription: 'A dual-app food delivery solution. Features real-time GPS tracking for customers, orders management for restaurants, and a dedicated app for drivers.',
@@ -205,7 +280,7 @@ export const projects: Project[] = [
   {
     id: 'walletx-crypto',
     title: 'WalletX Crypto',
-    price: 150.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Secure cryptocurrency wallet with Web3 integration.',
     fullDescription: 'A secure, non-custodial crypto wallet supporting multiple blockchains. Integrated with Web3 for DeFi swaps and NFT viewing.',
@@ -230,7 +305,7 @@ export const projects: Project[] = [
   {
     id: 'studysphere-edu',
     title: 'StudySphere Pro',
-    price: 79.00,
+    price: 1999,
     youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'LMS mobile app for online courses and quizzes.',
     fullDescription: 'A complete Learning Management System in your pocket. Supports video lessons, interactive quizzes, student progress tracking, and offline learning.',
