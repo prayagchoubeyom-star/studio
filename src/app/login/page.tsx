@@ -2,16 +2,45 @@
 "use client"
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Code, Github, Mail, ShieldCheck } from 'lucide-react';
+import { Code, ShieldCheck, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPass, setAdminPass] = useState('');
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Default credentials as requested
+    if (adminEmail === 'test@admin.com' && adminPass === 'admin') {
+      localStorage.setItem('scw_admin_logged_in', 'true');
+      toast({
+        title: "Login Successful",
+        description: "Welcome back, Administrator.",
+      });
+      router.push('/admin');
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Invalid Credentials",
+        description: "Please check your admin email and password.",
+      });
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-24 relative overflow-hidden">
@@ -27,7 +56,7 @@ export default function LoginPage() {
           <CardDescription>Access your source code library or manage projects.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="user" className="w-full" onValueChange={(v) => setIsAdmin(v === 'admin')}>
+          <Tabs defaultValue="admin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/5">
               <TabsTrigger value="user">Buyer Login</TabsTrigger>
               <TabsTrigger value="admin">Admin Portal</TabsTrigger>
@@ -61,17 +90,35 @@ export default function LoginPage() {
                 <ShieldCheck className="w-5 h-5 text-yellow-500" />
                 <span className="text-xs text-yellow-500 font-medium">Authorized staff only. IP addresses are logged.</span>
               </div>
-              <div className="space-y-4">
+              <form onSubmit={handleAdminLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="admin-id">Admin Email</Label>
-                  <Input id="admin-id" type="email" placeholder="admin@scw.store" className="bg-white/5 border-white/10 h-12" />
+                  <Input 
+                    id="admin-id" 
+                    type="email" 
+                    placeholder="test@admin.com" 
+                    className="bg-white/5 border-white/10 h-12"
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="admin-pass">Access Key</Label>
-                  <Input id="admin-pass" type="password" placeholder="••••••••" className="bg-white/5 border-white/10 h-12" />
+                  <Input 
+                    id="admin-pass" 
+                    type="password" 
+                    placeholder="admin" 
+                    className="bg-white/5 border-white/10 h-12"
+                    value={adminPass}
+                    onChange={(e) => setAdminPass(e.target.value)}
+                    required
+                  />
                 </div>
-                <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-white">Login to Console</Button>
-              </div>
+                <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary/90 text-white" disabled={loading}>
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Login to Console"}
+                </Button>
+              </form>
             </TabsContent>
           </Tabs>
         </CardContent>
