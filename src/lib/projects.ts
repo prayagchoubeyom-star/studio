@@ -7,7 +7,7 @@ export interface Project {
   fullDescription: string;
   thumbnail: string;
   images: string[];
-  screenshots?: string[];
+  screenshots: string[];
   technologies: string[];
   category: 'Web' | 'Mobile';
   liveUrl?: string;
@@ -35,6 +35,11 @@ export const projects: Project[] = [
     fullDescription: 'A complete forex trading solution featuring real-time charts, technical indicators, and seamless broker integration. Built for performance and reliability in the high-stakes trading environment.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/fxweb1/1200/800",
+      "https://picsum.photos/seed/fxweb2/1200/800",
+      "https://picsum.photos/seed/fxweb3/1200/800"
+    ],
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Socket.io'],
     category: 'Web',
     liveUrl: 'https://allinone.sourcecodewala.store/login',
@@ -66,6 +71,11 @@ export const projects: Project[] = [
     fullDescription: 'Enable users to follow professional traders automatically. This setup includes master account management, follower synchronization, and detailed performance analytics.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-5')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-5')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/copy1/1200/800",
+      "https://picsum.photos/seed/copy2/1200/800",
+      "https://picsum.photos/seed/copy3/1200/800"
+    ],
     technologies: ['Next.js', 'Prisma', 'PostgreSQL', 'Redis'],
     category: 'Web',
     liveUrl: 'https://allinone.sourcecodewala.store/login',
@@ -97,6 +107,11 @@ export const projects: Project[] = [
     fullDescription: 'Launch your own prop firm with this funded account management system. Includes challenge tracking, drawdown monitoring, and automated payout management.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/funded1/1200/800",
+      "https://picsum.photos/seed/funded2/1200/800",
+      "https://picsum.photos/seed/funded3/1200/800"
+    ],
     technologies: ['Next.js', 'Firebase', 'Chart.js', 'Zod'],
     category: 'Web',
     liveUrl: 'https://allinone.sourcecodewala.store/login',
@@ -128,6 +143,11 @@ export const projects: Project[] = [
     fullDescription: 'A high-speed binary options trading platform clone. Features OTC market simulation, high/low trading options, and an advanced admin panel for signal management.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/qx1/1200/800",
+      "https://picsum.photos/seed/qx2/1200/800",
+      "https://picsum.photos/seed/qx3/1200/800"
+    ],
     technologies: ['Next.js', 'WebSockets', 'Tailwind CSS', 'Node.js'],
     category: 'Web',
     liveUrl: 'https://binary.sourcecodewala.store/',
@@ -148,6 +168,11 @@ export const projects: Project[] = [
     fullDescription: 'Establish a direct bridge between your trading platform and top-tier liquidity providers. This A-Book setup ensures high-speed execution, minimal slippage, and professional-grade risk management for serious brokerage operations.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-7')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/lp1/1200/800",
+      "https://picsum.photos/seed/lp2/1200/800",
+      "https://picsum.photos/seed/lp3/1200/800"
+    ],
     technologies: ['Node.js', 'FIX Protocol', 'Redis', 'TypeScript'],
     category: 'Web',
     liveUrl: 'https://lp.sourcecodewala.store/login',
@@ -178,6 +203,11 @@ export const projects: Project[] = [
     fullDescription: 'Practice trading in the Indian stock market without real capital. This setup includes real-time data simulation for NSE/BSE stocks, virtual portfolio tracking, and performance analytics tailored for the Indian trading ecosystem.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
     images: [PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || ''],
+    screenshots: [
+      "https://picsum.photos/seed/ind1/1200/800",
+      "https://picsum.photos/seed/ind2/1200/800",
+      "https://picsum.photos/seed/ind3/1200/800"
+    ],
     technologies: ['Next.js', 'Node.js', 'MongoDB', 'Chart.js', 'Tailwind CSS'],
     category: 'Web',
     liveUrl: 'https://indianpaper.sourcecodewala.store/login',
@@ -191,7 +221,7 @@ export const projects: Project[] = [
     demoAdminPassword: 'Admin@54321'
   },
 
-  // MOBILE PROJECTS (REORDERED AND FILTERED)
+  // MOBILE PROJECTS
   {
     id: 'forex-trading-app',
     title: 'Forex Trading App',

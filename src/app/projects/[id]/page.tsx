@@ -31,6 +31,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from '@/components/ui/carousel';
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -164,17 +171,52 @@ export default function ProjectDetailPage() {
         </div>
       </section>
 
+      {/* Screenshot Slider Section */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="space-y-6">
+          <div className="flex items-center gap-3">
+            <Smartphone className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl md:text-3xl font-headline font-bold">Project <span className="text-primary">Gallery</span></h2>
+          </div>
+          
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {project.screenshots.map((shot, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                  <div className="relative aspect-[16/10] md:aspect-[9/16] overflow-hidden rounded-2xl border border-white/10 group">
+                    <Image 
+                      src={shot} 
+                      alt={`${project.title} Screenshot ${index + 1}`} 
+                      fill 
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden md:flex justify-end gap-2 mt-4">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselNext className="static translate-y-0" />
+            </div>
+          </Carousel>
+        </div>
+      </section>
+
       {/* Content Grid */}
-      <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-8 md:gap-12 mt-8 md:mt-12">
+      <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-8 md:gap-12 mt-4">
         <div className="lg:col-span-2 space-y-8 md:space-y-12">
           
           <Tabs defaultValue="overview" className="w-full">
             <div className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
               <TabsList className="bg-white/5 border border-white/10 w-fit min-w-full md:w-full justify-start h-12 md:h-14 p-1 rounded-xl">
                 <TabsTrigger value="overview" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Overview</TabsTrigger>
-                {isMobile && project.screenshots && (
-                   <TabsTrigger value="screenshots" className="flex items-center gap-2 rounded-lg text-sm"><Smartphone className="w-4 h-4" /> Screenshots</TabsTrigger>
-                )}
                 <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg text-sm"><Play className="w-4 h-4" /> Video</TabsTrigger>
                 <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Docs</TabsTrigger>
               </TabsList>
@@ -200,19 +242,6 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
             </TabsContent>
-
-            {isMobile && project.screenshots && (
-              <TabsContent value="screenshots" className="mt-6 md:mt-8 space-y-6 animate-in fade-in duration-500">
-                <h2 className="text-2xl md:text-3xl font-headline font-bold">App <span className="text-primary">Screenshots</span></h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                  {project.screenshots.map((shot, i) => (
-                    <div key={i} className="relative aspect-[9/19] rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                      <Image src={shot} alt={`Screenshot ${i + 1}`} fill className="object-cover" />
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
-            )}
 
             <TabsContent value="video" className="mt-6 md:mt-8 space-y-6 animate-in fade-in duration-500">
               <h2 className="text-2xl md:text-3xl font-headline font-bold">Watch Video <span className="text-red-500">Demo</span></h2>
