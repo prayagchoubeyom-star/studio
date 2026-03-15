@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export interface Project {
@@ -14,7 +15,6 @@ export interface Project {
   adminLiveUrl?: string;
   repoUrl?: string;
   downloadApkUrl?: string;
-  youtubeId?: string;
   price: number;
   features: string[];
   documentation?: string;
@@ -30,7 +30,6 @@ export const projects: Project[] = [
     id: 'forex-setup',
     title: 'Forex trading complete setup',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Professional forex trading platform with MT4/MT5 integration.',
     fullDescription: 'A complete forex trading solution featuring real-time charts, technical indicators, and seamless broker integration. Built for performance and reliability in the high-stakes trading environment.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
@@ -66,7 +65,6 @@ export const projects: Project[] = [
     id: 'copytrading-setup',
     title: 'copytrading complete setup',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Automated copy-trading platform for master and follower accounts.',
     fullDescription: 'Enable users to follow professional traders automatically. This setup includes master account management, follower synchronization, and detailed performance analytics.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-5')?.imageUrl || '',
@@ -102,7 +100,6 @@ export const projects: Project[] = [
     id: 'funded-forex',
     title: 'funded forex compelete setup',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Prop firm management platform with evaluation tracking.',
     fullDescription: 'Launch your own prop firm with this funded account management system. Includes challenge tracking, drawdown monitoring, and automated payout management.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-3')?.imageUrl || '',
@@ -138,7 +135,6 @@ export const projects: Project[] = [
     id: 'quotex-clone',
     title: 'quotex clone complete setup',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Binary options trading platform with instant execution.',
     fullDescription: 'A high-speed binary options trading platform clone. Features OTC market simulation, high/low trading options, and an advanced admin panel for signal management.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',
@@ -221,12 +217,11 @@ export const projects: Project[] = [
     demoAdminPassword: 'Admin@54321'
   },
 
-  // MOBILE PROJECTS
+  // MOBILE PROJECTS (ONLY THE REQUESTED 5)
   {
     id: 'forex-trading-app',
     title: 'Forex Trading App',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Advanced mobile application for real-time forex trading.',
     fullDescription: 'A full-featured mobile app designed for forex traders. It includes real-time price feeds, advanced charting tools, and high-security trading features. Built with React Native for high performance.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-1')?.imageUrl || '',
@@ -251,7 +246,6 @@ export const projects: Project[] = [
     id: 'indian-market-trading-app',
     title: 'Indian Market Trading App',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Comprehensive mobile app for the Indian Stock Market.',
     fullDescription: 'Manage your Indian stock market portfolio on the go. This app provides direct access to NSE/BSE data, intraday charts, and advanced order types specifically for the Indian market ecosystem.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-8')?.imageUrl || '',
@@ -276,7 +270,6 @@ export const projects: Project[] = [
     id: 'binary-trading-app',
     title: 'Binary Trading App',
     price: 1999,
-    youtubeId: 'dQw4w9WgXcQ',
     shortDescription: 'Binary options mobile app for high-speed trading.',
     fullDescription: 'A specialized mobile application for binary options trading. Features instant trade execution, profit/loss calculators, and a seamless user experience optimized for mobile interaction.',
     thumbnail: PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || '',

@@ -1,7 +1,7 @@
 
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,7 +13,6 @@ import { projects } from '@/lib/projects';
 import { 
   ArrowLeft, 
   CheckCircle2, 
-  Play, 
   FileText, 
   ShoppingCart, 
   KeyRound, 
@@ -37,6 +36,7 @@ import {
   CarouselNext, 
   CarouselPrevious 
 } from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay";
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -46,6 +46,10 @@ export default function ProjectDetailPage() {
   
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: false })
+  );
 
   if (!project) {
     return (
@@ -73,9 +77,10 @@ export default function ProjectDetailPage() {
   
   return (
     <div className="pb-12 md:pb-24">
-      {/* Hero Header with Slider */}
+      {/* Hero Header with Autoslider */}
       <section className="relative h-[60vh] md:h-[85vh] w-full overflow-hidden bg-black">
         <Carousel
+          plugins={[autoplayPlugin.current]}
           opts={{
             align: "start",
             loop: true,
@@ -203,7 +208,6 @@ export default function ProjectDetailPage() {
             <div className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
               <TabsList className="bg-white/5 border border-white/10 w-fit min-w-full md:w-full justify-start h-12 md:h-14 p-1 rounded-xl">
                 <TabsTrigger value="overview" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Overview</TabsTrigger>
-                <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg text-sm"><Play className="w-4 h-4" /> Video</TabsTrigger>
                 <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Docs</TabsTrigger>
               </TabsList>
             </div>
@@ -226,25 +230,6 @@ export default function ProjectDetailPage() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="video" className="mt-6 md:mt-8 space-y-6 animate-in fade-in duration-500">
-              <h2 className="text-2xl md:text-3xl font-headline font-bold">Watch Video <span className="text-red-500">Demo</span></h2>
-              <div className="aspect-video relative rounded-xl md:rounded-2xl overflow-hidden border border-white/10">
-                {project.youtubeId ? (
-                  <iframe 
-                    className="w-full h-full"
-                    src={`https://www.youtube.com/embed/${project.youtubeId}`}
-                    title="Project Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-white/5 text-muted-foreground">
-                    Video tour coming soon
-                  </div>
-                )}
               </div>
             </TabsContent>
 
