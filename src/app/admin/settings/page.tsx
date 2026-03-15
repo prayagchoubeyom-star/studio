@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { ArrowLeft, Save, Wallet, QrCode, AlertCircle, Info } from 'lucide-react';
+import { ArrowLeft, Save, Wallet, QrCode, AlertCircle, Info, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -17,6 +17,8 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 export default function AdminSettingsPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [usdtAddress, setUsdtAddress] = useState('0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7');
   const qrAsset = PlaceHolderImages.find(img => img.id === 'usdt-qr');
   const [qrUrl, setQrUrl] = useState(qrAsset?.imageUrl || '');
@@ -33,8 +35,32 @@ export default function AdminSettingsPage() {
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setQrUrl(reader.result as string);
+        toast({
+          title: "QR Code Updated",
+          description: "The new QR code has been loaded from your local file.",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-24 max-w-4xl space-y-8">
+      {/* Hidden File Input */}
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        className="hidden" 
+        accept="image/*" 
+        onChange={handleFileChange} 
+      />
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <Link href="/admin" className="text-sm text-primary flex items-center gap-2 hover:underline mb-2">
@@ -49,9 +75,11 @@ export default function AdminSettingsPage() {
       </div>
 
       <Alert className="bg-primary/5 border-primary/20 text-primary-foreground">
-        <Info className="h-4 w-4 text-primary" />
-        <AlertTitle className="text-primary font-bold">Heads up!</AlertTitle>
-        <AlertDescription className="text-primary/80">
+        <span className="flex items-center gap-2">
+          <Info className="h-4 w-4 text-primary" />
+          <AlertTitle className="text-primary font-bold mb-0">Heads up!</AlertTitle>
+        </span>
+        <AlertDescription className="text-primary/80 mt-2">
           Updating these settings will change the deposit details shown in the "Buy Source Code" modal for all projects across the site.
         </AlertDescription>
       </Alert>
@@ -93,7 +121,7 @@ export default function AdminSettingsPage() {
               </div>
               <CardTitle>QR Code Photo</CardTitle>
             </div>
-            <CardDescription>Upload or link your payment QR code.</CardDescription>
+            <CardDescription>Upload your payment QR code from your device.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="aspect-square relative max-w-[240px] mx-auto bg-white rounded-2xl p-4 shadow-inner overflow-hidden">
@@ -103,23 +131,27 @@ export default function AdminSettingsPage() {
                 fill 
                 className="object-contain p-4"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
-                <Button variant="secondary" size="sm">Update Photo</Button>
+              <div 
+                className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Button variant="secondary" size="sm">
+                  <Upload className="w-4 h-4 mr-2" /> Upload New
+                </Button>
               </div>
             </div>
             <div className="space-y-2">
-              <Label>QR Photo URL</Label>
+              <Label>Image Source</Label>
               <Input 
-                value={qrUrl} 
-                onChange={(e) => setQrUrl(e.target.value)}
-                className="bg-white/5 border-white/10 h-12 text-sm"
-                placeholder="https://example.com/qr.png"
+                value={qrUrl.startsWith('data:') ? 'Local file selected' : qrUrl} 
+                className="bg-white/5 border-white/10 h-12 text-xs"
+                readOnly
               />
             </div>
           </CardContent>
           <CardFooter className="bg-white/5 border-t border-white/5 p-4">
              <p className="text-xs text-muted-foreground text-center w-full">
-               Photo will be used in the checkout modal.
+               This photo will be used in the checkout modal.
              </p>
           </CardFooter>
         </Card>

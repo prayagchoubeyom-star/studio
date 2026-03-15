@@ -1,10 +1,10 @@
 
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,6 +18,8 @@ export default function AdminAssetsPage() {
   const { toast } = useToast();
   const [search, setSearch] = useState('');
   const [assets, setAssets] = useState(PlaceHolderImages);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [activeAssetId, setActiveAssetId] = useState<string | null>(null);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
@@ -29,16 +31,43 @@ export default function AdminAssetsPage() {
     a.id.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleUpdate = (id: string, newUrl: string) => {
+  const handleUpdateUrl = (id: string, newUrl: string) => {
     setAssets(prev => prev.map(a => a.id === id ? { ...a, imageUrl: newUrl } : a));
-    toast({
-      title: "Asset Preview Updated",
-      description: "Remember to save your changes to persistent storage.",
-    });
+  };
+
+  const triggerFilePicker = (id: string) => {
+    setActiveAssetId(id);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && activeAssetId) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleUpdateUrl(activeAssetId, reader.result as string);
+        toast({
+          title: "Photo Updated",
+          description: "Preview updated successfully from your local file.",
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset input
+    if (e.target) e.target.value = '';
   };
 
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
+      {/* Hidden File Input */}
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        className="hidden" 
+        accept="image/*" 
+        onChange={handleFileChange}
+      />
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <Link href="/admin" className="text-sm text-primary flex items-center gap-2 hover:underline mb-2">
@@ -73,7 +102,7 @@ export default function AdminAssetsPage() {
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                 <Button variant="secondary" size="sm">
+                 <Button variant="secondary" size="sm" onClick={() => triggerFilePicker(asset.id)}>
                    <Upload className="w-4 h-4 mr-2" /> Change Photo
                  </Button>
               </div>
@@ -86,14 +115,14 @@ export default function AdminAssetsPage() {
             </CardHeader>
             <CardContent className="p-4 pt-0 space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs text-muted-foreground">Image URL</Label>
+                <Label className="text-xs text-muted-foreground">Image Source</Label>
                 <div className="flex gap-2">
                   <Input 
-                    value={asset.imageUrl} 
+                    value={asset.imageUrl.startsWith('data:') ? 'Local File Selected' : asset.imageUrl} 
                     className="h-9 text-xs bg-white/5 border-white/10 font-mono"
-                    onChange={(e) => handleUpdate(asset.id, e.target.value)}
+                    readOnly
                   />
-                  <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0">
+                  <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0" onClick={() => triggerFilePicker(asset.id)}>
                     <RefreshCcw className="w-3 h-3" />
                   </Button>
                 </div>
