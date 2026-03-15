@@ -127,15 +127,15 @@ export const projects: Project[] = [
     images: [PlaceHolderImages.find(img => img.id === 'project-6')?.imageUrl || ''],
     technologies: ['Next.js', 'WebSockets', 'Tailwind CSS', 'Node.js'],
     category: 'Web',
-    liveUrl: 'https://quotex-clone.example.com',
-    adminLiveUrl: 'https://quotex-clone.example.com/admin',
+    liveUrl: 'https://binary.sourcecodewala.store/',
+    adminLiveUrl: 'https://binaryadmin.sourcecodewala.store/',
     repoUrl: 'https://github.com/scw/quotex-clone',
     features: ['Instant trade execution', 'Demo/Real balance', 'Signal management', 'Mobile-responsive UI'],
     documentation: '## Quotex Clone Setup\n1. Setup WebSocket server\n2. Configure market data feeds\n3. Deploy the admin dashboard\n4. Connect to your payment gateway.',
-    demoUserEmail: 'trader@demo.com',
-    demoUserPassword: 'password',
-    demoAdminEmail: 'operator@test.com',
-    demoAdminPassword: 'operatorpassword'
+    demoUserEmail: 'testuser@gmail.com',
+    demoUserPassword: 'Test@123456',
+    demoAdminEmail: 'trustfx',
+    demoAdminPassword: 'Algo@54321'
   },
   {
     id: 'lp-connection',
