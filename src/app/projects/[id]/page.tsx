@@ -1,7 +1,7 @@
 
 "use client"
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { projects } from '@/lib/projects';
+import { getPersistentProjects, getPersistentSettings } from '@/lib/persistence';
 import { 
   ArrowLeft, 
   CheckCircle2, 
@@ -28,7 +28,6 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { 
   Carousel, 
   CarouselContent, 
@@ -42,14 +41,26 @@ export default function ProjectDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const project = projects.find(p => p.id === id);
   
+  const [project, setProject] = useState<any>(null);
+  const [settings, setSettings] = useState<any>(null);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const autoplayPlugin = useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
   );
+
+  useEffect(() => {
+    const allProjects = getPersistentProjects();
+    const found = allProjects.find(p => p.id === id);
+    setProject(found || null);
+    setSettings(getPersistentSettings());
+    setLoading(false);
+  }, [id]);
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   if (!project) {
     return (
@@ -62,8 +73,8 @@ export default function ProjectDetailPage() {
   }
 
   const isMobile = project.category === 'Mobile';
-  const qrCodeImage = PlaceHolderImages.find(img => img.id === 'usdt-qr');
-  const usdtAddress = "0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7";
+  const usdtAddress = settings?.usdtAddress || "0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7";
+  const qrCodeImage = settings?.qrUrl;
 
   const copyAddress = () => {
     navigator.clipboard.writeText(usdtAddress);
@@ -77,7 +88,6 @@ export default function ProjectDetailPage() {
   
   return (
     <div className="pb-12 md:pb-24">
-      {/* Hero Header with Autoslider */}
       <section className="relative h-[60vh] md:h-[85vh] w-full overflow-hidden bg-black">
         <Carousel
           plugins={[autoplayPlugin.current]}
@@ -88,7 +98,7 @@ export default function ProjectDetailPage() {
           className="w-full h-full"
         >
           <CarouselContent className="h-full ml-0">
-            {project.screenshots.map((shot, index) => (
+            {project.screenshots?.map((shot: string, index: number) => (
               <CarouselItem key={index} className="pl-0 h-[60vh] md:h-[85vh] relative">
                 <Image 
                   src={shot} 
@@ -106,7 +116,6 @@ export default function ProjectDetailPage() {
           </div>
         </Carousel>
 
-        {/* Overlay Content */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent pointer-events-none" />
         
         <div className="absolute inset-0 z-10">
@@ -200,7 +209,6 @@ export default function ProjectDetailPage() {
         </div>
       </section>
 
-      {/* Content Grid */}
       <div className="container mx-auto px-4 grid lg:grid-cols-3 gap-8 md:gap-12 mt-12 md:mt-16">
         <div className="lg:col-span-2 space-y-8 md:space-y-12">
           
@@ -223,7 +231,7 @@ export default function ProjectDetailPage() {
               <div className="space-y-4 md:space-y-6">
                 <h2 className="text-2xl md:text-3xl font-headline font-bold">Key Features</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {project.features.map((feature, i) => (
+                  {project.features?.map((feature: string, i: number) => (
                     <div key={i} className="flex items-start gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
                       <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <span className="text-foreground text-sm md:text-base">{feature}</span>
@@ -245,7 +253,6 @@ export default function ProjectDetailPage() {
 
         </div>
 
-        {/* Sidebar Info */}
         <div className="space-y-6 md:space-y-8">
           <Card className="bg-card border-white/10 p-6 md:p-8 space-y-6 sticky top-24">
             <div className="space-y-1 md:space-y-2">
@@ -258,7 +265,7 @@ export default function ProjectDetailPage() {
             <div className="space-y-3 md:space-y-4">
               <h3 className="text-lg md:text-xl font-headline font-bold">Technologies</h3>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
+                {project.technologies?.map((tech: string) => (
                   <Badge key={tech} variant="secondary" className="px-3 py-1 bg-white/10 text-white font-normal hover:bg-white/20 transition-colors text-xs">
                     {tech}
                   </Badge>
@@ -292,7 +299,6 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      {/* Payment Modal */}
       <Dialog open={isPaymentOpen} onOpenChange={setIsPaymentOpen}>
         <DialogContent className="sm:max-w-[400px] bg-card border-white/10 p-0 overflow-hidden rounded-3xl">
           <DialogHeader className="p-6 pb-2">
@@ -300,16 +306,14 @@ export default function ProjectDetailPage() {
           </DialogHeader>
           
           <div className="px-6 py-4 space-y-6">
-            {/* QR Code Section */}
             <div className="flex flex-col items-center justify-center gap-4 py-4">
               <div className="relative w-48 h-48 bg-white rounded-2xl p-2 shadow-2xl overflow-hidden">
                 {qrCodeImage && (
                   <Image 
-                    src={qrCodeImage.imageUrl} 
+                    src={qrCodeImage} 
                     alt="Payment QR" 
                     fill 
                     className="object-contain"
-                    data-ai-hint={qrCodeImage.imageHint}
                   />
                 )}
                 {!qrCodeImage && <QrCode className="w-full h-full text-muted" />}
@@ -317,7 +321,6 @@ export default function ProjectDetailPage() {
               <p className="text-sm font-medium text-muted-foreground">For USDT deposits only</p>
             </div>
 
-            {/* Network & Address Info */}
             <div className="space-y-4">
               <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
                 <div className="flex items-center justify-between text-xs text-muted-foreground mb-1 uppercase tracking-widest font-bold">
@@ -360,13 +363,12 @@ export default function ProjectDetailPage() {
               </div>
             </div>
 
-            {/* Action Button */}
             <Button 
               className="w-full h-14 rounded-2xl font-bold glow-primary text-lg"
               asChild
             >
               <a 
-                href={`https://wa.me/18252508100?text=Hello SCW, I've initiated a payment of $1,999 for ${project.title}. Please verify.`} 
+                href={`https://wa.me/18252508100?text=Hello SCW, I've initiated a payment of $${project.price} for ${project.title}. Please verify.`} 
                 target="_blank" 
                 rel="noopener noreferrer"
               >

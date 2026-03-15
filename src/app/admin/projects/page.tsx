@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { projects as initialProjects } from '@/lib/projects';
-import { Plus, Search, Edit2, Trash2, ExternalLink, ArrowLeft } from 'lucide-react';
+import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
+import { Plus, Search, Edit2, Trash2, ExternalLink, ArrowLeft, Save } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -17,11 +17,12 @@ export default function AdminProjectsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [search, setSearch] = useState('');
-  const [projects, setProjects] = useState(initialProjects);
+  const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
     if (!loggedIn) router.push('/login');
+    setProjects(getPersistentProjects());
   }, [router]);
 
   const filteredProjects = projects.filter(p => 
@@ -30,13 +31,23 @@ export default function AdminProjectsPage() {
   );
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to remove this project from the catalog?')) {
-      setProjects(prev => prev.filter(p => p.id !== id));
+    if (confirm('Are you sure you want to remove this project?')) {
+      const updated = projects.filter(p => p.id !== id);
+      setProjects(updated);
+      savePersistentProjects(updated);
       toast({
         title: "Project Removed",
-        description: "The project has been successfully deleted from the local state.",
+        description: "The project has been deleted from your catalog.",
       });
     }
+  };
+
+  const handleSaveAll = () => {
+    savePersistentProjects(projects);
+    toast({
+      title: "Projects Saved",
+      description: "All changes to the project catalog are now live.",
+    });
   };
 
   return (
@@ -49,9 +60,14 @@ export default function AdminProjectsPage() {
           <h1 className="text-3xl font-headline font-bold">Manage Projects</h1>
           <p className="text-muted-foreground">Create and edit the trading projects available in your marketplace.</p>
         </div>
-        <Button className="glow-primary">
-          <Plus className="w-4 h-4 mr-2" /> Add New Project
-        </Button>
+        <div className="flex gap-4">
+          <Button variant="outline" onClick={handleSaveAll}>
+            <Save className="w-4 h-4 mr-2" /> Save Catalog
+          </Button>
+          <Button className="glow-primary">
+            <Plus className="w-4 h-4 mr-2" /> Add New Project
+          </Button>
+        </div>
       </div>
 
       <Card className="bg-card border-white/5 shadow-2xl">

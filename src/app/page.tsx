@@ -1,18 +1,24 @@
+
 "use client"
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { projects } from '@/lib/projects';
+import { getPersistentProjects } from '@/lib/persistence';
 import { Search, Sparkles, ArrowRight, Code2, Layers, Globe, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function MarketplaceHome() {
   const [filter, setFilter] = useState<'Web' | 'Mobile'>('Web');
   const [search, setSearch] = useState('');
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    setProjects(getPersistentProjects());
+  }, []);
 
   const filteredProjects = useMemo(() => {
     return projects.filter(project => {
@@ -21,20 +27,18 @@ export default function MarketplaceHome() {
                            project.shortDescription.toLowerCase().includes(search.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [filter, search]);
+  }, [filter, search, projects]);
 
   const categories = ['Web', 'Mobile'] as const;
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Dynamic Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] right-[-10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-primary/10 blur-[80px] md:blur-[120px] rounded-full animate-pulse" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-secondary/10 blur-[80px] md:blur-[120px] rounded-full animate-pulse delay-1000" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-12 md:py-24 space-y-12 md:space-y-20">
-        {/* Hero Section */}
         <section className="text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
           <Badge variant="outline" className="px-4 md:px-6 py-2 text-xs md:text-sm font-headline border-primary/20 bg-primary/5 text-primary mb-2 md:mb-4 animate-in fade-in slide-in-from-top-4 duration-500">
             <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-2" /> Premium Source Code Marketplace
@@ -53,7 +57,6 @@ export default function MarketplaceHome() {
           </p>
         </section>
 
-        {/* Search and Filters Bar */}
         <section className="sticky top-20 md:top-24 z-30 py-4 glass-card rounded-[1.5rem] md:rounded-[2rem] px-4 md:px-8 border-white/5 shadow-2xl animate-in zoom-in-95 duration-500">
           <div className="flex flex-col lg:flex-row gap-4 md:gap-8 items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3 w-full lg:w-auto">
@@ -84,7 +87,6 @@ export default function MarketplaceHome() {
           </div>
         </section>
 
-        {/* Projects Grid */}
         <section className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, idx) => (
@@ -129,7 +131,7 @@ export default function MarketplaceHome() {
                     </div>
 
                     <div className="pt-4 border-t border-white/5 flex flex-wrap gap-2">
-                      {project.technologies.slice(0, 4).map((tech) => (
+                      {project.technologies.slice(0, 4).map((tech: string) => (
                         <span key={tech} className="text-[9px] md:text-[10px] font-bold text-white/40 uppercase tracking-widest bg-white/5 px-2 py-1 rounded-md">
                           {tech}
                         </span>
@@ -152,7 +154,6 @@ export default function MarketplaceHome() {
           )}
         </section>
 
-        {/* Benefits Section */}
         <section className="grid sm:grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pt-12 md:pt-20 border-t border-white/5">
           {[
             { icon: Code2, title: "Clean Code", desc: "Production-ready, documented, and type-safe TypeScript codebases." },

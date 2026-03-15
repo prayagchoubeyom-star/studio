@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getPersistentAssets, savePersistentAssets } from '@/lib/persistence';
 import { ArrowLeft, Save, Upload, Search, RefreshCcw } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -17,13 +17,14 @@ export default function AdminAssetsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [search, setSearch] = useState('');
-  const [assets, setAssets] = useState(PlaceHolderImages);
+  const [assets, setAssets] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeAssetId, setActiveAssetId] = useState<string | null>(null);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
     if (!loggedIn) router.push('/login');
+    setAssets(getPersistentAssets());
   }, [router]);
 
   const filteredAssets = assets.filter(a => 
@@ -33,6 +34,14 @@ export default function AdminAssetsPage() {
 
   const handleUpdateUrl = (id: string, newUrl: string) => {
     setAssets(prev => prev.map(a => a.id === id ? { ...a, imageUrl: newUrl } : a));
+  };
+
+  const handleSaveAll = () => {
+    savePersistentAssets(assets);
+    toast({
+      title: "Assets Saved",
+      description: "All photo changes are now live across the website.",
+    });
   };
 
   const triggerFilePicker = (id: string) => {
@@ -47,19 +56,17 @@ export default function AdminAssetsPage() {
       reader.onloadend = () => {
         handleUpdateUrl(activeAssetId, reader.result as string);
         toast({
-          title: "Photo Updated",
-          description: "Preview updated successfully from your local file.",
+          title: "Photo Loaded",
+          description: "Click 'Save All Changes' to make it permanent.",
         });
       };
       reader.readAsDataURL(file);
     }
-    // Reset input
     if (e.target) e.target.value = '';
   };
 
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
-      {/* Hidden File Input */}
       <input 
         type="file" 
         ref={fileInputRef} 
@@ -76,7 +83,7 @@ export default function AdminAssetsPage() {
           <h1 className="text-3xl font-headline font-bold">Website Assets</h1>
           <p className="text-muted-foreground">Modify site-wide photos, background images, and brand elements.</p>
         </div>
-        <Button className="glow-primary">
+        <Button className="glow-primary" onClick={handleSaveAll}>
           <Save className="w-4 h-4 mr-2" /> Save All Changes
         </Button>
       </div>
@@ -84,7 +91,7 @@ export default function AdminAssetsPage() {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input 
-          placeholder="Search assets (e.g. hero, avatar)..." 
+          placeholder="Search assets..." 
           className="pl-10 bg-white/5 border-white/10 h-12"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

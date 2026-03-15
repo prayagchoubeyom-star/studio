@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getPersistentSettings, savePersistentSettings } from '@/lib/persistence';
 import { ArrowLeft, Save, Wallet, QrCode, AlertCircle, Info, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -19,19 +19,22 @@ export default function AdminSettingsPage() {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  const [usdtAddress, setUsdtAddress] = useState('0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7');
-  const qrAsset = PlaceHolderImages.find(img => img.id === 'usdt-qr');
-  const [qrUrl, setQrUrl] = useState(qrAsset?.imageUrl || '');
+  const [usdtAddress, setUsdtAddress] = useState('');
+  const [qrUrl, setQrUrl] = useState('');
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
     if (!loggedIn) router.push('/login');
+    const settings = getPersistentSettings();
+    setUsdtAddress(settings.usdtAddress);
+    setQrUrl(settings.qrUrl);
   }, [router]);
 
   const handleSave = () => {
+    savePersistentSettings({ usdtAddress, qrUrl });
     toast({
       title: "Settings Saved",
-      description: "Payment details have been updated globally.",
+      description: "Payment details have been updated globally across the site.",
     });
   };
 
@@ -42,8 +45,8 @@ export default function AdminSettingsPage() {
       reader.onloadend = () => {
         setQrUrl(reader.result as string);
         toast({
-          title: "QR Code Updated",
-          description: "The new QR code has been loaded from your local file.",
+          title: "QR Code Loaded",
+          description: "Click 'Save Changes' to apply the new code.",
         });
       };
       reader.readAsDataURL(file);
@@ -52,7 +55,6 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-24 max-w-4xl space-y-8">
-      {/* Hidden File Input */}
       <input 
         type="file" 
         ref={fileInputRef} 
@@ -107,7 +109,7 @@ export default function AdminSettingsPage() {
             <div className="p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-xl flex gap-3">
               <AlertCircle className="w-5 h-5 text-yellow-500 shrink-0" />
               <p className="text-xs text-yellow-500/80 leading-relaxed">
-                Ensure this address is compatible with the <strong>BNB Smart Chain (BEP20)</strong> network. Using the wrong network will result in permanent loss of funds.
+                Ensure this address is compatible with the <strong>BNB Smart Chain (BEP20)</strong> network.
               </p>
             </div>
           </CardContent>
@@ -125,12 +127,12 @@ export default function AdminSettingsPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="aspect-square relative max-w-[240px] mx-auto bg-white rounded-2xl p-4 shadow-inner overflow-hidden">
-               <Image 
+               {qrUrl && <Image 
                 src={qrUrl} 
                 alt="Payment QR" 
                 fill 
                 className="object-contain p-4"
-              />
+              />}
               <div 
                 className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer"
                 onClick={() => fileInputRef.current?.click()}
@@ -139,14 +141,6 @@ export default function AdminSettingsPage() {
                   <Upload className="w-4 h-4 mr-2" /> Upload New
                 </Button>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Image Source</Label>
-              <Input 
-                value={qrUrl.startsWith('data:') ? 'Local file selected' : qrUrl} 
-                className="bg-white/5 border-white/10 h-12 text-xs"
-                readOnly
-              />
             </div>
           </CardContent>
           <CardFooter className="bg-white/5 border-t border-white/5 p-4">
