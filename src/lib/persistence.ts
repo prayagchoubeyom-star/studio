@@ -2,9 +2,9 @@
 import { projects as initialProjects, Project } from './projects';
 import { PlaceHolderImages as initialAssets, ImagePlaceholder } from './placeholder-images';
 
-const PROJECTS_KEY = 'scw_projects_v1';
-const ASSETS_KEY = 'scw_assets_v1';
-const SETTINGS_KEY = 'scw_settings_v1';
+const PROJECTS_KEY = 'scw_projects_v2';
+const ASSETS_KEY = 'scw_assets_v2';
+const SETTINGS_KEY = 'scw_settings_v2';
 
 export interface SiteSettings {
   usdtAddress: string;
@@ -14,7 +14,11 @@ export interface SiteSettings {
 export function getPersistentProjects(): Project[] {
   if (typeof window === 'undefined') return initialProjects;
   const stored = localStorage.getItem(PROJECTS_KEY);
-  if (!stored) return initialProjects;
+  if (!stored) {
+    // Seed the storage with initial data if empty
+    localStorage.setItem(PROJECTS_KEY, JSON.stringify(initialProjects));
+    return initialProjects;
+  }
   try {
     return JSON.parse(stored);
   } catch (e) {
@@ -30,7 +34,10 @@ export function savePersistentProjects(projects: Project[]) {
 export function getPersistentAssets(): ImagePlaceholder[] {
   if (typeof window === 'undefined') return initialAssets;
   const stored = localStorage.getItem(ASSETS_KEY);
-  if (!stored) return initialAssets;
+  if (!stored) {
+    localStorage.setItem(ASSETS_KEY, JSON.stringify(initialAssets));
+    return initialAssets;
+  }
   try {
     return JSON.parse(stored);
   } catch (e) {

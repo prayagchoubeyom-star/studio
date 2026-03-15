@@ -1,23 +1,30 @@
 
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ExternalLink, ArrowLeft, Save } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ExternalLink, ArrowLeft, Save, X, Upload } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { Project } from '@/lib/projects';
 
 export default function AdminProjectsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [search, setSearch] = useState('');
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
@@ -35,48 +42,79 @@ export default function AdminProjectsPage() {
       const updated = projects.filter(p => p.id !== id);
       setProjects(updated);
       savePersistentProjects(updated);
-      toast({
-        title: "Project Removed",
-        description: "The project has been deleted from your catalog.",
-      });
+      toast({ title: "Project Removed" });
     }
   };
 
-  const handleSaveAll = () => {
-    savePersistentProjects(projects);
-    toast({
-      title: "Projects Saved",
-      description: "All changes to the project catalog are now live.",
-    });
+  const handleOpenEdit = (project: Project) => {
+    setEditingProject({ ...project });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenAdd = () => {
+    setEditingProject({
+      id: `project-${Date.now()}`,
+      title: '',
+      price: 1999,
+      category: 'Web',
+      shortDescription: '',
+      fullDescription: '',
+      thumbnail: 'https://picsum.photos/seed/new/1200/800',
+      images: [],
+      screenshots: [],
+      technologies: ['Next.js', 'TypeScript'],
+      features: ['professional trading terminal'],
+    } as Project);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveProject = () => {
+    if (!editingProject) return;
+    const exists = projects.find(p => p.id === editingProject.id);
+    let updated;
+    if (exists) {
+      updated = projects.map(p => p.id === editingProject.id ? editingProject : p);
+    } else {
+      updated = [...projects, editingProject];
+    }
+    setProjects(updated);
+    savePersistentProjects(updated);
+    setIsModalOpen(false);
+    toast({ title: "Project Saved Successfully" });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && editingProject) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditingProject({ ...editingProject, thumbnail: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
+      <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
           <Link href="/admin" className="text-sm text-primary flex items-center gap-2 hover:underline mb-2">
             <ArrowLeft className="w-3 h-3" /> Back to Dashboard
           </Link>
           <h1 className="text-3xl font-headline font-bold">Manage Projects</h1>
-          <p className="text-muted-foreground">Create and edit the trading projects available in your marketplace.</p>
+          <p className="text-muted-foreground">Add and edit projects. Changes reflect instantly to the marketplace.</p>
         </div>
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={handleSaveAll}>
-            <Save className="w-4 h-4 mr-2" /> Save Catalog
-          </Button>
-          <Button className="glow-primary">
-            <Plus className="w-4 h-4 mr-2" /> Add New Project
-          </Button>
-        </div>
+        <Button className="glow-primary" onClick={handleOpenAdd}>
+          <Plus className="w-4 h-4 mr-2" /> Add New Project
+        </Button>
       </div>
 
       <Card className="bg-card border-white/5 shadow-2xl">
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <CardTitle>Project Catalog</CardTitle>
-              <CardDescription>Viewing {filteredProjects.length} projects.</CardDescription>
-            </div>
+            <CardTitle>Project Catalog ({filteredProjects.length})</CardTitle>
             <div className="relative w-full md:w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input 
@@ -93,48 +131,24 @@ export default function AdminProjectsPage() {
             <Table>
               <TableHeader className="bg-white/5">
                 <TableRow>
-                  <TableHead>Project Title</TableHead>
+                  <TableHead>Title</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Price</TableHead>
-                  <TableHead>Demo Access</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredProjects.map((project) => (
-                  <TableRow key={project.id} className="hover:bg-white/5 transition-colors">
-                    <TableCell className="font-medium">
-                      <div className="flex flex-col">
-                        <span>{project.title}</span>
-                        <span className="text-xs text-muted-foreground">{project.id}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={project.category === 'Web' ? 'text-primary' : 'text-secondary'}>
-                        {project.category}
-                      </Badge>
-                    </TableCell>
+                  <TableRow key={project.id} className="hover:bg-white/5">
+                    <TableCell className="font-medium">{project.title}</TableCell>
+                    <TableCell><Badge variant="outline">{project.category}</Badge></TableCell>
                     <TableCell className="font-bold">${project.price}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        {project.liveUrl && <Badge variant="secondary" className="bg-green-500/10 text-green-500">User Demo</Badge>}
-                        {project.adminLiveUrl && <Badge variant="secondary" className="bg-blue-500/10 text-blue-500">Admin Panel</Badge>}
-                      </div>
-                    </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-primary" asChild>
-                          <Link href={`/projects/${project.id}`} target="_blank"><ExternalLink className="w-4 h-4" /></Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-secondary">
+                        <Button variant="ghost" size="icon" onClick={() => handleOpenEdit(project)}>
                           <Edit2 className="w-4 h-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                          onClick={() => handleDelete(project.id)}
-                        >
+                        <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(project.id)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -146,6 +160,68 @@ export default function AdminProjectsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-2xl bg-card border-white/10 max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingProject?.id.includes('project-') ? 'Add Project' : 'Edit Project'}</DialogTitle>
+          </DialogHeader>
+          {editingProject && (
+            <div className="grid gap-6 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Project Title</Label>
+                  <Input value={editingProject.title} onChange={e => setEditingProject({...editingProject, title: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Price ($)</Label>
+                  <Input type="number" value={editingProject.price} onChange={e => setEditingProject({...editingProject, price: Number(e.target.value)})} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <select 
+                    className="w-full h-10 bg-white/5 border border-white/10 rounded-md px-3 text-sm"
+                    value={editingProject.category} 
+                    onChange={e => setEditingProject({...editingProject, category: e.target.value as any})}
+                  >
+                    <option value="Web">Web</option>
+                    <option value="Mobile">Mobile</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Demo URL</Label>
+                  <Input value={editingProject.liveUrl || ''} onChange={e => setEditingProject({...editingProject, liveUrl: e.target.value})} />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Short Description</Label>
+                <Input value={editingProject.shortDescription} onChange={e => setEditingProject({...editingProject, shortDescription: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Full Description</Label>
+                <Textarea value={editingProject.fullDescription} onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Thumbnail Image</Label>
+                <div className="flex gap-4 items-center">
+                  <div className="w-20 h-20 relative rounded-lg overflow-hidden border border-white/10">
+                    <img src={editingProject.thumbnail} alt="Preview" className="object-cover w-full h-full" />
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                    <Upload className="w-4 h-4 mr-2" /> Upload New
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button className="glow-primary" onClick={handleSaveProject}>Save Project</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
