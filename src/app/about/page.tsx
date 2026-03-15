@@ -1,17 +1,18 @@
+
 "use client"
 
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getPersistentAssets } from '@/lib/persistence';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Github, Linkedin, Mail, Twitter, Send, MapPin, Phone } from 'lucide-react';
+import { Github, Linkedin, Mail, Twitter, Send, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const contactSchema = z.object({
@@ -23,7 +24,17 @@ const contactSchema = z.object({
 
 export default function AboutPage() {
   const { toast } = useToast();
-  const avatar = PlaceHolderImages.find(img => img.id === 'avatar');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [imageHint, setImageHint] = useState('');
+
+  useEffect(() => {
+    const assets = getPersistentAssets();
+    const avatar = assets.find(img => img.id === 'avatar');
+    if (avatar) {
+      setAvatarUrl(avatar.imageUrl);
+      setImageHint(avatar.imageHint);
+    }
+  }, []);
 
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
@@ -51,13 +62,13 @@ export default function AboutPage() {
         <div className="relative group">
           <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-[3rem] group-hover:bg-primary/30 transition-all duration-500" />
           <div className="relative aspect-square max-w-md mx-auto overflow-hidden rounded-[2.5rem] border border-white/10">
-            {avatar && (
+            {avatarUrl && (
               <Image 
-                src={avatar.imageUrl} 
+                src={avatarUrl} 
                 alt="Developer Profile" 
                 fill 
                 className="object-cover"
-                data-ai-hint={avatar.imageHint}
+                data-ai-hint={imageHint}
               />
             )}
           </div>

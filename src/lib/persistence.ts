@@ -14,20 +14,32 @@ export interface SiteSettings {
 export function getPersistentProjects(): Project[] {
   if (typeof window === 'undefined') return initialProjects;
   const stored = localStorage.getItem(PROJECTS_KEY);
-  return stored ? JSON.parse(stored) : initialProjects;
+  if (!stored) return initialProjects;
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    return initialProjects;
+  }
 }
 
 export function savePersistentProjects(projects: Project[]) {
+  if (typeof window === 'undefined') return;
   localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
 }
 
 export function getPersistentAssets(): ImagePlaceholder[] {
   if (typeof window === 'undefined') return initialAssets;
   const stored = localStorage.getItem(ASSETS_KEY);
-  return stored ? JSON.parse(stored) : initialAssets;
+  if (!stored) return initialAssets;
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    return initialAssets;
+  }
 }
 
 export function savePersistentAssets(assets: ImagePlaceholder[]) {
+  if (typeof window === 'undefined') return;
   localStorage.setItem(ASSETS_KEY, JSON.stringify(assets));
 }
 
@@ -40,9 +52,15 @@ export function getPersistentSettings(): SiteSettings {
 
   if (typeof window === 'undefined') return defaultSettings;
   const stored = localStorage.getItem(SETTINGS_KEY);
-  return stored ? JSON.parse(stored) : defaultSettings;
+  if (!stored) return defaultSettings;
+  try {
+    return JSON.parse(stored);
+  } catch (e) {
+    return defaultSettings;
+  }
 }
 
 export function savePersistentSettings(settings: SiteSettings) {
+  if (typeof window === 'undefined') return;
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
