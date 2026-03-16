@@ -1,10 +1,11 @@
 
+import { get, set } from 'idb-keyval';
 import { projects as initialProjects, Project } from './projects';
 import { PlaceHolderImages as initialAssets, ImagePlaceholder } from './placeholder-images';
 
-const PROJECTS_KEY = 'scw_projects_v3';
-const ASSETS_KEY = 'scw_assets_v3';
-const SETTINGS_KEY = 'scw_settings_v3';
+const PROJECTS_KEY = 'scw_projects_v4';
+const ASSETS_KEY = 'scw_assets_v4';
+const SETTINGS_KEY = 'scw_settings_v4';
 
 export interface SiteSettings {
   usdtAddress: string;
@@ -12,51 +13,42 @@ export interface SiteSettings {
   logoUrl?: string;
 }
 
-export function getPersistentProjects(): Project[] {
+export async function getPersistentProjects(): Promise<Project[]> {
   if (typeof window === 'undefined') return initialProjects;
-  const stored = localStorage.getItem(PROJECTS_KEY);
+  const stored = await get(PROJECTS_KEY);
   if (!stored) {
-    localStorage.setItem(PROJECTS_KEY, JSON.stringify(initialProjects));
+    await set(PROJECTS_KEY, initialProjects);
     return initialProjects;
   }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return initialProjects;
-  }
+  return stored as Project[];
 }
 
-export function savePersistentProjects(projects: Project[]): boolean {
+export async function savePersistentProjects(projects: Project[]): Promise<boolean> {
   if (typeof window === 'undefined') return false;
   try {
-    localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+    await set(PROJECTS_KEY, projects);
     window.dispatchEvent(new Event('storage_update'));
     return true;
   } catch (e) {
-    // This catches QuotaExceededError and other storage failures
-    console.error('LocalStorage write failed:', e);
+    console.error('IndexedDB write failed:', e);
     return false;
   }
 }
 
-export function getPersistentAssets(): ImagePlaceholder[] {
+export async function getPersistentAssets(): Promise<ImagePlaceholder[]> {
   if (typeof window === 'undefined') return initialAssets;
-  const stored = localStorage.getItem(ASSETS_KEY);
+  const stored = await get(ASSETS_KEY);
   if (!stored) {
-    localStorage.setItem(ASSETS_KEY, JSON.stringify(initialAssets));
+    await set(ASSETS_KEY, initialAssets);
     return initialAssets;
   }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return initialAssets;
-  }
+  return stored as ImagePlaceholder[];
 }
 
-export function savePersistentAssets(assets: ImagePlaceholder[]): boolean {
+export async function savePersistentAssets(assets: ImagePlaceholder[]): Promise<boolean> {
   if (typeof window === 'undefined') return false;
   try {
-    localStorage.setItem(ASSETS_KEY, JSON.stringify(assets));
+    await set(ASSETS_KEY, assets);
     window.dispatchEvent(new Event('storage_update'));
     return true;
   } catch (e) {
@@ -65,7 +57,7 @@ export function savePersistentAssets(assets: ImagePlaceholder[]): boolean {
   }
 }
 
-export function getPersistentSettings(): SiteSettings {
+export async function getPersistentSettings(): Promise<SiteSettings> {
   const defaultQr = initialAssets.find(img => img.id === 'usdt-qr')?.imageUrl || '';
   const defaultSettings: SiteSettings = {
     usdtAddress: '0x6cdeb76a8901dfb1a90cf2bf0923e638bb3e10d7',
@@ -74,19 +66,15 @@ export function getPersistentSettings(): SiteSettings {
   };
 
   if (typeof window === 'undefined') return defaultSettings;
-  const stored = localStorage.getItem(SETTINGS_KEY);
+  const stored = await get(SETTINGS_KEY);
   if (!stored) return defaultSettings;
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    return defaultSettings;
-  }
+  return stored as SiteSettings;
 }
 
-export function savePersistentSettings(settings: SiteSettings): boolean {
+export async function savePersistentSettings(settings: SiteSettings): Promise<boolean> {
   if (typeof window === 'undefined') return false;
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    await set(SETTINGS_KEY, settings);
     window.dispatchEvent(new Event('storage_update'));
     return true;
   } catch (e) {

@@ -46,11 +46,15 @@ export default function ProjectDetailPage() {
   const autoplayPlugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false }));
 
   useEffect(() => {
-    const allProjects = getPersistentProjects();
-    const found = allProjects.find(p => p.id === id);
-    setProject(found || null);
-    setSettings(getPersistentSettings());
-    setLoading(false);
+    const loadData = async () => {
+      const allProjects = await getPersistentProjects();
+      const found = allProjects.find(p => p.id === id);
+      const siteSettings = await getPersistentSettings();
+      setProject(found || null);
+      setSettings(siteSettings);
+      setLoading(false);
+    };
+    loadData();
   }, [id]);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;

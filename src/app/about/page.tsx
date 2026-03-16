@@ -28,12 +28,15 @@ export default function AboutPage() {
   const [imageHint, setImageHint] = useState('');
 
   useEffect(() => {
-    const assets = getPersistentAssets();
-    const avatar = assets.find(img => img.id === 'avatar');
-    if (avatar) {
-      setAvatarUrl(avatar.imageUrl);
-      setImageHint(avatar.imageHint);
-    }
+    const loadAssets = async () => {
+      const assets = await getPersistentAssets();
+      const avatar = assets.find(img => img.id === 'avatar');
+      if (avatar) {
+        setAvatarUrl(avatar.imageUrl);
+        setImageHint(avatar.imageHint);
+      }
+    };
+    loadAssets();
   }, []);
 
   const form = useForm<z.infer<typeof contactSchema>>({

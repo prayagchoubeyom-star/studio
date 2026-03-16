@@ -24,7 +24,12 @@ export default function AdminAssetsPage() {
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
     if (!loggedIn) router.push('/login');
-    setAssets(getPersistentAssets());
+    
+    const loadAssets = async () => {
+      const data = await getPersistentAssets();
+      setAssets(data);
+    };
+    loadAssets();
   }, [router]);
 
   const filteredAssets = assets.filter(a => 
@@ -36,17 +41,16 @@ export default function AdminAssetsPage() {
     setAssets(prev => prev.map(a => a.id === id ? { ...a, imageUrl: newUrl } : a));
   };
 
-  const handleSaveAll = () => {
+  const handleSaveAll = async () => {
     // 1. Save Assets
-    savePersistentAssets(assets);
+    await savePersistentAssets(assets);
     
     // 2. Map Assets to Projects for direct sync
-    const currentProjects = getPersistentProjects();
+    const currentProjects = await getPersistentProjects();
     const assetMap = assets.reduce((acc, a) => ({ ...acc, [a.id]: a.imageUrl }), {} as any);
     
     // 3. Update Project Thumbnails if they were derived from these specific placeholder IDs
     const updatedProjects = currentProjects.map(p => {
-      // Map legacy IDs to project thumbnails
       const mapping: Record<string, string> = {
         'forex-setup': 'project-1',
         'copytrading-setup': 'project-5',
@@ -68,7 +72,7 @@ export default function AdminAssetsPage() {
       return p;
     });
 
-    savePersistentProjects(updatedProjects);
+    await savePersistentProjects(updatedProjects);
 
     toast({
       title: "Changes Published",
@@ -113,7 +117,7 @@ export default function AdminAssetsPage() {
             <ArrowLeft className="w-3 h-3" /> Back to Dashboard
           </Link>
           <h1 className="text-3xl font-headline font-bold">Website Assets</h1>
-          <p className="text-muted-foreground">Modify site-wide photos. Changes here automatically update linked projects.</p>
+          <p className="text-muted-foreground">Modify site-wide photos. Using IndexedDB for 100MB+ storage.</p>
         </div>
         <Button className="glow-primary px-8 h-12" onClick={handleSaveAll}>
           <Save className="w-4 h-4 mr-2" /> Save Changes
@@ -158,7 +162,7 @@ export default function AdminAssetsPage() {
                 <Label className="text-xs text-muted-foreground">Image Status</Label>
                 <div className="flex gap-2">
                   <Input 
-                    value={asset.imageUrl.startsWith('data:') ? 'Custom Upload (Local)' : 'External Source'} 
+                    value={asset.imageUrl.startsWith('data:') ? 'Custom Upload (IndexedDB)' : 'External Source'} 
                     className="h-9 text-xs bg-white/5 border-white/10"
                     readOnly
                   />

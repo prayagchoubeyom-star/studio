@@ -25,16 +25,23 @@ export default function AdminSettingsPage() {
   const [logoUrl, setLogoUrl] = useState('');
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem('scw_admin_logged_in');
-    if (!loggedIn) router.push('/login');
-    const settings = getPersistentSettings();
-    setUsdtAddress(settings.usdtAddress);
-    setQrUrl(settings.qrUrl);
-    setLogoUrl(settings.logoUrl || '');
+    const checkAuth = () => {
+      const loggedIn = localStorage.getItem('scw_admin_logged_in');
+      if (!loggedIn) router.push('/login');
+    };
+    checkAuth();
+
+    const loadSettings = async () => {
+      const settings = await getPersistentSettings();
+      setUsdtAddress(settings.usdtAddress);
+      setQrUrl(settings.qrUrl);
+      setLogoUrl(settings.logoUrl || '');
+    };
+    loadSettings();
   }, [router]);
 
-  const handleSave = () => {
-    savePersistentSettings({ usdtAddress, qrUrl, logoUrl });
+  const handleSave = async () => {
+    await savePersistentSettings({ usdtAddress, qrUrl, logoUrl });
     toast({
       title: "Settings Saved",
       description: "Logo and payment details have been updated globally.",
@@ -76,7 +83,6 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Brand Logo Section */}
         <Card className="bg-card border-white/5">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">
@@ -114,7 +120,6 @@ export default function AdminSettingsPage() {
           </CardContent>
         </Card>
 
-        {/* Wallet Address Section */}
         <Card className="bg-card border-white/5 lg:col-span-2">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">

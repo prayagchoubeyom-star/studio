@@ -16,13 +16,13 @@ export default function MarketplaceHome() {
   const [search, setSearch] = useState('');
   const [projects, setProjects] = useState<Project[]>([]);
 
-  const loadData = () => {
-    setProjects(getPersistentProjects());
+  const loadData = async () => {
+    const data = await getPersistentProjects();
+    setProjects(data);
   };
 
   useEffect(() => {
     loadData();
-    // Listen for storage updates from the admin panel
     window.addEventListener('storage_update', loadData);
     return () => window.removeEventListener('storage_update', loadData);
   }, []);

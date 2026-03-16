@@ -29,9 +29,17 @@ export default function AdminProjectsPage() {
   const videoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem('scw_admin_logged_in');
-    if (!loggedIn) router.push('/login');
-    setProjects(getPersistentProjects());
+    const checkAuth = () => {
+      const loggedIn = localStorage.getItem('scw_admin_logged_in');
+      if (!loggedIn) router.push('/login');
+    };
+    checkAuth();
+    
+    const loadData = async () => {
+      const data = await getPersistentProjects();
+      setProjects(data);
+    };
+    loadData();
   }, [router]);
 
   const filteredProjects = projects.filter(p => 
@@ -39,12 +47,14 @@ export default function AdminProjectsPage() {
     p.id.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to remove this project?')) {
       const updated = projects.filter(p => p.id !== id);
-      setProjects(updated);
-      savePersistentProjects(updated);
-      toast({ title: "Project Removed" });
+      const success = await savePersistentProjects(updated);
+      if (success) {
+        setProjects(updated);
+        toast({ title: "Project Removed" });
+      }
     }
   };
 
@@ -75,7 +85,7 @@ export default function AdminProjectsPage() {
     setIsModalOpen(true);
   };
 
-  const handleSaveProject = () => {
+  const handleSaveProject = async () => {
     if (!editingProject) return;
     const exists = projects.find(p => p.id === editingProject.id);
     let updated;
@@ -85,8 +95,7 @@ export default function AdminProjectsPage() {
       updated = [...projects, editingProject];
     }
     
-    // Attempt to save to LocalStorage
-    const success = savePersistentProjects(updated);
+    const success = await savePersistentProjects(updated);
     
     if (success) {
       setProjects(updated);
@@ -98,8 +107,8 @@ export default function AdminProjectsPage() {
     } else {
       toast({ 
         variant: "destructive",
-        title: "Storage Limit Exceeded", 
-        description: "The video or images are too large for browser storage. Please use a smaller video file (under 2MB) or remove the video." 
+        title: "Storage Error", 
+        description: "There was an issue saving to IndexedDB. Please check your browser storage." 
       });
     }
   };
@@ -107,16 +116,17 @@ export default function AdminProjectsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && editingProject) {
-      // Browsers typically limit LocalStorage to ~5MB TOTAL for the whole site.
-      // We warn users if an individual file is pushing that limit.
-      const sizeLimit = uploadTarget === 'video' ? 3 * 1024 * 1024 : 1024 * 1024; // 3MB for video, 1MB for images
+      // 100MB Limit Check
+      const MB_LIMIT = 100;
+      const sizeLimit = MB_LIMIT * 1024 * 1024;
       
       if (file.size > sizeLimit) {
         toast({
           variant: "destructive",
-          title: "File is quite large",
-          description: `This file is ${Math.round(file.size / 1024 / 1024 * 100) / 100}MB. Browser storage might fail if multiple large files are saved. Try a smaller file.`,
+          title: "File exceeds 100MB limit",
+          description: `This file is ${Math.round(file.size / 1024 / 1024)}MB. Please use a smaller file.`,
         });
+        return;
       }
 
       const reader = new FileReader();
@@ -154,7 +164,7 @@ export default function AdminProjectsPage() {
             <ArrowLeft className="w-3 h-3" /> Back to Dashboard
           </Link>
           <h1 className="text-3xl font-headline font-bold">Project Management</h1>
-          <p className="text-muted-foreground">Manage trading solutions, screenshots, and APK downloads.</p>
+          <p className="text-muted-foreground">Manage trading solutions, screenshots, and APK downloads (100MB Limit).</p>
         </div>
         <Button className="glow-primary h-12 px-6" onClick={handleOpenAdd}>
           <Plus className="w-4 h-4 mr-2" /> New Project
@@ -242,7 +252,7 @@ export default function AdminProjectsPage() {
                   <div className="space-y-2">
                     <Label className="flex items-center justify-between">
                       Project Video 
-                      <Badge variant="outline" className="text-[10px] bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Browser Limit: ~2MB Recommended</Badge>
+                      <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-500 border-green-500/20">Browser Limit: 100MB</Badge>
                     </Label>
                     <div className="flex flex-col gap-4 p-4 border border-dashed border-white/10 rounded-xl bg-white/5">
                       {editingProject.videoUrl ? (
@@ -255,7 +265,7 @@ export default function AdminProjectsPage() {
                            <Video className="w-8 h-8 mx-auto text-muted-foreground opacity-50" />
                            <Button variant="outline" size="sm" onClick={() => { setUploadTarget('video'); videoInputRef.current?.click(); }}>Upload Video File</Button>
                            <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
-                             <AlertTriangle className="w-3 h-3" /> Larger files will cause save errors
+                             <AlertTriangle className="w-3 h-3" /> IndexedDB handles up to 100MB+ easily
                            </p>
                         </div>
                       )}

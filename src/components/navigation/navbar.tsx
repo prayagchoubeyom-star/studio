@@ -44,8 +44,8 @@ export function Navbar() {
   const [logoUrl, setLogoUrl] = useState('');
   const whatsappNumber = "18252508100";
 
-  const updateLogo = () => {
-    const settings = getPersistentSettings();
+  const updateLogo = async () => {
+    const settings = await getPersistentSettings();
     setLogoUrl(settings.logoUrl || '');
   };
 
