@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Video } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Video, Image as ImageIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -108,11 +108,13 @@ export default function AdminProjectsPage() {
       };
       reader.readAsDataURL(file);
     }
+    // Reset input
+    if (e.target) e.target.value = '';
   };
 
   const removeScreenshot = (index: number) => {
     if (!editingProject) return;
-    const filtered = editingProject.screenshots.filter((_, i) => i !== index);
+    const filtered = (editingProject.screenshots || []).filter((_, i) => i !== index);
     setEditingProject({ ...editingProject, screenshots: filtered });
   };
 
@@ -158,7 +160,13 @@ export default function AdminProjectsPage() {
                   <TableCell>
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded bg-white/10 overflow-hidden relative border border-white/10">
-                        <img src={project.thumbnail} className="object-cover w-full h-full" alt="" />
+                        {project.thumbnail ? (
+                          <img src={project.thumbnail} className="object-cover w-full h-full" alt="" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="w-4 h-4 text-muted-foreground/50" />
+                          </div>
+                        )}
                       </div>
                       <div>
                         <div className="font-bold">{project.title}</div>
@@ -217,7 +225,7 @@ export default function AdminProjectsPage() {
                       ) : (
                         <div className="text-center space-y-2">
                            <Video className="w-8 h-8 mx-auto text-muted-foreground opacity-50" />
-                           <Button variant="outline" size="sm" onClick={() => videoInputRef.current?.click()}>Upload Video File</Button>
+                           <Button variant="outline" size="sm" onClick={() => { setUploadTarget('video'); videoInputRef.current?.click(); }}>Upload Video File</Button>
                            <p className="text-[10px] text-muted-foreground">Supports MP4, WebM (Max 10MB recommended)</p>
                         </div>
                       )}
@@ -227,7 +235,11 @@ export default function AdminProjectsPage() {
                 <div className="space-y-4">
                   <Label>Main Thumbnail</Label>
                   <div className="relative aspect-video rounded-xl border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center group">
-                    <img src={editingProject.thumbnail} alt="" className="object-cover w-full h-full" />
+                    {editingProject.thumbnail ? (
+                      <img src={editingProject.thumbnail} alt="" className="object-cover w-full h-full" />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-muted-foreground/20" />
+                    )}
                     <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button variant="secondary" size="sm" onClick={() => { setUploadTarget('thumbnail'); fileInputRef.current?.click(); }}><Upload className="w-4 h-4 mr-2" /> Upload Image</Button>
                     </div>
@@ -240,7 +252,7 @@ export default function AdminProjectsPage() {
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
                   {editingProject.screenshots?.map((s, i) => (
                     <div key={i} className="relative aspect-video rounded-lg border border-white/10 bg-white/5 group overflow-hidden">
-                      <img src={s} className="object-cover w-full h-full" alt="" />
+                      {s && <img src={s} className="object-cover w-full h-full" alt="" />}
                       <button onClick={() => removeScreenshot(i)} className="absolute top-1 right-1 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><X className="w-3 h-3" /></button>
                     </div>
                   ))}
