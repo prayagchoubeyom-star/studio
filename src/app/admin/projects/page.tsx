@@ -85,16 +85,21 @@ export default function AdminProjectsPage() {
       updated = [...projects, editingProject];
     }
     
+    // Attempt to save to LocalStorage
     const success = savePersistentProjects(updated);
+    
     if (success) {
       setProjects(updated);
       setIsModalOpen(false);
-      toast({ title: "Project Saved Successfully" });
+      toast({ 
+        title: "Project Saved Successfully",
+        description: "Your changes are now live on the marketplace."
+      });
     } else {
       toast({ 
         variant: "destructive",
-        title: "Save Failed", 
-        description: "The data (likely the video) is too large for browser storage. Please use a smaller file." 
+        title: "Storage Limit Exceeded", 
+        description: "The video or images are too large for browser storage. Please use a smaller video file (under 2MB) or remove the video." 
       });
     }
   };
@@ -102,14 +107,16 @@ export default function AdminProjectsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && editingProject) {
-      // 5MB limit check for prototype stability
-      if (file.size > 5 * 1024 * 1024) {
+      // Browsers typically limit LocalStorage to ~5MB TOTAL for the whole site.
+      // We warn users if an individual file is pushing that limit.
+      const sizeLimit = uploadTarget === 'video' ? 3 * 1024 * 1024 : 1024 * 1024; // 3MB for video, 1MB for images
+      
+      if (file.size > sizeLimit) {
         toast({
           variant: "destructive",
-          title: "File Too Large",
-          description: "Please upload a file smaller than 5MB for browser storage compatibility.",
+          title: "File is quite large",
+          description: `This file is ${Math.round(file.size / 1024 / 1024 * 100) / 100}MB. Browser storage might fail if multiple large files are saved. Try a smaller file.`,
         });
-        return;
       }
 
       const reader = new FileReader();
@@ -122,7 +129,7 @@ export default function AdminProjectsPage() {
           setEditingProject({ ...editingProject, screenshots: newScreenshots });
         } else if (uploadTarget === 'video') {
           setEditingProject({ ...editingProject, videoUrl: result });
-          toast({ title: "Video Ready to Save" });
+          toast({ title: "Video ready to save" });
         }
       };
       reader.readAsDataURL(file);
@@ -235,7 +242,7 @@ export default function AdminProjectsPage() {
                   <div className="space-y-2">
                     <Label className="flex items-center justify-between">
                       Project Video 
-                      <Badge variant="outline" className="text-[10px] bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Max 5MB</Badge>
+                      <Badge variant="outline" className="text-[10px] bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Browser Limit: ~2MB Recommended</Badge>
                     </Label>
                     <div className="flex flex-col gap-4 p-4 border border-dashed border-white/10 rounded-xl bg-white/5">
                       {editingProject.videoUrl ? (
@@ -248,7 +255,7 @@ export default function AdminProjectsPage() {
                            <Video className="w-8 h-8 mx-auto text-muted-foreground opacity-50" />
                            <Button variant="outline" size="sm" onClick={() => { setUploadTarget('video'); videoInputRef.current?.click(); }}>Upload Video File</Button>
                            <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
-                             <AlertTriangle className="w-3 h-3" /> Browsers limit local storage to ~5MB
+                             <AlertTriangle className="w-3 h-3" /> Larger files will cause save errors
                            </p>
                         </div>
                       )}
@@ -292,7 +299,12 @@ export default function AdminProjectsPage() {
               <div className="space-y-2"><Label>Technical Documentation</Label><Textarea value={editingProject.documentation || ''} onChange={e => setEditingProject({...editingProject, documentation: e.target.value})} className="bg-white/5 border-white/10 min-h-[150px] font-mono text-xs" /></div>
             </div>
           )}
-          <DialogFooter className="border-t border-white/5 pt-6"><Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button><Button className="glow-primary px-8" onClick={handleSaveProject}><Save className="w-4 h-4 mr-2" /> Save Project Changes</Button></DialogFooter>
+          <DialogFooter className="border-t border-white/5 pt-6">
+            <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button className="glow-primary px-8" onClick={handleSaveProject}>
+              <Save className="w-4 h-4 mr-2" /> Save Project Changes
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

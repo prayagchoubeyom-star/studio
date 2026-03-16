@@ -33,7 +33,8 @@ export function savePersistentProjects(projects: Project[]): boolean {
     window.dispatchEvent(new Event('storage_update'));
     return true;
   } catch (e) {
-    console.error('Storage failed:', e);
+    // This catches QuotaExceededError and other storage failures
+    console.error('LocalStorage write failed:', e);
     return false;
   }
 }
