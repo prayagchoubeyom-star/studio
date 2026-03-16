@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Youtube } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Video } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -24,8 +24,9 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [uploadTarget, setUploadTarget] = useState<'thumbnail' | 'screenshot'>('thumbnail');
+  const [uploadTarget, setUploadTarget] = useState<'thumbnail' | 'screenshot' | 'video'>('thumbnail');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('scw_admin_logged_in');
@@ -69,7 +70,7 @@ export default function AdminProjectsPage() {
       liveUrl: '',
       adminLiveUrl: '',
       downloadApkUrl: '',
-      youtubeId: '',
+      videoUrl: '',
     } as Project);
     setIsModalOpen(true);
   };
@@ -94,12 +95,15 @@ export default function AdminProjectsPage() {
     if (file && editingProject) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64 = reader.result as string;
+        const result = reader.result as string;
         if (uploadTarget === 'thumbnail') {
-          setEditingProject({ ...editingProject, thumbnail: base64 });
-        } else {
-          const newScreenshots = [...(editingProject.screenshots || []), base64];
+          setEditingProject({ ...editingProject, thumbnail: result });
+        } else if (uploadTarget === 'screenshot') {
+          const newScreenshots = [...(editingProject.screenshots || []), result];
           setEditingProject({ ...editingProject, screenshots: newScreenshots });
+        } else if (uploadTarget === 'video') {
+          setEditingProject({ ...editingProject, videoUrl: result });
+          toast({ title: "Video Uploaded Successfully" });
         }
       };
       reader.readAsDataURL(file);
@@ -115,6 +119,7 @@ export default function AdminProjectsPage() {
   return (
     <div className="container mx-auto px-4 py-24 space-y-8">
       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+      <input type="file" ref={videoInputRef} className="hidden" accept="video/*" onChange={(e) => { setUploadTarget('video'); handleFileChange(e); }} />
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
@@ -202,10 +207,20 @@ export default function AdminProjectsPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>YouTube Video ID</Label>
-                    <div className="flex gap-2">
-                      <div className="h-10 w-10 flex items-center justify-center bg-destructive/10 rounded-md shrink-0"><Youtube className="w-5 h-5 text-destructive" /></div>
-                      <Input placeholder="e.g. dQw4w9WgXcQ" value={editingProject.youtubeId || ''} onChange={e => setEditingProject({...editingProject, youtubeId: e.target.value})} className="bg-white/5 border-white/10" />
+                    <Label>Project Video</Label>
+                    <div className="flex flex-col gap-4 p-4 border border-dashed border-white/10 rounded-xl bg-white/5">
+                      {editingProject.videoUrl ? (
+                         <div className="space-y-2">
+                            <video src={editingProject.videoUrl} className="w-full aspect-video rounded-lg" controls />
+                            <Button variant="destructive" size="sm" className="w-full" onClick={() => setEditingProject({...editingProject, videoUrl: ''})}>Remove Video</Button>
+                         </div>
+                      ) : (
+                        <div className="text-center space-y-2">
+                           <Video className="w-8 h-8 mx-auto text-muted-foreground opacity-50" />
+                           <Button variant="outline" size="sm" onClick={() => videoInputRef.current?.click()}>Upload Video File</Button>
+                           <p className="text-[10px] text-muted-foreground">Supports MP4, WebM (Max 10MB recommended)</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

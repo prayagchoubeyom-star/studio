@@ -10,7 +10,7 @@
         "price": { "type": "number" },
         "shortDescription": { "type": "string" },
         "fullDescription": { "type": "string" },
-        "youtubeId": { "type": "string" },
+        "videoUrl": { "type": "string", "description": "Local video data URI or external URL." },
         "demoUrl": { "type": "string" },
         "docs": { "type": "string" },
         "category": { "type": "string", "enum": ["Web", "Mobile"] },

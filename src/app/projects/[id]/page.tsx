@@ -154,7 +154,7 @@ export default function ProjectDetailPage() {
             <div className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
               <TabsList className="bg-white/5 border border-white/10 w-fit min-w-full md:w-full justify-start h-12 p-1 rounded-xl">
                 <TabsTrigger value="overview" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Overview</TabsTrigger>
-                {project.youtubeId && <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg text-sm"><PlayCircle className="w-4 h-4" /> Video Demo</TabsTrigger>}
+                {project.videoUrl && <TabsTrigger value="video" className="flex items-center gap-2 rounded-lg text-sm"><PlayCircle className="w-4 h-4" /> Video Demo</TabsTrigger>}
                 <TabsTrigger value="docs" className="flex items-center gap-2 rounded-lg text-sm"><FileText className="w-4 h-4" /> Docs</TabsTrigger>
               </TabsList>
             </div>
@@ -176,11 +176,11 @@ export default function ProjectDetailPage() {
               </div>
             </TabsContent>
 
-            {project.youtubeId && (
+            {project.videoUrl && (
               <TabsContent value="video" className="mt-8 space-y-6 animate-in fade-in duration-500">
                 <h2 className="text-2xl md:text-3xl font-headline font-bold">Watch <span className="text-primary">Demo</span></h2>
-                <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                  <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${project.youtubeId}`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black flex items-center justify-center">
+                  <video src={project.videoUrl} className="w-full h-full" controls playsInline />
                 </div>
               </TabsContent>
             )}
