@@ -143,8 +143,8 @@ export const projects: Project[] = [
     documentation: '## Quotex Clone Setup\n1. Setup WebSocket server\n2. Configure market data feeds\n3. Deploy the admin dashboard\n4. Connect to your payment gateway.',
     demoUserEmail: 'testuser@gmail.com',
     demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'trustfx',
-    demoAdminPassword: 'Algo@54321'
+    demoAdminEmail: 'admin@test1gmail.com',
+    demoAdminPassword: 'Admin@54321'
   },
   {
     id: 'lp-connection',
@@ -173,8 +173,8 @@ export const projects: Project[] = [
     documentation: '## LP Connection Setup\n1. Secure FIX credentials from your LP\n2. Configure the bridge server\n3. Set up Redis for order caching\n4. Map trading symbols.',
     demoUserEmail: 'demo@broker.com',
     demoUserPassword: 'Demo@123456',
-    demoAdminEmail: 'admin@lpplatform.com',
-    demoAdminPassword: 'Admin@123456'
+    demoAdminEmail: 'admin@test1gmail.com',
+    demoAdminPassword: 'Admin@54321'
   },
   {
     id: 'indian-paper-trading',
