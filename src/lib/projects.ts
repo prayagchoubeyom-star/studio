@@ -25,6 +25,9 @@ export interface Project {
   demoAdminPassword?: string;
 }
 
+const DEFAULT_ADMIN_EMAIL = 'admin@test1gmail.com';
+const DEFAULT_ADMIN_PASS = 'Admin@54321';
+
 export const projects: Project[] = [
   // WEB PROJECTS
   {
@@ -58,8 +61,8 @@ export const projects: Project[] = [
     documentation: '## Forex Setup Guide\n1. Clone the repository\n2. Configure your MT4/MT5 API keys\n3. Set up environment variables\n4. Run `npm install` and `npm run dev`.',
     demoUserEmail: 'testuser@gmail.com',
     demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoAdminEmail: DEFAULT_ADMIN_EMAIL,
+    demoAdminPassword: DEFAULT_ADMIN_PASS
   },
   {
     id: 'copytrading-setup',
@@ -88,8 +91,8 @@ export const projects: Project[] = [
     documentation: '## Copytrading Setup\n1. Connect master API\n2. Setup Redis for fast execution\n3. Configure your database\n4. Deploy to a high-performance server.',
     demoUserEmail: 'testuser@gmail.com',
     demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoAdminEmail: DEFAULT_ADMIN_EMAIL,
+    demoAdminPassword: DEFAULT_ADMIN_PASS
   },
   {
     id: 'funded-forex',
@@ -117,7 +120,9 @@ export const projects: Project[] = [
     ],
     documentation: '## Funded Firm Setup\n1. Define your challenge parameters\n2. Setup Firebase for user data\n3. Configure payout methods\n4. Customize the branding.',
     demoUserEmail: 'testuser@gmail.com',
-    demoUserPassword: 'Test@123456'
+    demoUserPassword: 'Test@123456',
+    demoAdminEmail: DEFAULT_ADMIN_EMAIL,
+    demoAdminPassword: DEFAULT_ADMIN_PASS
   },
   {
     id: 'quotex-clone',
@@ -141,8 +146,8 @@ export const projects: Project[] = [
     documentation: '## Quotex Clone Setup\n1. Setup WebSocket server\n2. Configure market data feeds\n3. Deploy the admin dashboard\n4. Connect to your payment gateway.',
     demoUserEmail: 'testuser@gmail.com',
     demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoAdminEmail: DEFAULT_ADMIN_EMAIL,
+    demoAdminPassword: DEFAULT_ADMIN_PASS
   },
   {
     id: 'lp-connection',
@@ -171,8 +176,8 @@ export const projects: Project[] = [
     documentation: '## LP Connection Setup\n1. Secure FIX credentials from your LP\n2. Configure the bridge server\n3. Set up Redis for order caching\n4. Map trading symbols.',
     demoUserEmail: 'demo@broker.com',
     demoUserPassword: 'Demo@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoAdminEmail: DEFAULT_ADMIN_EMAIL,
+    demoAdminPassword: DEFAULT_ADMIN_PASS
   },
   {
     id: 'indian-paper-trading',
