@@ -117,9 +117,7 @@ export const projects: Project[] = [
     ],
     documentation: '## Funded Firm Setup\n1. Define your challenge parameters\n2. Setup Firebase for user data\n3. Configure payout methods\n4. Customize the branding.',
     demoUserEmail: 'testuser@gmail.com',
-    demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoUserPassword: 'Test@123456'
   },
   {
     id: 'quotex-clone',
@@ -197,9 +195,7 @@ export const projects: Project[] = [
     features: ['NSE/BSE Data Simulation', 'Virtual Portfolio Management', 'Order History & Reports', 'Market News Feed'],
     documentation: '## Indian Paper Trading Setup\n1. Secure Indian market data API credentials\n2. Configure MongoDB for user accounts\n3. Set up the virtual matching engine\n4. Deploy to a production environment.',
     demoUserEmail: 'testuser@gmail.com',
-    demoUserPassword: 'Test@123456',
-    demoAdminEmail: 'admin@test1gmail.com',
-    demoAdminPassword: 'Admin@54321'
+    demoUserPassword: 'Test@123456'
   },
 
   // MOBILE PROJECTS
@@ -223,9 +219,7 @@ export const projects: Project[] = [
     features: ['Real-time charts', 'Secure wallet', 'Push alerts', 'Multiple account support'],
     documentation: '## Forex App Setup\n1. Install React Native environment\n2. Configure Socket.io server URL\n3. Connect Firebase project\n4. Build and deploy to stores.',
     demoUserEmail: 'apptrader@test.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'appadmin@trading.com',
-    demoAdminPassword: 'adminpassword'
+    demoUserPassword: 'password123'
   },
   {
     id: 'indian-market-trading-app',
@@ -247,9 +241,7 @@ export const projects: Project[] = [
     features: ['NSE/BSE Watchlist', 'Portfolio tracking', 'Live market news', 'Biometric login'],
     documentation: '## India Trade App Setup\n1. Setup NSE/BSE Data API keys\n2. Configure the React Native project\n3. Setup secure storage for credentials\n4. Build for Android/iOS.',
     demoUserEmail: 'trader@india-app.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'admin@india-app.com',
-    demoAdminPassword: 'adminpassword'
+    demoUserPassword: 'password123'
   },
   {
     id: 'binary-trading-app',
@@ -271,9 +263,7 @@ export const projects: Project[] = [
     features: ['High/Low trading', 'Instant deposit', 'Signal history', 'Demo mode'],
     documentation: '## Binary App Setup\n1. Install Flutter SDK\n2. Configure backend API in config file\n3. Run `flutter build apk`\n4. Set up push notification keys.',
     demoUserEmail: 'binaryuser@test.com',
-    demoUserPassword: 'password123',
-    demoAdminEmail: 'binaryadmin@test.com',
-    demoAdminPassword: 'adminpassword'
+    demoUserPassword: 'password123'
   },
   {
     id: 'binance-app-clone',

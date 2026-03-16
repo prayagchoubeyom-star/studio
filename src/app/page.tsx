@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { getPersistentProjects } from '@/lib/persistence';
-import { Search, Sparkles, ShieldCheck } from 'lucide-react';
+import { Search, Sparkles, ShieldCheck, Users, ExternalLink } from 'lucide-react';
 import { Project } from '@/lib/projects';
 
 export default function MarketplaceHome() {
@@ -38,6 +38,13 @@ export default function MarketplaceHome() {
 
   const categories = ['Web', 'Mobile'] as const;
 
+  const happyClients = [
+    { name: 'Bluestone Exchange', url: 'https://bluestoneexchange.com/' },
+    { name: 'Vediex', url: 'https://vediex.com/' },
+    { name: 'ProfitVisionFX', url: 'https://profitvisionfx.com/' },
+    { name: 'SetupFX24', url: 'https://setupfx24.com/' },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -62,6 +69,30 @@ export default function MarketplaceHome() {
           <p className="text-lg md:text-2xl text-muted-foreground leading-relaxed">
             Expertly crafted source code, templates, and full-stack solutions ready for your next production launch. Zero risk, professional support.
           </p>
+        </section>
+
+        {/* Happy Clients Section */}
+        <section className="py-12 glass-card rounded-[2rem] border-white/5 bg-card/20 backdrop-blur-md">
+          <div className="text-center space-y-8">
+            <div className="flex items-center justify-center gap-2 text-primary font-headline font-bold text-xl uppercase tracking-widest">
+              <Users className="w-6 h-6" />
+              Our Happy Clients
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 px-6">
+              {happyClients.map((client) => (
+                <a
+                  key={client.name}
+                  href={client.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 text-lg md:text-xl font-headline font-bold text-muted-foreground hover:text-white transition-all hover:scale-105"
+                >
+                  {client.name}
+                  <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="sticky top-20 md:top-24 z-30 py-4 glass-card rounded-[1.5rem] md:rounded-[2rem] px-4 md:px-8 border-white/5 shadow-2xl">

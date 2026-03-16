@@ -24,7 +24,8 @@ import {
   Check,
   QrCode,
   Info,
-  PlayCircle
+  PlayCircle,
+  Shield
 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -132,15 +133,27 @@ export default function ProjectDetailPage() {
                     <PopoverTrigger asChild>
                       <Button variant="outline" size="lg" className="h-10 md:h-12 px-4 md:px-8 border-white/20 bg-black/20 hover:bg-white/10 w-full sm:w-auto backdrop-blur-md"><KeyRound className="w-4 h-4 mr-2" /> Credentials</Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[calc(100vw-2rem)] sm:w-80 p-6 bg-card border-white/10 shadow-2xl rounded-2xl mx-4">
-                      <div className="space-y-4">
+                    <PopoverContent className="w-[calc(100vw-2rem)] sm:w-96 p-6 bg-card border-white/10 shadow-2xl rounded-2xl mx-4">
+                      <div className="space-y-6">
                         <h4 className="font-bold text-lg border-b border-white/10 pb-2">Demo Credentials</h4>
-                        {project.demoUserEmail && (
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-primary text-xs font-bold uppercase"><User className="w-3 h-3" /> User Login</div>
-                            <div className="bg-white/5 p-3 rounded-lg text-xs font-mono break-all text-muted-foreground">Email: {project.demoUserEmail}<br/>Pass: {project.demoUserPassword}</div>
-                          </div>
-                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {project.demoUserEmail && (
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-primary text-[10px] font-bold uppercase"><User className="w-3 h-3" /> User Login</div>
+                              <div className="bg-white/5 p-3 rounded-lg text-[10px] font-mono break-all text-muted-foreground border border-white/5">
+                                Email: {project.demoUserEmail}<br/>Pass: {project.demoUserPassword}
+                              </div>
+                            </div>
+                          )}
+                          {project.demoAdminEmail && (
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-secondary text-[10px] font-bold uppercase"><Shield className="w-3 h-3" /> Admin Login</div>
+                              <div className="bg-secondary/5 p-3 rounded-lg text-[10px] font-mono break-all text-muted-foreground border border-secondary/10">
+                                Email: {project.demoAdminEmail}<br/>Pass: {project.demoAdminPassword}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </PopoverContent>
                   </Popover>
