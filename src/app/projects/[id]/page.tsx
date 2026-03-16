@@ -180,7 +180,7 @@ export default function ProjectDetailPage() {
               <TabsContent value="video" className="mt-8 space-y-6 animate-in fade-in duration-500">
                 <h2 className="text-2xl md:text-3xl font-headline font-bold">Watch <span className="text-primary">Demo</span></h2>
                 <div className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black flex items-center justify-center">
-                  <video src={project.videoUrl} className="w-full h-full" controls playsInline />
+                  <video key={project.videoUrl} src={project.videoUrl} className="w-full h-full" controls playsInline />
                 </div>
               </TabsContent>
             )}

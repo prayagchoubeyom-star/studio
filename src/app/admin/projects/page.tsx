@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getPersistentProjects, savePersistentProjects } from '@/lib/persistence';
-import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Video, Image as ImageIcon } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, ArrowLeft, Save, X, Upload, Video, Image as ImageIcon, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
@@ -84,15 +84,34 @@ export default function AdminProjectsPage() {
     } else {
       updated = [...projects, editingProject];
     }
-    setProjects(updated);
-    savePersistentProjects(updated);
-    setIsModalOpen(false);
-    toast({ title: "Project Saved Successfully" });
+    
+    const success = savePersistentProjects(updated);
+    if (success) {
+      setProjects(updated);
+      setIsModalOpen(false);
+      toast({ title: "Project Saved Successfully" });
+    } else {
+      toast({ 
+        variant: "destructive",
+        title: "Save Failed", 
+        description: "The data (likely the video) is too large for browser storage. Please use a smaller file." 
+      });
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && editingProject) {
+      // 5MB limit check for prototype stability
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File Too Large",
+          description: "Please upload a file smaller than 5MB for browser storage compatibility.",
+        });
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
@@ -103,12 +122,11 @@ export default function AdminProjectsPage() {
           setEditingProject({ ...editingProject, screenshots: newScreenshots });
         } else if (uploadTarget === 'video') {
           setEditingProject({ ...editingProject, videoUrl: result });
-          toast({ title: "Video Uploaded Successfully" });
+          toast({ title: "Video Ready to Save" });
         }
       };
       reader.readAsDataURL(file);
     }
-    // Reset input
     if (e.target) e.target.value = '';
   };
 
@@ -215,18 +233,23 @@ export default function AdminProjectsPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Project Video</Label>
+                    <Label className="flex items-center justify-between">
+                      Project Video 
+                      <Badge variant="outline" className="text-[10px] bg-yellow-500/10 text-yellow-500 border-yellow-500/20">Max 5MB</Badge>
+                    </Label>
                     <div className="flex flex-col gap-4 p-4 border border-dashed border-white/10 rounded-xl bg-white/5">
                       {editingProject.videoUrl ? (
                          <div className="space-y-2">
-                            <video src={editingProject.videoUrl} className="w-full aspect-video rounded-lg" controls />
+                            <video key={editingProject.videoUrl} src={editingProject.videoUrl} className="w-full aspect-video rounded-lg" controls />
                             <Button variant="destructive" size="sm" className="w-full" onClick={() => setEditingProject({...editingProject, videoUrl: ''})}>Remove Video</Button>
                          </div>
                       ) : (
-                        <div className="text-center space-y-2">
+                        <div className="text-center space-y-2 py-4">
                            <Video className="w-8 h-8 mx-auto text-muted-foreground opacity-50" />
                            <Button variant="outline" size="sm" onClick={() => { setUploadTarget('video'); videoInputRef.current?.click(); }}>Upload Video File</Button>
-                           <p className="text-[10px] text-muted-foreground">Supports MP4, WebM (Max 10MB recommended)</p>
+                           <p className="text-[10px] text-muted-foreground flex items-center justify-center gap-1">
+                             <AlertTriangle className="w-3 h-3" /> Browsers limit local storage to ~5MB
+                           </p>
                         </div>
                       )}
                     </div>

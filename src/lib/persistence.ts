@@ -26,10 +26,16 @@ export function getPersistentProjects(): Project[] {
   }
 }
 
-export function savePersistentProjects(projects: Project[]) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
-  window.dispatchEvent(new Event('storage_update'));
+export function savePersistentProjects(projects: Project[]): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
+    window.dispatchEvent(new Event('storage_update'));
+    return true;
+  } catch (e) {
+    console.error('Storage failed:', e);
+    return false;
+  }
 }
 
 export function getPersistentAssets(): ImagePlaceholder[] {
@@ -46,10 +52,16 @@ export function getPersistentAssets(): ImagePlaceholder[] {
   }
 }
 
-export function savePersistentAssets(assets: ImagePlaceholder[]) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(ASSETS_KEY, JSON.stringify(assets));
-  window.dispatchEvent(new Event('storage_update'));
+export function savePersistentAssets(assets: ImagePlaceholder[]): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    localStorage.setItem(ASSETS_KEY, JSON.stringify(assets));
+    window.dispatchEvent(new Event('storage_update'));
+    return true;
+  } catch (e) {
+    console.error('Asset storage failed:', e);
+    return false;
+  }
 }
 
 export function getPersistentSettings(): SiteSettings {
@@ -70,8 +82,14 @@ export function getPersistentSettings(): SiteSettings {
   }
 }
 
-export function savePersistentSettings(settings: SiteSettings) {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  window.dispatchEvent(new Event('storage_update'));
+export function savePersistentSettings(settings: SiteSettings): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    window.dispatchEvent(new Event('storage_update'));
+    return true;
+  } catch (e) {
+    console.error('Settings storage failed:', e);
+    return false;
+  }
 }
