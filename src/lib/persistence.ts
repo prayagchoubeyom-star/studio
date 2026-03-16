@@ -3,9 +3,10 @@ import { get, set } from 'idb-keyval';
 import { projects as initialProjects, Project } from './projects';
 import { PlaceHolderImages as initialAssets, ImagePlaceholder } from './placeholder-images';
 
-const PROJECTS_KEY = 'scw_projects_v4';
-const ASSETS_KEY = 'scw_assets_v4';
-const SETTINGS_KEY = 'scw_settings_v4';
+// Stable keys for IndexedDB
+const PROJECTS_KEY = 'scw_projects_v5';
+const ASSETS_KEY = 'scw_assets_v5';
+const SETTINGS_KEY = 'scw_settings_v5';
 
 export interface SiteSettings {
   usdtAddress: string;

@@ -305,6 +305,13 @@ export default function AdminProjectsPage() {
                 <div className="space-y-2 md:col-span-2"><Label>Mobile APK Link</Label><Input value={editingProject.downloadApkUrl || ''} onChange={e => setEditingProject({...editingProject, downloadApkUrl: e.target.value})} className="bg-white/5 border-white/10" /></div>
               </div>
 
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2"><Label>Demo User Email</Label><Input value={editingProject.demoUserEmail || ''} onChange={e => setEditingProject({...editingProject, demoUserEmail: e.target.value})} className="bg-white/5 border-white/10" /></div>
+                <div className="space-y-2"><Label>Demo User Password</Label><Input value={editingProject.demoUserPassword || ''} onChange={e => setEditingProject({...editingProject, demoUserPassword: e.target.value})} className="bg-white/5 border-white/10" /></div>
+                <div className="space-y-2"><Label>Demo Admin Email</Label><Input value={editingProject.demoAdminEmail || ''} onChange={e => setEditingProject({...editingProject, demoAdminEmail: e.target.value})} className="bg-white/5 border-white/10" /></div>
+                <div className="space-y-2"><Label>Demo Admin Password</Label><Input value={editingProject.demoAdminPassword || ''} onChange={e => setEditingProject({...editingProject, demoAdminPassword: e.target.value})} className="bg-white/5 border-white/10" /></div>
+              </div>
+
               <div className="space-y-2"><Label>Full Project Description</Label><Textarea value={editingProject.fullDescription} onChange={e => setEditingProject({...editingProject, fullDescription: e.target.value})} className="bg-white/5 border-white/10 min-h-[120px]" /></div>
               <div className="space-y-2"><Label>Technical Documentation</Label><Textarea value={editingProject.documentation || ''} onChange={e => setEditingProject({...editingProject, documentation: e.target.value})} className="bg-white/5 border-white/10 min-h-[150px] font-mono text-xs" /></div>
             </div>
